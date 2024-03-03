@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.id-card-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  backdrop-filter: blur(5px); /* Adjust the blur effect as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container {
+  width: 100%; /* Set width as needed */
+  height: 300px; /* Set height as needed */
+  background-image: url('/path/to/your/image.jpg'); /* Replace with the path to your image */
+  background-size: cover; /* This property ensures that the image covers the entire container */
+  background-position: center; /* This property centers the image within the container */
+  background-repeat: no-repeat; /* This property prevents the image from repeating */
+  /* You can also add additional styling here */
+}
+
+.id-card-modal {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.addressdvsvs{
+  width: 500px;
+  background-color: #0d5667;
+  font-size: xx-small;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+#button1 {
+  background-color: #18819b;
+  color: white;
+  border-radius: 12px;
+  width: 240px;
+  box-shadow: 5px 5px 7px 5px rgba(53, 53, 53, 0.4);
+}
+
+
+#button2{
+  background-color: #18819b;
+  color: white;
+  border-radius: 12px;
+  width: 240px;
+  box-shadow: 5px 5px 7px 5px rgba(53, 53, 53, 0.4);
+
+  
+
+
+}
+
+.image-uploader {
+  margin: 20px;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.custom-file-upload:hover {
+  background-color: #0056b3;
+}
+
+
+.abc{
+  background-color: #0b475af9;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  /* width: 100vw; */
+  width: 100%;
+}
+
+.navbar {
+  background-color: #248ba5;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.input-container {
+  width: 100%;
+  max-width: 550px;
+}
+
+.cnic-input {
+  border: 1px solid #248ba5;
+  border-radius: 4px;
+  height: 50px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.submit-button {
+  background-color: #248ba5;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  width: 100%;
+  height: 50px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.table-container {
+  width: 100%;
+  max-width: 550px;
+}

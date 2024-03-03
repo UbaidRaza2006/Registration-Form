@@ -1,0 +1,18 @@
+#bg{
+    background-color: #18819b;
+}
+
+#button1{
+    border:1px solid white;
+    margin-right: 1%;
+}
+#button2{
+    border:1px solid white;
+    margin-right: -1%;
+}
+
+#payment{
+background-repeat: no-repeat;
+height: 100%;
+width: 100%;
+}
