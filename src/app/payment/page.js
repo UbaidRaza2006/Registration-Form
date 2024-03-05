@@ -5,7 +5,7 @@
 // import ImageUploadComponent from "@/components/AntUpload/ubaid2";
 // import { Button } from "antd";
 // import Image2UploadComponent from "@/components/AntUpload/ubaid2";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AntInputComponent from "../../components/AntInput";
 import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
@@ -56,10 +56,100 @@ export default function PaymentVerify() {
     },
   };
 
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageee, setImageee] = useState("");
+  const [rollNumber,setRollNumber] = useState("")
+
   // const [paymentFormData, setPaymentFormData] = useState("");
 
 const [myPaymentData , setMyPaymentData ] = useState("")
+const [user,setUser] = useState(null)
+
+
+const [idForUser, setIdForUser] = useState('');
+const [fullName, setFullName] = useState('');
+  const [fatherName, setFatherName] = useState('');
+  const [email, setEmail] = useState('');
+  const [course, setCourse] = useState('');
+  const [batch, setBatch] = useState('');
+  const [status, setStatus] = useState('');
+  const [city, setCity] = useState('');
+  const [cnic, setCnic] = useState('');
+  const [phone, setPhone] = useState('');
+  const [payment, setPayment] = useState('');
+  const [paymentImg, setPaymentImg] = useState('');
+  const [rollNo, setRollNo] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [gender, setGender] = useState('');
+  const [qualification, setQualification] = useState('');
+  const [address, setAddress] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+
+const getUserData = async (rollNo) => {
+  console.log("rollNoForUser-->", rollNo);
+  let userData = await fetch(`http://localhost:3000/api/students?rollNo=${rollNo}`)
+  userData = await userData.json()
+  console.log(userData);
+  if (userData.success) {
+    let data = userData.data
+    console.log("data-->",data);
+    // setUser(userData.data)
+    // console.log(user);
+
+// agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
+
+// setFullName(userData.data.fullName);
+// setFatherName(userData.data.fatherName);
+// setEmail(userData.data.email);
+// setCourse(userData.data.course);
+//     setBatch(userData.data.batch);
+//     setStatus(userData.data.status);
+//     setCity(userData.data.city);
+//     setCnic(userData.data.cnic);
+//     setPhone(userData.data.phone);
+//     setDateOfBirth(userData.data.dateOfBirth);
+//     setGender(userData.data.gender);
+//     setQualification(userData.data.qualification);
+//     setAddress(userData.data.address);
+//     setImageUrl(userData.data.imageUrl);
+//     setRollNo(userData.data.rollNo);
+//     setPayment(userData.data.payment);
+//     setPaymentImg(userData.data.paymentImg);
+//     setIdForUser(userData.data._id)
+
+
+    // console.log(fullName,fatherName,course,batch)
+
+  }
+
+
+}
+
+
+
+const updateUser = async (userId) => {
+
+  
+
+console.log("userId-->",userId)
+  // let data = await fetch(`http://localhost:3000/api/students/${userId}`, {
+  //   method: "PUT",
+  //   body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, phone, qualification, rollNo, status }), headers: {
+  //     "Content-Type": "application/json"
+  //   }
+  // })
+  // data = await data.json()
+  // // console.log("info-->",data);
+  // if (data.success) {
+  //   alert("Your payment data has been sent! , Later it will be cerified by Admin")
+  //   // setOpen(false);
+  // }
+  // else {
+  //   console.log(data);
+  // }
+}
+
+
+
 
 const handleImageUpload = async (e) => {
   const file = e.target.files[0];
@@ -79,7 +169,7 @@ const handleImageUpload = async (e) => {
       console.log("Data.response hon->>>", data.secure_url);
 
       // Set the image URL received from Cloudinary
-      setImageUrl(data.secure_url);
+      setImageee(data.secure_url);
 
       // Convert the image to base64
       const base64Image = await getBase64Image(data.secure_url);
@@ -121,7 +211,7 @@ const getBase64Image = async (imageUrl) => {
 
 
 
-console.log(imageUrl);
+console.log(imageee);
 console.log("Image Url ka baap hon----->", myPaymentData)
 
   return (
@@ -151,6 +241,23 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Roll No."}
               style={styles.inputs}
+              value={rollNumber}
+              onChange={(event)=>{
+                setRollNumber(event.target.value)
+                if(event.target.value.length===5){
+                  setRollNo(event.target.value)
+                  console.log("rollNo-->",rollNo)
+                  getUserData(rollNo)
+
+
+                }else{
+                  setFullName("")
+                  setFatherName("")
+                  setCourse("")
+                  setBatch("")
+                  setUser(null)
+                }
+              }}
             />
           </div>
           <div style={{ marginTop: "5px" }}>
@@ -158,6 +265,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Name"}
               style={styles.inputs}
+              // value={fullName}
             />
           </div>
           <div>
@@ -165,6 +273,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Course"}
               style={styles.inputs}
+              // value={course}
             />
           </div>
           <div>
@@ -173,6 +282,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Batch"}
               style={styles.inputs}
+              // value={batch}
             />
           </div>
 
@@ -193,12 +303,12 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             placeholder="Upload here"
             onChange={handleImageUpload}
             style={{ display: "none" }}
-          /> {!imageUrl ? (
+          /> {!imageee ? (
             <h1> Upload Here</h1>
           ) : (
             <Image
               cloudName="dbcpfhk6n"
-              publicId={imageUrl}
+              publicId={imageee}
               style={{ width: "100%", height: "100%" }}
             />
           )}
@@ -235,9 +345,11 @@ console.log("Image Url ka baap hon----->", myPaymentData)
 
         </div>
         
-        <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
+        <button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
         color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
-         }}>Submit</Button>
+         }}
+         onClick={updateUser(idForUser)}
+         >Submit</button>
       </div>
     </div>
   );

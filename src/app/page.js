@@ -92,9 +92,10 @@ async function helperForUploadingImageToFirebase(file) {
         )
 
     })
-
-
 }
+
+
+
 const initialFormData = {
     fullName: '',
     fatherName: '',
@@ -110,7 +111,8 @@ const initialFormData = {
     gender: 'male',
     qualification: '',
     address: '',
-    imageUrl: ''
+    imageUrl: '',
+    paymentImg: 'not-done'
 }
 
 
