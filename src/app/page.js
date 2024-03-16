@@ -97,22 +97,22 @@ async function helperForUploadingImageToFirebase(file) {
 
 
 const initialFormData = {
-    fullName: '',
-    fatherName: '',
-    email: '',
+    fullName: 'abc',
+    fatherName: 'abc',
+    email: 'abc@gmail.com',
     course:`${courseOptions[0].label}`,
     batch:`${batchOptions[0]}`,
     payment:'not-done',
+    paymentImg: 'not-done',
     status:"un-verified",
-    city: '',
-    cnic: '',
-    phone: '',
-    dateOfBirth: '',
+    city: 'abc',
+    cnic: 'abc',
+    phone: 'abc',
+    dateOfBirth: 'abc',
     gender: 'male',
-    qualification: '',
-    address: '',
-    imageUrl: '',
-    paymentImg: 'not-done'
+    qualification: 'abc',
+    address: 'abc',
+    imageUrl: 'abc'
 }
 
 
@@ -213,17 +213,23 @@ export default function RegisterUser() {
             console.log("Data.response hon->>>", data.secure_url);
     
             // Set the image URL received from Cloudinary
+            if(data.secure_url){
             setImage(data.secure_url);
-    
+        }
             // Convert the image to base64
             const base64Image = await getBase64Image(data.secure_url);
             console.log("Base64 image:", base64Image);
     
             // Update the form data with the base64 representation of the image
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                imageUrl: base64Image,
-            }));
+
+            if(data.secure_url){
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    imageUrl: base64Image,
+                }));
+            }
+
+            
         } catch (error) {
             console.error('Error uploading image to Cloudinary:', error);
         }
@@ -769,7 +775,7 @@ const closeModal = () => {
         <p className="upload-text">Upload</p>
       )} */}
 
-{image && <Image  cloudName="dbcpfhk6n" publicId={image} style={{ width: '100px', height: '150px' }} />}
+{image && <img  cloudName="dbcpfhk6n" src={image} style={{ width: '100px', height: '150px' }} />}
 
        <style jsx>{`
     .image-uploader {

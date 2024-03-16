@@ -3,7 +3,7 @@ import { EyeOutlined } from "@ant-design/icons";
 import { Button, Drawer, Space } from "antd";
 // import 'antd/dist/antd.css';
 
-const EyeViewDrawerApp = ({id}) => {
+const EyeViewDrawerApp = ({userData}) => {
   const [open, setOpen] = useState(false);
   const [idForUser, setIdForUser] = useState({});
   const [viewData,setViewData] = useState({})
@@ -15,26 +15,26 @@ const EyeViewDrawerApp = ({id}) => {
   //   getUserData();
   // },[])
 
-  const getUserData =async(userId)=> {
-    console.log("idForUser-->",userId);
-    let userData = await fetch(`http://localhost:3000/api/students/${userId}`)
-    userData= await userData.json()
-    console.log(userData);
-    if(userData.success){
-        let result = userData.result
-        setViewData(result)
-        console.log(viewData);
-        // handleDownload();
-    }
+//   const getUserData =async(userId)=> {
+//     console.log("idForUser-->",userId);
+//     let userData = await fetch(`http://localhost:3000/api/students/${userId}`)
+//     userData= await userData.json()
+//     console.log(userData);
+//     if(userData.success){
+//         let result = userData.result
+//         setViewData(result)
+//         console.log(viewData);
+//         // handleDownload();
+//     }
 
 
-}
+// }
 
 
 const showDrawer = () => {
-  console.log("idForUser-->", id); // Access the id here
-  setIdForUser(id);
-  getUserData(id); // Pass the id to getUserData function
+  // console.log("idForUser-->", id); // Access the id here
+  // setIdForUser(id);
+  // getUserData(id); // Pass the id to getUserData function
   setOpen(true);
 };
 
@@ -97,7 +97,7 @@ const showDrawer = () => {
         >
           <div>
           <img
-            src={viewData.imageUrl}
+            src={userData.imageUrl}
             alt="Student"
             style={{
               width: "20%",
@@ -109,17 +109,17 @@ const showDrawer = () => {
           </div>
           
           <div className="space-y-3">
-            <p>Name: {viewData.fullName}</p>
-            <p>Fathers Name: {viewData.fatherName}</p>
-            <p>CNIC: {viewData.cnic}</p>
-            <p>Course: {viewData.course}</p>
-            <p>Gender: {viewData.gender}</p>
-            <p>Batch: {viewData.batch}</p>
-            <p>Email: {viewData.email}</p>
-            <p>City: {viewData.city}</p>
-            <p>Date of Birth: {viewData.dateOfBirth}</p>
-            <p>Qualification: {viewData.qualification}</p>
-            <p>Address: {viewData.address}</p>
+            <p>Name: {userData.fullName}</p>
+            <p>Fathers Name: {userData.fatherName}</p>
+            <p>CNIC: {userData.cnic}</p>
+            <p>Course: {userData.course}</p>
+            <p>Gender: {userData.gender}</p>
+            <p>Batch: {userData.batch}</p>
+            <p>Email: {userData.email}</p>
+            <p>City: {userData.city}</p>
+            <p>Date of Birth: {userData.dateOfBirth}</p>
+            <p>Qualification: {userData.qualification}</p>
+            <p>Address: {userData.address}</p>
           </div>
 
         </div>

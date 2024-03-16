@@ -10,6 +10,7 @@ const RegistrationSchema = new mongoose.Schema({
     course:String,
     batch:String,
     payment:String,
+    paymentImg:String,
     status:String,
     city: String,
     cnic: String,

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import 'antd/dist/antd.css';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd';
@@ -8,39 +8,68 @@ import { batchOptions, courseOptions } from '../../utils';
 import SelectComponent from '../SelectComponent';
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
+
+import { Image } from 'cloudinary-react';
+
+
+// const cloudinary = require('cloudinary').v2;
+// import { v2 as cloudinary } from "cloudinary";
+
+if (typeof window === 'undefined') {
+    const { v2: cloudinary } = require('cloudinary');
+cloudinary.config({
+    cloud_name: "dbcpfhk6n",
+    api_key: "588376267435949",
+    api_secret:"ax1LWxiCFgecD5A2ve7Rfm4kBoA"
+});
+}
+
+
 const { Option } = Select;
-const EditDrawerApp = ({ id }) => {
+const EditDrawerApp = ({ userData }) => {
   
   const [open, setOpen] = useState(false);
   const [viewData, setViewData] = useState({})
 
-  const [fullName, setFullName] = useState('');
-  const [fatherName, setFatherName] = useState('');
-  const [email, setEmail] = useState('');
-  const [course, setCourse] = useState('');
-  const [batch, setBatch] = useState('');
-  const [status, setStatus] = useState('');
-  const [city, setCity] = useState('');
-  const [cnic, setCnic] = useState('');
-  const [phone, setPhone] = useState('');
-  const [payment, setPayment] = useState('');
-  const [rollNo, setRollNo] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [gender, setGender] = useState('');
-  const [qualification, setQualification] = useState('');
-  const [address, setAddress] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [email, setEmail] = useState("");
+  const [course, setCourse] = useState("");
+  const [batch, setBatch] = useState("");
+  const [status, setStatus] = useState("");
+  const [city, setCity] = useState("");
+  const [cnic, setCnic] = useState("");
+  const [phone, setPhone] = useState("");
+  const [payment, setPayment] = useState("");
+  const [paymentImg, setPaymentImg] = useState("");
+  const [rollNo, setRollNo] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [gender, setGender] = useState("");
+  const [qualification, setQualification] = useState("");
+  const [address, setAddress] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
+  const [studentImage,setStudentImage]= useState("")
+  const [paymentImage,setPaymentImage]= useState("")
+
+  const [verified, setVerified] = useState(true); // Initial state is verified
+  const [buttonText, setButtonText] = useState("Pending");
+  const [buttonColor, setButtonColor] = useState("Blue");
+
+  
+  // useEffect(() => {
+  //   getUserData(userData._id)
+  // }, [userData]);
 
 
   const getUserData = async (userId) => {
     console.log("idForUser-->", userId);
-    let userData = await fetch(`http://localhost:3000/api/students/${userId}`)
-    userData = await userData.json()
-    console.log(userData);
-    if (userData.success) {
-      let result = userData.result
-      setViewData(result)
+    let data = await fetch(`http://localhost:3000/api/students/${userId}`)
+    data = await data.json()
+    console.log(data);
+    if (data.success) {
+      let result = data.result
+      // setViewData(result)
       // console.log(viewData);
       setFullName(result.fullName);
       setFatherName(result.fatherName);
@@ -58,6 +87,31 @@ const EditDrawerApp = ({ id }) => {
       setImageUrl(result.imageUrl);
       setRollNo(result.rollNo);
       setPayment(result.payment);
+      setPaymentImg(result.paymentImg);
+
+
+      setStudentImage(result.imageUrl);
+      setPaymentImage(result.paymentImg);
+  // useEffect(() => {
+    
+  //   if (userData.status == "verified") {
+  //     setButtonColor("green");
+  //     setButtonText("Verified");
+  //   } else {
+  //     setButtonColor("red");
+  //     setButtonText("Un-verified");
+  //   }
+  // }, []);
+      if(result.status === "verified"){
+        setButtonColor("green")
+        setButtonText("Verified")
+      }
+      else{
+        setButtonColor("red")
+        setButtonText("Un-verified")
+      }
+
+
     }
 
 
@@ -79,7 +133,7 @@ const EditDrawerApp = ({ id }) => {
 
     let data = await fetch(`http://localhost:3000/api/students/${userId}`, {
       method: "PUT",
-      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, phone, qualification, rollNo, status }), headers: {
+      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment,paymentImg, phone, qualification, rollNo, status }), headers: {
         "Content-Type": "application/json"
       }
     })
@@ -95,9 +149,25 @@ const EditDrawerApp = ({ id }) => {
   }
 
 
+  const handleButtonClick = () => {
+    // Toggle the verification status and update button text and color accordingly
+    setVerified(!verified);
+    if (status === "verified") {
+      setStatus("un-verified")
+      setButtonText('Un-verified');
+      setButtonColor('red');
+    } else {
+      setStatus("verified")
+      setButtonText('Verified');
+      setButtonColor('green');
+    }
+    // updateUser(userData._id)
+  };
+
+
   const showDrawer = () => {
     setOpen(true);
-    getUserData(id); // Pass the id to getUserData function
+    getUserData(userData._id); // Pass the id to getUserData function
 
     // console.log(id);
 
@@ -119,6 +189,122 @@ const EditDrawerApp = ({ id }) => {
     const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
     return formattedNumber;
   };
+
+  // Image Function for Student
+
+  const handleStudentImage = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'Rizwan_Tayyab');
+
+    try {
+        const response = await fetch(
+            'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+        const data = await response.json();
+        console.log("Data.response hon->>>", data.secure_url);
+
+        // Set the image URL received from Cloudinary
+        // setStudentImage(data.secure_url);
+
+        // Convert the image to base64
+        const base64Image = await getBase64Image(data.secure_url);
+        console.log("Base64 image:", base64Image);
+
+        // Update the form data with the base64 representation of the image
+
+            if(data.secure_url){
+
+              setImageUrl(base64Image)
+              setStudentImage(base64Image)
+
+            }
+
+    } catch (error) {
+        console.error('Error uploading image to Cloudinary:', error);
+    }
+};
+
+// Function to convert an image URL to base64
+const getBase64Image = async (imageUrl) => {
+    try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    } catch (error) {
+        console.error('Error fetching image for base64 conversion:', error);
+        return null;
+    }
+};
+
+
+// Image Function for payment
+
+
+const handlePaymentImage = async (e) => {
+  const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'Rizwan_Tayyab');
+
+  try {
+      const response = await fetch(
+          'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
+          {
+              method: 'POST',
+              body: formData,
+          }
+      );
+      const data = await response.json();
+      console.log("Data.response hon->>>", data.secure_url);
+
+      // Set the image URL received from Cloudinary
+      // setStudentImage(data.secure_url);
+
+      // Convert the image to base64
+      const base64Image = await getBase64PaymentImage(data.secure_url);
+      console.log("Base64 image:", base64Image);
+
+      // Update the form data with the base64 representation of the image
+      if(data.secure_url){
+        
+        setPaymentImg(base64Image)
+        setPaymentImage(base64Image)
+        setPayment("done")
+
+      }
+
+  } catch (error) {
+      console.error('Error uploading image to Cloudinary:', error);
+  }
+};
+
+// Function to convert an image URL to base64
+const getBase64PaymentImage = async (imageUrl) => {
+  try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+      });
+  } catch (error) {
+      console.error('Error fetching image for base64 conversion:', error);
+      return null;
+  }
+};
 
 
 
@@ -161,7 +347,7 @@ const EditDrawerApp = ({ id }) => {
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={() => updateUser(id)} type="primary">
+            <Button onClick={() => updateUser(userData._id)} type="primary">
               Submit
             </Button>
 
@@ -169,7 +355,101 @@ const EditDrawerApp = ({ id }) => {
         }
       >
 
+
+
+
         <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className="mx-auto w-full  flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative">
+
+
+
+            <div className='display-inline flex felx-col'>
+
+<div className="image-uploader" onClick={() => document.getElementById('student-image-upload').click()}>
+      <input id="student-image-upload" type="file"  onChange={handleStudentImage} style={{ display: 'none' }} />
+      {/* {image ? (
+        <img src={image} alt="ID Card" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '5px' }} /> */}
+      {/* ) : (
+        <p className="upload-text">Upload</p>
+      )} */}
+
+{studentImage && <img  src={studentImage} style={{ width: '160px', height: '140px' }} />}
+
+       <style jsx>{`
+    .image-uploader {
+      width: 160px;
+      height: 140px; /* Reduced height */
+      background-color: #f2f2f2;
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .upload-text {
+      margin: 0;
+      color: #555;
+    }
+    input[type='file'] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      opacity: 0;
+      cursor: pointer;
+    }
+  `}</style>
+    </div>
+
+
+
+    <div className="image-uploader" onClick={() => document.getElementById('payment-image-upload').click()}>
+      <input id="payment-image-upload" type="file"  onChange={handlePaymentImage} style={{ display: 'none' }} />
+      {/* {image ? (
+        <img src={image} alt="ID Card" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '5px' }} /> */}
+      {/* ) : (
+        <p className="upload-text">Upload</p>
+      )} */}
+
+{paymentImage && <img  src={paymentImage} style={{ width: '320px', height: '140px' }} />}
+
+       <style jsx>{`
+    .image-uploader {
+      width: 320px;
+      height: 140px; /* Reduced height */
+      background-color: #f2f2f2;
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .upload-text {
+      margin: 0;
+      color: #555;
+    }
+    input[type='file'] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 120px;
+      height: 120px;
+      opacity: 0;
+      cursor: pointer;
+    }
+  `}</style>
+    </div>
+
+    </div>
+
+
+
+
+
           <div className="w-full mr-0 mb-0 ml-0 space-y-4 lg:space-y-1 md:space-y-1 mx:space-y-1
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6
                  ">
@@ -351,6 +631,17 @@ const EditDrawerApp = ({ id }) => {
                 }}
               />
             </div>
+
+
+            <button
+      style={{ backgroundColor: buttonColor, color: 'white', padding: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
+      onClick={handleButtonClick}
+    >
+      {buttonText}
+    </button>
+
+
+
           </div>
 
 

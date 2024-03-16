@@ -26,6 +26,8 @@ if (typeof window === "undefined") {
 }
 
 export default function PaymentVerify() {
+
+
   const styles = {
     container: {
     //   backgroundColor: "white",
@@ -61,7 +63,7 @@ export default function PaymentVerify() {
 
   // const [paymentFormData, setPaymentFormData] = useState("");
 
-const [myPaymentData , setMyPaymentData ] = useState("")
+// const [myPaymentData , setMyPaymentData ] = useState("")
 const [user,setUser] = useState(null)
 
 
@@ -83,70 +85,140 @@ const [fullName, setFullName] = useState('');
   const [qualification, setQualification] = useState('');
   const [address, setAddress] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-
-const getUserData = async (rollNo) => {
-  console.log("rollNoForUser-->", rollNo);
-  let userData = await fetch(`http://localhost:3000/api/students?rollNo=${rollNo}`)
-  userData = await userData.json()
-  console.log(userData);
-  if (userData.success) {
-    let data = userData.data
-    console.log("data-->",data);
-    // setUser(userData.data)
-    // console.log(user);
-
-// agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
-
-// setFullName(userData.data.fullName);
-// setFatherName(userData.data.fatherName);
-// setEmail(userData.data.email);
-// setCourse(userData.data.course);
-//     setBatch(userData.data.batch);
-//     setStatus(userData.data.status);
-//     setCity(userData.data.city);
-//     setCnic(userData.data.cnic);
-//     setPhone(userData.data.phone);
-//     setDateOfBirth(userData.data.dateOfBirth);
-//     setGender(userData.data.gender);
-//     setQualification(userData.data.qualification);
-//     setAddress(userData.data.address);
-//     setImageUrl(userData.data.imageUrl);
-//     setRollNo(userData.data.rollNo);
-//     setPayment(userData.data.payment);
-//     setPaymentImg(userData.data.paymentImg);
-//     setIdForUser(userData.data._id)
+  const [check, setCheck] = useState(false);
 
 
-    // console.log(fullName,fatherName,course,batch)
 
+  useEffect(() => {
+  if(rollNumber.length==5){
+    console.log("Updated rollNo:", rollNumber);
+    // setRollNo(rollNumber)
+    getUserData(rollNumber)
+    }
+    else{
+    setCourse("")
+    setBatch("")
+    setFullName("")
+    setFatherName("")
+    setImageee("")
+    setCheck(false)
+    }
+  }, [rollNumber])
+  
+
+
+  const getUserData = async (rollNumber) => {
+  console.log("rollNoForUser-->", rollNumber);
+  if(rollNumber){
+
+
+    let userData = await fetch(`http://localhost:3000/api/students?rollNo=${rollNumber}`)
+    userData = await userData.json()
+      console.log(userData)
+      if (userData.success) {
+        let data = userData.data
+        console.log("data-->",data);
+        // setUser(userData.data)
+        // console.log(user);
+    
+    // agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
+    
+    setFullName(userData.data.fullName);
+    setFatherName(userData.data.fatherName);
+    setEmail(userData.data.email);
+    setCourse(userData.data.course);
+        setBatch(userData.data.batch);
+        setStatus(userData.data.status);
+        setCity(userData.data.city);
+        setCnic(userData.data.cnic);
+        setPhone(userData.data.phone);
+        setDateOfBirth(userData.data.dateOfBirth);
+        setGender(userData.data.gender);
+        setQualification(userData.data.qualification);
+        setAddress(userData.data.address);
+        setImageUrl(userData.data.imageUrl);
+        setRollNo(userData.data.rollNo);
+        setPayment(userData.data.payment);
+        setPaymentImg(userData.data.paymentImg);
+        setIdForUser(userData.data._id)
+    
+    
+        setImageee(userData.data.paymentImg);
+
+
+        if(payment == "done"){
+          setCheck(true)
+        }
+        else{
+          setPayment("done")
+          setCheck(false)
+
+        }
+
+        // console.log(fullName,fatherName,course,batch)
+
+  }
+  else if(userData.message == "Student not found in the database"){
+    alert("Student not found with this Roll No !")
+
+  }
+  else{
+    alert("An error occured !")
+  }
+ 
+
+  }else{
+    console.log("roll number nhi ara")
   }
 
 
 }
 
-
-
 const updateUser = async (userId) => {
+  try {
+    if(check){
+      alert("Your payment is already done!")
+    }
+    else if(rollNumber.length !== 5 && fullName == ""){
+      alert("Enter a correct 5 digit Roll No !")
+    }
+    else if(userId && paymentImg !== "not-done" && check == false){
+      // setPayment("done")
+      // 27577
+    let dataToEdit = await fetch(`http://localhost:3000/api/students/${userId}`, {
+      method: "PUT",
+      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, paymentImg, phone, qualification, rollNo, status }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 
+    dataToEdit = await dataToEdit.json();
+
+    if (dataToEdit.success) {
+      alert("Your Payment process has been done!..");
+      setFullName("")
+      setFatherName("")
+      setCourse("")
+      setBatch("")
+      setPaymentImg("")
+      setImageee("")
+      setRollNumber("")
+      setCheck(false)
+    } else {
+      console.log(dataToEdit.error);
+    }
+  }
+  else if(paymentImg== "not-done"){
+    alert("Provide Your Payment Pic!")
+  }
   
+  } catch (error) {
+    console.error("An error occurred while updating user:", error);
+  }
+};
 
-console.log("userId-->",userId)
-  // let data = await fetch(`http://localhost:3000/api/students/${userId}`, {
-  //   method: "PUT",
-  //   body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, phone, qualification, rollNo, status }), headers: {
-  //     "Content-Type": "application/json"
-  //   }
-  // })
-  // data = await data.json()
-  // // console.log("info-->",data);
-  // if (data.success) {
-  //   alert("Your payment data has been sent! , Later it will be cerified by Admin")
-  //   // setOpen(false);
-  // }
-  // else {
-  //   console.log(data);
-  // }
-}
+
 
 
 
@@ -169,14 +241,20 @@ const handleImageUpload = async (e) => {
       console.log("Data.response hon->>>", data.secure_url);
 
       // Set the image URL received from Cloudinary
-      setImageee(data.secure_url);
+      // setImageee(data.secure_url);
 
       // Convert the image to base64
       const base64Image = await getBase64Image(data.secure_url);
       console.log("Base64 image:", base64Image);
 
       // Update the form data with the base64 representation of the image
-      setMyPaymentData(base64Image);
+      if(data.secure_url){
+
+        setPaymentImg(base64Image);
+        setImageee(base64Image);
+
+      }
+      // setPayment("done")
   } catch (error) {
       console.error('Error uploading image to Cloudinary:', error);
   }
@@ -212,7 +290,7 @@ const getBase64Image = async (imageUrl) => {
 
 
 console.log(imageee);
-console.log("Image Url ka baap hon----->", myPaymentData)
+console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
     <div id="payment" style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}>
@@ -243,21 +321,11 @@ console.log("Image Url ka baap hon----->", myPaymentData)
               style={styles.inputs}
               value={rollNumber}
               onChange={(event)=>{
-                setRollNumber(event.target.value)
-                if(event.target.value.length===5){
-                  setRollNo(event.target.value)
-                  console.log("rollNo-->",rollNo)
-                  getUserData(rollNo)
+                // setRollNumber(event.target.value)
+                console.log(event.target.value)
+                  setRollNumber(event.target.value)
 
-
-                }else{
-                  setFullName("")
-                  setFatherName("")
-                  setCourse("")
-                  setBatch("")
-                  setUser(null)
-                }
-              }}
+                }}
             />
           </div>
           <div style={{ marginTop: "5px" }}>
@@ -265,7 +333,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Name"}
               style={styles.inputs}
-              // value={fullName}
+              value={fullName}
             />
           </div>
           <div>
@@ -273,7 +341,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Course"}
               style={styles.inputs}
-              // value={course}
+              value={course}
             />
           </div>
           <div>
@@ -282,7 +350,7 @@ console.log("Image Url ka baap hon----->", myPaymentData)
             <AntInputComponent
               placeholder={"Enter Batch"}
               style={styles.inputs}
-              // value={batch}
+              value={batch}
             />
           </div>
 
@@ -306,9 +374,9 @@ console.log("Image Url ka baap hon----->", myPaymentData)
           /> {!imageee ? (
             <h1> Upload Here</h1>
           ) : (
-            <Image
-              cloudName="dbcpfhk6n"
-              publicId={imageee}
+            <img
+              // cloudName="dbcpfhk6n"
+              src={imageee}
               style={{ width: "100%", height: "100%" }}
             />
           )}
@@ -345,11 +413,14 @@ console.log("Image Url ka baap hon----->", myPaymentData)
 
         </div>
         
-        <button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
+        {/* <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
         color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
          }}
          onClick={updateUser(idForUser)}
-         >Submit</button>
+         >Submit</Button> */}
+
+         <button onClick={() => updateUser(idForUser)}>Submit</button>
+
       </div>
     </div>
   );

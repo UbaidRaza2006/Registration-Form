@@ -13,10 +13,12 @@ export async function GET(req) {
 
 await connectToDb();
 
-    const query = new URL(req.url).searchParams.get("rollNo");
+    const rollNoQuery = new URL(req.url).searchParams.get("rollNo");
+    const cnicQuery = new URL(req.url).searchParams.get("cnic");
+
 
     try {
-        if (!query) {
+        if (!rollNoQuery && !cnicQuery) {
             const students = await Register.find();
             if (students.length > 0) {
               return NextResponse.json(
@@ -44,8 +46,8 @@ await connectToDb();
                 }
               );
             }
-          } else {
-            const student = await Register.findOne({ rollNo: query });
+          } else if(cnicQuery && rollNoQuery){
+            const student = await Register.findOne({ rollNo: rollNoQuery, cnic: cnicQuery });
             if (student) {
               return NextResponse.json(
                 {
@@ -72,6 +74,66 @@ await connectToDb();
                 }
               );
             }
+          } else if(rollNoQuery && !cnicQuery){
+
+            const student = await Register.findOne({ rollNo: rollNoQuery });
+            if (student) {
+              return NextResponse.json(
+                {
+                  success: true,
+                    data: student,
+                },
+                {
+                  headers: {
+                    "Cache-Control": "no-cache",
+                  },
+                }
+              );
+            } else {
+              return NextResponse.json(
+                {
+                  success: false,
+                  status: 204,
+                  message: "Student not found in the database",
+                },
+                {
+                  headers: {
+                    "Cache-Control": "no-cache",
+                  },
+                }
+              );
+            }
+
+          } else if(cnicQuery && !rollNoQuery){
+
+            const student = await Register.find({ cnic: cnicQuery });
+            if (student) {
+              return NextResponse.json(
+                {
+                  success: true,
+                    data: student,
+                },
+                {
+                  headers: {
+                    "Cache-Control": "no-cache",
+                  },
+                }
+              );
+            } else {
+              return NextResponse.json(
+                {
+                  success: false,
+                  status: 204,
+                  message: "Student not found in the database",
+                },
+                {
+                  headers: {
+                    "Cache-Control": "no-cache",
+                  },
+                }
+              );
+            }
+
           }
     } catch (error) {
         console.error("An error occurred:", error);
