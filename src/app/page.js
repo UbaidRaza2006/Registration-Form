@@ -110,9 +110,16 @@ const initialFormData = {
     phone: 'abc',
     dateOfBirth: 'abc',
     gender: 'male',
+<<<<<<< HEAD
     qualification: 'abc',
     address: 'abc',
     imageUrl: 'abc'
+=======
+    qualification: '',
+    address: '',
+    imageUrl: '',
+    paymentImg: 'not-done'
+>>>>>>> 6ca6e3e391264a7f96eea448841ead264b5783dd
 }
 
 
