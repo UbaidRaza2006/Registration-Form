@@ -1,17 +1,37 @@
 'use client'
-// In your context file
-import {  createContext, useContext, useState } from 'react';
+// // In your context file
+// import {  createContext, useContext, useState } from 'react';
 
-const GlobalContext = createContext();
+import { createContext, useContext, useState } from "react";
 
-const GlobalContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+// const GlobalContext = createContext();
+
+// const GlobalContextProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+
+//   return (
+//     <GlobalContext.Provider value={{ user, setUser }}>
+//       {children}
+//     </GlobalContext.Provider>
+//   );
+// };
+
+// export { GlobalContext, GlobalContextProvider };
+
+
+
+
+const PasswordContext = createContext();
+
+export const PasswordProvider = ({ children }) => {
+  const [password, setPassword] = useState('abc');
+  const [api, setApi] = useState(false);
 
   return (
-    <GlobalContext.Provider value={{ user, setUser }}>
+    <PasswordContext.Provider value={{ password, setPassword ,api,setApi}}>
       {children}
-    </GlobalContext.Provider>
+    </PasswordContext.Provider>
   );
 };
 
-export { GlobalContext, GlobalContextProvider };
+export const usePassword = () => useContext(PasswordContext);

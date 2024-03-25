@@ -12,6 +12,7 @@ import style from "../globals.css"
 import Link from "next/link";
 import InputComponent from "../../components/InputComponent";
 import { findUserByCNIC, getAllUsers, getUserWithCnic } from "../../services/register";
+import IdCard from "../../components/IdCard";
 
 
 
@@ -23,25 +24,16 @@ function DownloadIdCard() {
   const [cnic,setCnic]= useState(false)
   const [inputCnic,setInputCnic]= useState('')
   const [simpleCnic,setSimpleCnic]= useState('')
+  const [usersWithCnic,setUsersWithCnic]= useState([])
   // const [usersWithCnic,setUsersWithCnic]= useState([])
-  var usersWithCnic=[]
 
 
     useEffect(() => {
-        getAllUsers()
-          .then((users) => {
-            setRes(users)
-            setAllUsers(users.data);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-          });
-        }, []);
+      if(inputCnic.length>15 || inputCnic.length<15){
+        setUsersWithCnic([])
+      }
+        }, [inputCnic]);
   
-        console.log(res)
-        console.log(allUsers)
-        console.log(simpleCnic)
-        console.log(cnic)
   
 
         const data = [
@@ -77,57 +69,54 @@ function DownloadIdCard() {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-              <Button style={{ backgroundColor: "#248ba5" }}>
-                <Link href={`/download/${record._id}`}>ID Card</Link>
-              </Button>
+              <IdCard user={record}/>
             ),
       
           },
         ];
       
 
-        // const formatCnicNumber = (input) => {
-        //   // Remove any non-digit characters
-        //   const cleanedInput = input.replace(/\D/g, '');
-        
-        //   // Insert hyphens after certain positions
-        //   let formattedCnic = cleanedInput.replace(/^(\d{5})(\d{7})(\d{1})$/, '$1-$2-$3');
-        
-        //   return formattedCnic;
-        // };
         const formatCnicNumber = (input) => {
           const cleanedInput = input.replace(/\D/g, '');
           let formattedCnic = cleanedInput.replace(/^(\d{5})(\d{7})(\d{1})$/, '$1-$2-$3');
           return formattedCnic;
         };
 
-    // 
-
-
-
-    // console.log(cnic)
 
 
     function isFormValid() {
         return inputCnic.length === 15 ? true : false
     }
 
-    // setCnic(simpleCnic)
 
-    const handleShow = () => {
-      const filteredUsers = allUsers.filter(data => data.cnic === inputCnic);
-      if (filteredUsers.length > 0) {
-        filteredUsers.forEach(user => {
-          usersWithCnic.push(user);
-        });
-        console.log('usersWithCnic-->', usersWithCnic);
-        // setCnic(true)
-      } else {
-        console.log('cnic is not matching');
+    const getUserCnicData = async (cnicNumber) => {
+      console.log("cnicForUser-->", cnicNumber);
+      if (cnicNumber) {
+        try {
+          let userData = await fetch(`http://localhost:3000/api/students?cnic=${cnicNumber}`);
+          userData = await userData.json();
+          console.log(userData);
+    
+          if (userData.success) {
+            let data = userData.data;
+            console.log("data-->", data);
+            
+            const users = Array.isArray(data) ? data : [data];
+  
+            setUsersWithCnic(users);
+          } else if (userData.message === "Student not found in the database") {
+            alert("Student not found with this Roll No !");
+          } else {
+            alert("An error occurred !");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
       }
-      console.log('mein chal gaya');
     };
 
+    
+ 
 
 
 
@@ -166,7 +155,7 @@ function DownloadIdCard() {
                     className="disabled:opacity-50 mt-4 bg-[#248ba5] text-white font-semibold w-full"
                     style={{ height: "50px" }}
                     disabled={!isFormValid()}
-                    onClick={handleShow()}
+                    onClick={()=>getUserCnicData(inputCnic)}
                 >
                     SUBMIT
                 </Button>
@@ -174,9 +163,18 @@ function DownloadIdCard() {
 
 
                 <div className="mt-6">
-                    <Table columns={columns} dataSource={usersWithCnic} style={{ width: '550px',  borderRadius: "0px" }}  />
+                    {usersWithCnic.length>0?<Table columns={columns} dataSource={usersWithCnic} style={{ width: '550px',  borderRadius: "0px" }}  />:null}
                 </div>
             </div>
+
+
+
+            
+
+
+
+
+
         </div>
     );
 }

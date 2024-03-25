@@ -1,190 +1,120 @@
-"use client";
+// import React, { useState, useRef } from 'react';
+'use client'
+import Modal from 'react-modal';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import html2pdf from 'html2pdf.js';
+import html2pdfmake from 'html2pdfmake';
+import { Button } from 'antd';
 
-import React, { useRef } from "react";
-import { Button } from "antd";
-import html2pdf from "html2pdf.js";
+import css from "../../app/globals.css"
+import { useRouter } from 'next/navigation';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { GlobalContext } from '../../context';
+// import { GlobalContext } from '../../context';
+// import { GlobalCon } from '../../context';
 
-const IDCard = () => {
-  const idCardRef = useRef(null);
 
-  const handleDownload = () => {
-    const input = idCardRef.current;
 
-    if (!input) {
-      console.error("Element with id 'id-card' not found");
-      return;
-    }
 
-    const options = {
-      filename: "id_card.pdf",
-      html2canvas: { scale: 1 },
-      jsPDF: { orientation: "portrait" },
-    };
 
-    html2pdf().set(options).from(input).save();
-  };
+export default function Id () {
 
-  const userFromStorage = localStorage.getItem("user");
-  const user = JSON.parse(userFromStorage);
+    const [isDownloaded, setIsDownloaded] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  const cardRef= useRef(null);
+  const router= useRouter()
+  // const { user } = useContext(GlobalContext);
 
-  return (
-    <>
-      <div className="flex flex-col items-center justify-center h-screen overflow-hidden w-full absolute">
-        <div
-          id="id-card"
-          className="flex bg-no-repeat object-cover relative top-0 bottom-0 left-0 right-0"
-          style={{
-            backgroundImage: 'url("/images/id.PNG")',
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="h-full w-full">
-            <div className="p-24 space-y-1">
-              <h1 className="text-2xl font-bold mb-4">ID Card</h1>
-              <p>
-                <span className="font-bold">Full Name:</span> {user.fullName}
-              </p>
-              <p>
-                <span className="font-bold">Father Name:</span>{" "}
-                {user.fatherName}
-              </p>
-              <p>
-                <span className="font-bold">Gender:</span> {user.gender}
-              </p>
-              <p>
-                <span className="font-bold">Date of Birth:</span>{" "}
-                {user.dateOfBirth}
-              </p>
-              <p>
-                <span className="font-bold">Address:</span> {user.address}
-              </p>
-              <p>
-                <span className="font-bold">City:</span> {user.city}
-              </p>
-              <p>
-                <span className="font-bold">CNIC:</span> {user.cnic}
-              </p>
-              <p>
-                <span className="font-bold">Email:</span> {user.email}
-              </p>
-              <p>
-                <span className="font-bold">Phone:</span> {user.phone}
-              </p>
-              <p>
-                <span className="font-bold">Course:</span> {user.course}
-              </p>
-              <p>
-                <span className="font-bold">Batch:</span> {user.batch}
-              </p>
-              <p>
-                <span className="font-bold">Qualification:</span>{" "}
-                {user.qualification}
-              </p>
-              <p>
-                <span className="font-bold">Roll No:</span> {user.rollNo}
-              </p>
-              <p>
-                <span className="font-bold">Payment Status:</span>{" "}
-                {user.payment}
-              </p>
-              <p>
-                <span className="font-bold">Status:</span> {user.status}
-              </p>
-              <p>
-                <span className="font-bold">Created At:</span> {user.createdAt}
-              </p>
-              <p>
-                <span className="font-bold">Updated At:</span> {user.updatedAt}
-              </p>
-            </div>
-          </div>
-        </div>
-        <Button
-          type="primary"
-          style={{ backgroundColor: "#0d5667" }}
-          className="w-auto mx-auto h-10 mt-8"
-          onClick={handleDownload}
-        >
-          Download ID Card
-        </Button>
-      </div>
-      {/* card to download */}
-      <div className="w-screen h-screen hidden">
-        <div
-          id="id-card"
-          ref={idCardRef}
-          className="flex bg-no-repeat m-auto my-16 w-[488px] h-[711px]"
-          style={{
-            backgroundImage: 'url("/images/id.PNG")',
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="h-full w-full">
-            <div className="p-24 space-y-1">
-              <h1 className="text-2xl font-bold mb-4">ID Card</h1>
-              <p>
-                <span className="font-bold">Full Name:</span> {user.fullName}
-              </p>
-              <p>
-                <span className="font-bold">Father Name:</span>{" "}
-                {user.fatherName}
-              </p>
-              <p>
-                <span className="font-bold">Gender:</span> {user.gender}
-              </p>
-              <p>
-                <span className="font-bold">Date of Birth:</span>{" "}
-                {user.dateOfBirth}
-              </p>
-              <p>
-                <span className="font-bold">Address:</span> {user.address}
-              </p>
-              <p>
-                <span className="font-bold">City:</span> {user.city}
-              </p>
-              <p>
-                <span className="font-bold">CNIC:</span> {user.cnic}
-              </p>
-              <p>
-                <span className="font-bold">Email:</span> {user.email}
-              </p>
-              <p>
-                <span className="font-bold">Phone:</span> {user.phone}
-              </p>
-              <p>
-                <span className="font-bold">Course:</span> {user.course}
-              </p>
-              <p>
-                <span className="font-bold">Batch:</span> {user.batch}
-              </p>
-              <p>
-                <span className="font-bold">Qualification:</span>{" "}
-                {user.qualification}
-              </p>
-              <p>
-                <span className="font-bold">Roll No:</span> {user.rollNo}
-              </p>
-              <p>
-                <span className="font-bold">Payment Status:</span>{" "}
-                {user.payment}
-              </p>
-              <p>
-                <span className="font-bold">Status:</span> {user.status}
-              </p>
-              <p>
-                <span className="font-bold">Created At:</span> {user.createdAt}
-              </p>
-              <p>
-                <span className="font-bold">Updated At:</span> {user.updatedAt}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+// console.log('User for ID Card is -->',user)
+const userFromStorage=localStorage.getItem("user")
+const user = JSON.parse(userFromStorage)
+console.log('User from Local Storage is -->',user);
+
+const handleDownload = async () => {
+  try {
+      const canvas = await html2canvas(cardRef.current, { scale: 2 });
+      const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'mm',
+          format: 'a4',
+      });
+
+      const scaleFactor = 210 / canvas.width;
+
+      pdf.addImage(
+          canvas.toDataURL('image/png'),
+          'PNG',
+          0,
+          0,
+          210,
+          canvas.height * scaleFactor,
+          null,
+          'FAST'
+      );
+
+      pdf.save('id_card.pdf');
+  } catch (error) {
+      console.error('Error generating PDF:', error);
+  }
 };
+// useEffect(() => {
+//   // Call handleDownload when the component mounts
+//   handleDownload();
+// }, []); // Empty dependency array ensures this runs only on mount
 
-export default IDCard;
+
+
+
+return(
+  <div>
+<div >
+<Button type='primary' style={{backgroundColor:"#0d5667"}} className='w-[400px] absolute fixed mx-auto mt-[570px] h-10' onClick={handleDownload}>
+Download ID Card
+</Button>
+<div ref={cardRef} className='bg-white h-[1500px]'>
+
+<div   className="id-card flex shadow-md rounded-md bg-white bg-cover bg-center bg-no-repeat mx-auto h-[550px] w-[400px]" style={{ backgroundImage: 'url("/images/id.PNG")' }}>
+    <div className="card-content flex overflow-hidden ">
+      {/* <div className="bg-[/images/Capture.png]"> */}
+        {/* <img src="/images/Capture.png" alt="" /> */}
+        <img className='w-[40%] h-[160px] mt-[80px] ml-[30%] ' src={user.imageUrl} />
+        <div className='mt-[300px] ml-[-68%] ml-[-55%] w-[280px] overflow-hidden'>
+        <p className='mx-auto'><strong>{user.rollNo}</strong></p>
+        <p className="break-words">
+          <strong> Name: </strong>
+          {user.fullName} {user.fatherName}
+        </p>
+        <p className="break-words">
+          <strong> Course: </strong>
+          {user.course}
+        </p>
+        <p className="break-words">
+          <strong> Batch: </strong>
+          {user.batch}
+        </p>
+        <p className="break-words">
+          <strong> Cnic/B-form: </strong>
+          {user.cnic}
+        </p>
+        <p className="break-words">
+          <strong> City: </strong>
+          {user.city}
+        </p></div>
+        {/* Add more fields and styling as needed */}
+      {/* </div> */}
+    </div>
+        
+  </div>
+
+
+
+</div>
+
+</div>
+</div>
+)
+
+
+
+}

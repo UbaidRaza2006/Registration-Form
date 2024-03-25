@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 "use client";
-
+import dynamic from "next/dynamic";
 
 // import ButtonComponent from "@/components/AntButtonComponent";
 // import AntCardComponent from "@/components/AntCard Component";
@@ -34,29 +33,93 @@ import SearchBox from "../../components/AntSearchComponent";
 import MyAntTable from "../../components/AntTableComponents/index2";
 import { getAllUsers } from "../../services/register";
 import { useState } from "react";
-import { Card, Select, Space, Table } from "antd";
+import { Button, Card, Select, Space, Table } from "antd";
 import EditDrawerApp from "../../components/EditDrawerComponent/antdrawer";
 import DeleteIconComponent from "../../components/DeleteIconComponent";
 import EyeViewDrawerApp from "../../components/EyeViewDrawerComponent/eyeantdrawer";
 // import ButtonComponent from "../../components/AntButtonComponent";
 import { Input } from 'antd';
 import VerificationButton from "../../components/VerificationButton";
+import { usePassword } from "../../context";
 const { Search } = Input;
 
 const { Option } = Select;
+const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
+  ssr: false,
+});
 
 
 export default function AdminPage() {
+  const [adminName, setAdminName] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  const {api,setApi} = usePassword();
+
+
+  useEffect(() => {
+    const storedAdminName = localStorage.getItem("adminName");
+    const storedAdminPassword = localStorage.getItem("adminPassword");
+
+    if (storedAdminName && storedAdminPassword) {
+      setAdminName(storedAdminName);
+      setAdminPassword(storedAdminPassword);
+    } else {
+      setModalOpen(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsFormValid(adminName === "a" && adminPassword === "a");
+  }, [adminName, adminPassword]);
+
+  const handleAdminLogin = () => {
+    if (isFormValid) {
+      localStorage.setItem("adminName", adminName);
+      localStorage.setItem("adminPassword", adminPassword);
+      setModalOpen(false);
+      resetAdminCredentials();
+    } else {
+      alert("Invalid admin credentials");
+    }
+  };
+
+ const resetAdminCredentials = () => {
+  console.log("Resetting admin credentials...");
+  setTimeout(() => {
+    localStorage.removeItem("adminName");
+    localStorage.removeItem("adminPassword");
+    setModalOpen(true);
+    setAdminName("");
+    setAdminPassword("");
+  }, 60000); // 1 minute in milliseconds
+};
 
   const [isHovered, setIsHovered] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false)
+  // const [query, setQuery] = useState("")
+  const [cnicUsers, setCnicUsers] = useState([]);
+  const [rollNoUsers, setRollNoUsers] = useState([]);
+  const [cnicAndRollNoUsers, setCnicAndRollNoUsers] = useState([]);
+  const [filterUsers, setFilterUsers] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [verifiedUsers, setVerifiedUsers] = useState([])
+  const [verifiedRollNo, setVerifiedRollNo] = useState([])
+  const [verifiedCnic, setVerifiedCnic] = useState([])
+  const [verifiedrollNoAndCnic, setVerifiedRollNoAndCnic] = useState([])
+  const [filterVerified, setFilterVerified] = useState([])
   const [alternateUsers, setAlternateUsers] = useState([])
   const [alternateVerified, setAlternateVerified] = useState([])
 
   const [rollNumber, setRollNumber] = useState("")
   const [cnicNumber, setCnicNumber] = useState("")
+  const [gender, setGender] = useState("")
+  const [batch, setBatch] = useState("")
+  const [course, setCourse] = useState("")
+  const [city, setCity] = useState("")
+  const [status, setStatus] = useState("")
+  const [payment, setPayment] = useState("")
 
 
   const formatCnicNumber = (input) => {
@@ -71,34 +134,98 @@ export default function AdminPage() {
 
 
 
-  useEffect(() => {
-    if (rollNumber.length === 5 && (cnicNumber.length > 15 || cnicNumber.length < 15)) {
+useEffect(() => {
+    if (rollNumber.length === 5 && cnicNumber.length !== 15){
       console.log("Updated rollNo:", rollNumber);
-      // setRollNo(rollNumber)
       getUserRollNoData(rollNumber)
+      setAllUsers(rollNoUsers)
+      setVerifiedUsers(verifiedRollNo)
     }
-    else if((rollNumber.length > 5 || rollNumber.length < 5) && cnicNumber.length === 15){
-
-      console.log("Updated cnic:", cnicNumber);
-      getUserCnicData(cnicNumber)
-
-    }
-    else if((rollNumber.length === 5) && (cnicNumber.length === 15)){
-
+    else if(rollNumber.length === 5 && cnicNumber.length === 15){
       console.log("Updated cnic:", cnicNumber);
       console.log("Updated rollNo:", rollNumber);
       getUserCnicAndRollNoData(cnicNumber, rollNumber)
+      setAllUsers(cnicAndRollNoUsers)
+      setVerifiedUsers(verifiedrollNoAndCnic)
+    }
+    else if(rollNumber.length !== 5 && cnicNumber.length === 15){
+      console.log("Updated cnic:", cnicNumber);
+      getUserCnicData(cnicNumber)
+      setAllUsers(cnicUsers)
+      setVerifiedUsers(verifiedCnic)
+    }
+    else if(rollNumber.length !== 5  && cnicNumber.length !== 15 ){
+      if (city || course || batch || gender || status || payment) {
+        console.log("Condition met! Other state has value.", status, city, batch, course, gender,payment);
+        getUsersFromFilter(status,batch,gender,city,course,payment);
+      }
+      else if(!city && !course && !batch && !gender && !status && !payment){
+        setAllUsers(alternateUsers)
+        setVerifiedUsers(alternateVerified)
+      }
+    }
+}, [rollNumber, cnicNumber, city, status, course, batch, gender, payment]);
 
+
+  
+  
+  const getUsersFromFilter = async (status, batch, gender, city, course,payment) => {
+    console.log("Filter Query Values-->", status, batch, gender, city, course,payment);
+
+    let queryParams = '';
+
+
+    if (status) {
+        queryParams += `${queryParams ? '&' : ''}status=${status}`;
     }
 
-    else if((rollNumber.length > 5 || rollNumber.length < 5) && (cnicNumber.length > 15 || cnicNumber.length < 15)){
-      // console.log(alternateUsers);
-      setAllUsers(alternateUsers)
-      setVerifiedUsers(alternateVerified)
-      // gettingUsers()
+    if (batch) {
+        queryParams += `${queryParams ? '&' : ''}batch=${batch}`;
     }
-  }, [rollNumber,cnicNumber])
 
+    if (gender) {
+        queryParams += `${queryParams ? '&' : ''}gender=${gender}`;
+    }
+
+    if (city) {
+        queryParams += `${queryParams ? '&' : ''}city=${city}`;
+    }
+
+    if (course) {
+        queryParams += `${queryParams ? '&' : ''}course=${course}`;
+    }
+
+    if (payment) {
+      queryParams += `${queryParams ? '&' : ''}payment=${payment}`;
+  }
+
+    try {
+        let userData = await fetch(`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+        userData = await userData.json();
+        console.log(userData,"url-->",`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+
+        if (userData.success) {
+            let data = userData.data;
+            console.log("data-->", data,"url-->",`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+            
+            // Convert single object to an array of length 1
+            const users = Array.isArray(data) ? data : [data];
+            const verified = users.filter(user => user.status === "verified");
+
+            setAllUsers(users);
+            setVerifiedUsers(verified)
+        } else if (userData.message === "No students found!") {
+          setAllUsers([]);
+          setVerifiedUsers([])
+            // alert("Student not found with these parameters!");
+        } else {
+            alert("An error occurred !");
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+    }
+};
+  
 
   const getUserRollNoData = async (rollNumber) => {
     console.log("rollNoForUser-->", rollNumber);
@@ -116,12 +243,15 @@ export default function AdminPage() {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setVerifiedUsers(verified)
+          setVerifiedRollNo(verified)
           // setAlternateUsers(allUsers)
-          setAllUsers(users);
+          setRollNoUsers(users);
           // checkingVerifiedUsers(users);
-        } else if (userData.message === "Student not found in the database") {
+        } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
+          setVerifiedRollNo(verified)
+          // setAlternateUsers(allUsers)
+          setRollNoUsers(users);
         } else {
           alert("An error occurred !");
         }
@@ -147,12 +277,15 @@ export default function AdminPage() {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setVerifiedUsers(verified)
+          setVerifiedCnic(verified)
           // setAlternateUsers(allUsers)
-          setAllUsers(users);
+          setCnicUsers(users);
           // checkingVerifiedUsers(users);
-        } else if (userData.message === "Student not found in the database") {
+        } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
+          setVerifiedCnic(verified)
+          // setAlternateUsers(allUsers)
+          setCnicUsers(users);
         } else {
           alert("An error occurred !");
         }
@@ -162,7 +295,7 @@ export default function AdminPage() {
     }
   };
 
-  const getUserCnicAndRollNoData = async (rollNumber,cnicNumber) => {
+  const getUserCnicAndRollNoData = async (cnicNumber,rollNumber) => {
     console.log("rollNoForUser-->", rollNumber);
     console.log("cnicForUser-->", cnicNumber);
     if (rollNumber && cnicNumber) {
@@ -179,12 +312,14 @@ export default function AdminPage() {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setVerifiedUsers(verified)
+          setCnicAndRollNoUsers(users);
+          setVerifiedRollNoAndCnic(verified)
           // setAlternateUsers(allUsers)
-          setAllUsers(users);
           // checkingVerifiedUsers(users);
-        } else if( queryData.message === "Student not found in the database") {
+        } else if( queryData.message === "No students found!") {
           alert("Student not found with this Roll No and Cnic !");
+          setCnicAndRollNoUsers(users);
+          setVerifiedRollNoAndCnic(verified)
         } else {
           alert("An error occurred !");
         }
@@ -196,11 +331,43 @@ export default function AdminPage() {
 
   useEffect(() => {
     gettingUsers();
-
-
-  }, [])
+  }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (api === true) {
+        console.log("Reload hoja bhai");
+  
+        try {
+          const res = await fetch("http://localhost:3000/api/students", {
+            method: "GET",
+            cache: "no-cache", // Set cache control policy to 'no-cache'
+          });
+          const data = await res.json();
+  
+          // Convert single object to an array of length 1
+          const users = Array.isArray(data.data) ? data.data : [data.data];
+          const verified = users.filter((user) => user.status === "verified");
+  
+          setVerifiedUsers(verified);
+          setAlternateVerified(verified);
+  
+          // Set all users into state
+          setAllUsers(users);
+          setAlternateUsers(users);
+          // checkingVerifiedUsers(users);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+        setApi(false);
+      }
+    };
+  
+    fetchData();
+  }, [api]); // api ko dependency list mein include kiya hai
 
   const gettingUsers = async () => {
+    console.log("gettingUsers")
     try {
       const res = await fetch("http://localhost:3000/api/students", {
         method: "GET",
@@ -232,6 +399,20 @@ export default function AdminPage() {
   //   const updatedUsers = allUsers.filter((user) => user._id !== deletedUserId);
   //   setAllUsers(updatedUsers);
   // };
+
+  const resetSelectInputs = () => {
+    setCity("");
+    setCourse("");
+    setBatch("");
+    setStatus("");
+    setPayment("");
+    // setRollNumber("");
+    // setCnicNumber("");
+  };
+
+  const handleClearQueries = () => {
+    resetSelectInputs();
+  };
 
 
 
@@ -419,13 +600,15 @@ export default function AdminPage() {
             )}
           </Button> */}
 
+<EyeViewDrawerApp userData={record} />
+
           <EditDrawerApp userData={record} />
 
           <DeleteIconComponent id={record._id} />
 
+
           {/* <EyeOutlined style={{ cursor: "pointer" }} /> */}
 
-<EyeViewDrawerApp userData={record} />
           {/* 
           <Button  style={{border:" none"}}>
             <DownloadOutlined style={{ cursor: "pointer" }} />
@@ -443,6 +626,51 @@ export default function AdminPage() {
   return (
     <div style={{}}>
 
+{/* Password */}
+
+
+{/* <DynamicModal
+  title="Admin Login"
+  visible={modalOpen}
+  footer={null}
+  centered
+  destroyOnClose
+  // afterClose={() => {
+  //   // Reset adminName and adminPassword when the modal is closed
+  //   setAdminName("");
+  //   setAdminPassword("");
+  // }}
+>
+  <form className="mx-auto space-y-[20px]">
+    <Input
+      className="w-[100%] h-[40px]"
+      placeholder="Admin Name"
+      value={adminName}
+      onChange={(e) => setAdminName(e.target.value)}
+      autoComplete="off"
+    />
+    <Input.Password
+      className="w-[100%] h-[40px]"
+      placeholder="Admin Key"
+      value={adminPassword}
+      onChange={(e) => setAdminPassword(e.target.value)}
+      autoComplete="off"
+    />
+    <Button
+      className="mx-auto w-[20%] h-[40px] "
+      onClick={handleAdminLogin}
+      disabled={!isFormValid}
+    >
+      Login
+    </Button>
+  </form>
+</DynamicModal> */}
+
+
+{/* Password */}
+
+{/* {!modalOpen && ( */}
+        <>
       <div
       //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
       >
@@ -454,7 +682,7 @@ export default function AdminPage() {
 
 
       {/* Card Component */}
-      <div
+      {/* <div
         className="space-x-[150px] mx-auto"
         style={{ display: "flex", marginLeft: "220px" }} >
 
@@ -469,170 +697,184 @@ export default function AdminPage() {
         <Card title="Unverified Students" style={{ width: 250 }}>
           <p style={{ fontSize: "30px", fontWeight: 1000 }}>{allUsers.length - verifiedUsers.length}</p>
         </Card>
+      </div> */}
+
+<div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
+      {/* First card */}
+      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+        <h2 className="text-xl font-bold text-gray-800">Students</h2>
+        <p className="text-4xl font-bold text-blue-600">{allUsers.length}</p>
       </div>
+
+      {/* Second card */}
+      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+        <h2 className="text-xl font-bold text-gray-800">Verified</h2>
+        <p className="text-4xl font-bold text-blue-600">{verifiedUsers.length}</p>
+      </div>
+
+      {/* Third card */}
+      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+        <h2 className="text-xl font-bold text-gray-800">Un-Verified</h2>
+        <p className="text-4xl font-bold text-blue-600">{allUsers.length - verifiedUsers.length}</p>
+      </div>
+    </div>
+
+
       {/* Card Component */}
+<div className="mx-auto flex space-x-2 items-center mt-7 ml-[8%]">
 
-
-      <div
-        className="space-x-11"
-        style={{ marginTop: "2%", marginLeft: "12%", }}
+      <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
+      {/* City */}
+      <Select
+        showSearch
+        value={city || undefined}
+        style={{ width: 120 }}
+        placeholder="City"
+        optionFilterProp="children"
+        onChange={(value) => setCity(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
       >
-        {/* <RightSideModal/> */}
-        {/* <YourPageComponent/> */}
-        {/* <EditStudentDrawerComponent/>
-<EyeViewDrawerComponent/> */}
+        <Select.Option value="Karachi">Karachi</Select.Option>
+        <Select.Option value="Lahore">Lahore</Select.Option>
+        <Select.Option value="Quetta">Quetta</Select.Option>
+      </Select>
 
-        {/* City */}
-        <Select
-          showSearch
-          style={{ width: 120 }}
-          placeholder="Karachi"
-          optionFilterProp="children"
-          // onChange={handleChange}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="karachi">Karachi</Option>
-          <Option value="lahore">Lahore</Option>
-          <Option value="quetta">Quetta</Option>
-        </Select>
-        {/* City */}
+      {/* Course */}
+      <Select
+        showSearch
+        style={{ width: 120 }}
+        value={course || undefined}
+        placeholder="Course"
+        optionFilterProp="children"
+        onChange={(value) => setCourse(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="Web and App Development">Web & App Development</Select.Option>
+        <Select.Option value="Graphic Designing">Graphic Designing</Select.Option>
+        <Select.Option value="Businees Management">Businees Management</Select.Option>
+        <Select.Option value="Digital Marketing">Digital Marketing</Select.Option>
+      </Select>
 
+      {/* Batch */}
+      <Select
+        showSearch
+        style={{ width: 120 }}
+        value={batch || undefined}
+        placeholder="Batch"
+        optionFilterProp="children"
+        onChange={(value) => setBatch(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="1">1</Select.Option>
+        <Select.Option value="2">2</Select.Option>
+        <Select.Option value="3">3</Select.Option>
+        <Select.Option value="4">4</Select.Option>
+      </Select>
 
-        {/* Course */}
-        <Select
-          showSearch
-          style={{ width: 120 }}
-          placeholder="Web & App Development"
-          optionFilterProp="children"
-          // onChange={handleChange}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option style={{ width: 200 }} value="web">Web & App Development</Option>
-          <Option style={{ width: 200 }} value="ai">AI</Option>
-          <Option style={{ width: 200 }} value="graphic">Graphic Designing</Option>
-          <Option style={{ width: 200 }} value="bs-manage">Businees Management</Option>
-          <Option style={{ width: 200 }} value="dg-market">Digital Marketing</Option>
-        </Select>
-        {/* Course */}
+      {/* Status */}
+      <Select
+        showSearch
+        style={{ width: 120 }}
+        value={status || undefined}
+        placeholder="Status"
+        optionFilterProp="children"
+        onChange={(value) => setStatus(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="verified">Verified</Select.Option>
+        <Select.Option value="un-verified">Un-Verified</Select.Option>
+      </Select>
 
-        {/* Batch */}
-        <Select
-          showSearch
-          style={{ width: 120 }}
-          placeholder="Select Batch"
-          optionFilterProp="children"
-          // onChange={handleChange}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="select">Select</Option>
-          <Option value="7">7</Option>
-          <Option value="8">8</Option>
-          <Option value="9">9</Option>
-          <Option value="10">10</Option>
-        </Select>
+      {/* Payment */}
+      <Select
+        showSearch
+        style={{ width: 120 }}
+        value={payment || undefined}
+        placeholder="Payment"
+        optionFilterProp="children"
+        onChange={(value) => setPayment(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="done">Done</Select.Option>
+        <Select.Option value="not-done">Not-Done</Select.Option>
+      </Select>
 
-        {/* Batch */}
+      {/* Gender */}
+      <Select
+        showSearch
+        style={{ width: 120 }}
+        value={gender || undefined}
+        placeholder="Gender"
+        optionFilterProp="children"
+        onChange={(value) => setGender(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="male">Male</Select.Option>
+        <Select.Option value="female">Female</Select.Option>
+      </Select>
 
-        {/* Approved */}
-        <Select
-          showSearch
-          style={{ width: 120 }}
-          placeholder="Approved"
-          optionFilterProp="children"
-          // onChange={handleChange}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          {/* <Option value="select">Select</Option> */}
-          <Option value="Approved">Approved</Option>
-          <Option value="Pending">Pending</Option>
-          <Option value="Complete">Complete</Option>
-        </Select>
-        {/* Approved */}
+      {/* Clear Button */}
+      <Button onClick={handleClearQueries} style={{ backgroundColor: '#333', color: '#fff' }}>Clear</Button>
+    </div>
 
-        {/* Gender */}
-        <Select
-          showSearch
-          style={{ width: 120 }}
-          placeholder="Select Gender"
-          optionFilterProp="children"
-          // onChange={handleChange}
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          {/* <Option value="select">Select</Option> */}
-          <Option value="male">Male</Option>
-          <Option value="female">Female</Option>
-
-        </Select>
-        {/* Gender */}
+        
 
 
 
+    
 
-        <div
-          className=" max-auto absolute mt-[-2.4%] rounded-md "
-          style={{ backgroundColor: "green", marginLeft: "62%", borderRadius: "10px" }}
-        >
-          <ButtonComponent
-          // onClick=""
-          />
-        </div>
-
-
-        {/* Search */}
-        <div className="max-auto absolute mt-[-2.4%] rounded-md "
-          style={{ marginLeft: "73%", borderRadius: "10px" }}>
-
-
-<Search
-            style={{ width: 200, backgroundColor: "blue", borderRadius: "10px" }}
-            placeholder="Search Cnic-No" value={cnicNumber}
-            onChange={(event) => {
-                const inputValue=event.target.value
-            
-                if (inputValue.length <= 15) {
-                    const formattedCnic = formatCnicNumber(inputValue);
-            
-            
-                setCnicNumber(formattedCnic)
-                console.log(formattedCnic)
-            }
-            }} enterButton />
-
-
-          <Search
-            style={{ width: 150, backgroundColor: "blue", borderRadius: "10px" }}
-            placeholder="Search Roll-No" value={rollNumber}
-            onChange={(event) => {
-              // setRollNumber(event.target.value)
-              console.log(event.target.value)
-              setRollNumber(event.target.value)
-
-            }} enterButton />
-
-        </div>
+    <div className="flex space-x-2 items-center bg-[#333] w-[32%] mt-4 p-4 rounded-md shadow-md">
+  <div className="flex items-center space-x-2">
+    {/* Search Cnic-No */}
+    <Search
+      style={{ width: 200, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
+      placeholder="Search Cnic-No" 
+      value={cnicNumber}
+      onChange={(event) => {
+        const inputValue=event.target.value
+        if (inputValue.length <= 15) {
+          const formattedCnic = formatCnicNumber(inputValue);
+          setCnicNumber(formattedCnic);
+          console.log(formattedCnic);
+        }
+      }} 
+      enterButton 
+    />
+    
+    {/* Search Roll-No */}
+    <Search
+      style={{ width: 150, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
+      placeholder="Search Roll-No" 
+      value={rollNumber}
+      onChange={(event) => {
+        console.log(event.target.value);
+        setRollNumber(event.target.value);
+      }} 
+      enterButton 
+    />
+  </div>
+</div>
 
       </div>
 
 
-
-      <br />
-
-
-      <div >
+      <div className="mt-8 ml-[-1.5%]">
 
         {/* <TableComponent /> */}
         {/* <MyAntTable/> */}
-        <Table
+        {allUsers.length>0?<Table
           style={{
             marginLeft: "8.5%",
             width: "90%",
@@ -640,487 +882,49 @@ export default function AdminPage() {
           }}
           dataSource={allUsers}
           columns={columns}
-        />
+        />:
+    //     <div className="flex justify-center items-center h-screen bg-gray-200 to-indigo-600">
+    //   <div className="bg-white p-12 ml-20 mt-[-160px] rounded-lg shadow-2xl w-[90%]">
+    //     <p className="text-6xl font-extrabold text-center text-gray-900">No Students Found!</p>
+    //     <p className="text-xl text-center text-gray-800 mt-6">Thier might be a technical or network delay in fetching Students, or may be the student according to your queries does not exist</p>
+    //     <div className="mt-12 flex justify-center">
+    //       <button className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Clear Queries</button>
+    //     </div>
+    //   </div>
+    // </div>
+
+
+
+
+
+    <div className="flex justify-center items-center h-screen ml-24">
+      <div className="flex mt-[-300px] space-x-4">
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
       </div>
+    </div>
+
+
+  //   <div className="flex justify-center items-center fixed top-0 left-0 w-full h-full bg-transparent z-50">
+  //   <div className="flex space-x-4">
+  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
+  //   </div>
+  // </div>
+
+        }
+        
+      </div>
+      </>
+
+{/* )} */}
 
     </div>
   );
 }
-=======
-"use client";
-
-
-// import ButtonComponent from "@/components/AntButtonComponent";
-// import AntCardComponent from "@/components/AntCard Component";
-// import SearchBox from "@/components/AntSearchComponent";
-// import TableComponent from "@/components/AntTableComponents";
-// import MyAntTable from "@/components/AntTableComponents/index2";
-// import ApprovingSelectBox from "@/components/ApprovingSelectBox";
-// import BatchSelectBox from "@/components/BatchSelectBox";
-// import CitySelectBox from "@/components/CitySelectBox";
-// import CourseSelectBox from "@/components/CourseSelectBox";
-// import DrawerApp from "@/components/EditDrawerComponent/antdrawer";
-// import EditStudentDrawerComponent from "@/components/EditDrawerComponent/index2";
-// import DrawerComponent from "@/components/EditDrawerComponent/index2";
-// import EyeViewDrawerComponent from "@/components/EyeViewDrawerComponent";
-// import SimpleDrawer from "@/components/EyeViewDrawerComponent";
-// import GenderSelectBox from "@/components/GenderSelectbox";
-// import EyeViewComponent from "@/components/SideModalsComponent/EyeViewModalComponent";
-// import RightSideModal from "@/components/SideModalsComponent/ModalsComponent";
-// import YourPageComponent from "@/components/SideModalsComponent/ModalsComponent/index2";
-// import SideNavbar from "@/components/SideNavbarComponent";
-import React, { useEffect } from "react";
-import AntCardComponent from "../../components/AntCard Component";
-import SideNavbar from "../../components/SideNavbarComponent";
-import CitySelectBox from "../../components/CitySelectBox";
-import CourseSelectBox from "../../components/CourseSelectBox";
-import BatchSelectBox from "../../components/BatchSelectBox";
-import ApprovingSelectBox from "../../components/ApprovingSelectBox";
-import GenderSelectBox from "../../components/GenderSelectbox";
-import ButtonComponent from "../../components/AntButtonComponent";
-import SearchBox from "../../components/AntSearchComponent";
-import MyAntTable from "../../components/AntTableComponents/index2";
-import { getAllUsers } from "../../services/register";
-import { useState } from "react";
-import { Card, Select, Space, Table } from "antd";
-import EditDrawerApp from "../../components/EditDrawerComponent/antdrawer";
-import DeleteIconComponent from "../../components/DeleteIconComponent";
-import EyeViewDrawerApp from "../../components/EyeViewDrawerComponent/eyeantdrawer";
-// import ButtonComponent from "../../components/AntButtonComponent";
-import { Input } from 'antd';
-const { Search } = Input;
-
-const { Option } = Select;
-
-
-export default function AdminPage() {
-
-  const [isHovered, setIsHovered] = useState(false);
-  const [drawerVisible, setDrawerVisible] = useState(false)
-  const [allUsers,setAllUsers] =useState([]);
-
-  // useEffect(() => {
-  //   getAllUsers()
-  //     .then((users) => {
-  //       setAllUsers(users);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching data:', error);
-  //     });
-  // }, []);
-
-
-  useEffect(()=>{
-    gettingUsers();
-
-    
-  },[])
-
-  const gettingUsers=async()=>{
-
-    const res = await fetch("http://localhost:3000/api/students", {
-      method: "GET",
-      cache: "no-cache", // Set cache control policy to 'no-cache'
-    });
-      const data = await res.json();
-      const users= await data.data
-console.log("data-->",users);
-setAllUsers({data:users})
-console.log(allUsers);
-
-  }
-
-
-
-  
-  // const handleUserDeleted = (deletedUserId) => {
-  //   // Filter out the deleted user from the list of users
-  //   const updatedUsers = allUsers.filter((user) => user._id !== deletedUserId);
-  //   setAllUsers(updatedUsers);
-  // };
-
-
-
-  const dataSource = [
-    {
-      key: "1",
-      fullName: "Ubaid Raza",
-      fatherName: "Tayyab",
-      cnic: "430133344",
-      phone: "03093322555",
-      course: "Web & App",
-      status: "Pending",
-    },
-    {
-      key: "2",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "3",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "4",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "5",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "6",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "7",
-     fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "8",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "9",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "10",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "11",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "12",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "13",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "14",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-
-    // Add more data as needed
-  ];
-
-  const columns = [
-    {
-      title: "Student Name",
-      dataIndex: "fullName",
-      key: "studentName",
-    },
-    {
-      title: "Father Name",
-      dataIndex: "fatherName",
-      key: "fatherName",
-    },
-    {
-      title: "CNIC",
-      dataIndex: "cnic",
-      key: "cnic",
-    },
-    {
-      title: "Phone",
-      dataIndex: "phone",
-      key: "phone",
-    },
-    {
-      title: "Course",
-      dataIndex: "course",
-      key: "course",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
-    {
-      title: "Actions",
-      key: "actions",
-      render: (text, record) => (
-        <Space size="middle">
-          {/* <Button type="primary" onClick={handleToggleDrawer}> 
-         
-            <EditOutlined style={{ cursor: "pointer" }} onClick={handleToggleDrawer}/>
-            {drawerVisible && (
-              <AddStudentDrawer
-              visible={drawerVisible}
-              onClose={handleToggleDrawer}
-              onAddStudent={handleAddStudent}
-              />
-            )}
-          </Button> */}
-
-          <EditDrawerApp id={record._id}/>
-
-         <DeleteIconComponent id={record._id} />
-
-          {/* <EyeOutlined style={{ cursor: "pointer" }} /> */}
-          <EyeViewDrawerApp id={record._id}/>
-{/* 
-          <Button  style={{border:" none"}}>
-            <DownloadOutlined style={{ cursor: "pointer" }} />
-          </Button> */}
-
-        </Space>
-      ),
-    },
-  ];
-
-
-
-
-
-  return (
-    <div style={{}}>
-
-    <div
-    //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
-    >
-      <SideNavbar/>
-    </div>
-
-{/* <AntCardComponent/> */}
-
-
-
-{/* Card Component */}
-<div
-    className="space-x-[150px] mx-auto"
-     style={{display:"flex", marginLeft: "220px" }} >
-      
-      <Card title="Total Students" style={{ width: 250 }}>
-        <p style={{ fontSize: "30px", fontWeight: 1000 }}>1200</p>
-      </Card>
-
-      <Card title="Verified Students" style={{ width: 250 }}>
-        <p style={{ fontSize: "30px", fontWeight: 1000 }}>700</p>
-      </Card>
-
-      <Card title="Unverified Students" style={{ width: 250 }}>
-        <p style={{ fontSize: "30px", fontWeight: 1000 }}>500</p>
-      </Card>
-    </div>
-{/* Card Component */}
-
-
-      <div
-        className="space-x-11"
-        style={{ marginTop: "2%", marginLeft: "12%", }}
-      >
-      {/* <RightSideModal/> */}
-      {/* <YourPageComponent/> */}
-{/* <EditStudentDrawerComponent/>
-<EyeViewDrawerComponent/> */}
-
-{/* City */}
-<Select
-      showSearch
-      style={{ width: 120 }}
-      placeholder="Karachi"
-      optionFilterProp="children"
-      // onChange={handleChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-    >
-      <Option value="karachi">Karachi</Option>
-      <Option value="lahore">Lahore</Option>
-      <Option value="quetta">Quetta</Option>
-    </Select>
-{/* City */}
-
-
-{/* Course */}
-<Select
-      showSearch
-      style={{ width: 120 }}
-      placeholder="Web & App Development"
-      optionFilterProp="children"
-      // onChange={handleChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-    >
-      <Option style={{ width: 200 }} value="web">Web & App Development</Option>
-      <Option style={{ width: 200 }} value="ai">AI</Option>
-      <Option style={{ width: 200 }} value="graphic">Graphic Designing</Option>
-      <Option style={{ width: 200 }} value="bs-manage">Businees Management</Option>
-      <Option style={{ width: 200 }} value="dg-market">Digital Marketing</Option>
-    </Select>
-{/* Course */}
-
-{/* Batch */}
-<Select
-      showSearch
-      style={{ width: 120 }}
-      placeholder="Select Batch"
-      optionFilterProp="children"
-      // onChange={handleChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-    >
-      <Option value="select">Select</Option>
-      <Option value="7">7</Option>
-      <Option value="8">8</Option>
-      <Option value="9">9</Option>
-      <Option value="10">10</Option>
-    </Select>
-
-{/* Batch */}
-
-{/* Approved */}
-<Select
-      showSearch
-      style={{ width: 120 }}
-      placeholder="Approved"
-      optionFilterProp="children"
-      // onChange={handleChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-    >
-      {/* <Option value="select">Select</Option> */}
-      <Option value="Approved">Approved</Option>
-      <Option value="Pending">Pending</Option>
-      <Option value="Complete">Complete</Option>
-    </Select>
-{/* Approved */}
-
-{/* Gender */}
-<Select
-      showSearch
-      style={{ width: 120 }}
-      placeholder="Select Gender"
-      optionFilterProp="children"
-      // onChange={handleChange}
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
-    >
-      {/* <Option value="select">Select</Option> */}
-      <Option value="male">Male</Option>
-      <Option value="female">Female</Option>
-      
-    </Select>
-{/* Gender */}
-
-
-
-
-        <div
-          className=" max-auto absolute mt-[-2.4%] rounded-md "
-          style={{ backgroundColor: "green", marginLeft: "62%", borderRadius:"10px"}}
-        >
-          <ButtonComponent 
-          // onClick=""
-          />
-        </div>
-
-
-{/* Search */}
-        <div className="max-auto absolute mt-[-2.4%] rounded-md "
-          style={{  marginLeft: "73%", borderRadius:"10px"}}>
-
-<Search 
-          style={{ width: 150 , backgroundColor: "blue" , borderRadius:"10px" }}
-    placeholder="Search ............." enterButton />
-
-        </div>
-
-      </div>
-
-
-
-      <br />
-
-
-      <div >
-      
-      {/* <TableComponent /> */}
-      {/* <MyAntTable/> */}
-      <Table
-      style={{
-        marginLeft: "8.5%",
-        width: "90%",
-        // backgroundColor:"yellow",
-      }}
-      dataSource={allUsers.data}
-      columns={columns}
-    />
-      </div>
-
-    </div>
-  );
-}
->>>>>>> 6ca6e3e391264a7f96eea448841ead264b5783dd

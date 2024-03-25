@@ -97,29 +97,22 @@ async function helperForUploadingImageToFirebase(file) {
 
 
 const initialFormData = {
-    fullName: 'abc',
-    fatherName: 'abc',
-    email: 'abc@gmail.com',
+    fullName: '',
+    fatherName: '',
+    email: '',
     course:`${courseOptions[0].label}`,
     batch:`${batchOptions[0]}`,
     payment:'not-done',
     paymentImg: 'not-done',
     status:"un-verified",
-    city: 'abc',
-    cnic: 'abc',
-    phone: 'abc',
-    dateOfBirth: 'abc',
+    city: '',
+    cnic: '',
+    phone: '',
+    dateOfBirth: '',
     gender: 'male',
-<<<<<<< HEAD
-    qualification: 'abc',
-    address: 'abc',
-    imageUrl: 'abc'
-=======
     qualification: '',
     address: '',
-    imageUrl: '',
-    paymentImg: 'not-done'
->>>>>>> 6ca6e3e391264a7f96eea448841ead264b5783dd
+    imageUrl: ''
 }
 
 
@@ -140,7 +133,7 @@ export default function RegisterUser() {
     const nameRegex = /^[A-Za-z][a-z]*(?: [A-Za-z][a-z]*)*$/;
     // const emailRegex = /^\S+@\S+(\.\S+)?$/;
 
-    const {user,setUser}=useContext(GlobalContext)
+    // const {user,setUser}=useContext(GlobalContext)
 
 
     // const beforeUpload = (file) => {
@@ -459,8 +452,8 @@ const formatCnicNumber = (input) => {
 
 // Check if userLocalString is not null or undefined before parsing
  // Set the user in the global state
- setUser(res?.user);
- console.log('user-->', user);
+//  setUser(res?.user);
+//  console.log('user-->', user);
 
 // Now, userLocal will either contain the parsed user object or be null if parsing fails
 // setUser(userLocal);
