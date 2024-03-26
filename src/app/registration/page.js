@@ -22,7 +22,6 @@ import dynamic from "next/dynamic";
 // import SideNavbar from "@/components/SideNavbarComponent";
 import React, { useEffect } from "react";
 import AntCardComponent from "../../components/AntCard Component";
-import SideNavbar from "../../components/SideNavbarComponent";
 import CitySelectBox from "../../components/CitySelectBox";
 import CourseSelectBox from "../../components/CourseSelectBox";
 import BatchSelectBox from "../../components/BatchSelectBox";
@@ -37,6 +36,7 @@ import { Button, Card, Select, Space, Table } from "antd";
 import EditDrawerApp from "../../components/EditDrawerComponent/antdrawer";
 import DeleteIconComponent from "../../components/DeleteIconComponent";
 import EyeViewDrawerApp from "../../components/EyeViewDrawerComponent/eyeantdrawer";
+import SideNavbarComponent from "../../components/SideNavbarComponent"
 // import ButtonComponent from "../../components/AntButtonComponent";
 import { Input } from 'antd';
 import VerificationButton from "../../components/VerificationButton";
@@ -50,51 +50,67 @@ const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
 
 
 export default function AdminPage() {
+ 
+
+  const {api,setApi} = usePassword();
+
+
+  const [admin, setAdmin] = useState(null)
   const [adminName, setAdminName] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const {api,setApi} = usePassword();
-
-
   useEffect(() => {
-    const storedAdminName = localStorage.getItem("adminName");
-    const storedAdminPassword = localStorage.getItem("adminPassword");
-
-    if (storedAdminName && storedAdminPassword) {
-      setAdminName(storedAdminName);
-      setAdminPassword(storedAdminPassword);
-    } else {
-      setModalOpen(true);
-    }
+    checkLocalStorage(); // Check local storage on component mount
+    const intervalId = setInterval(checkLocalStorage, 60000); // Check local storage every minute
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
 
   useEffect(() => {
-    setIsFormValid(adminName === "a" && adminPassword === "a");
-  }, [adminName, adminPassword]);
+    if(admin){
+    setIsFormValid(adminName === admin.adminName && adminPassword === admin.adminPassword);}
+  }, [ admin, adminName, adminPassword,]);
 
   const handleAdminLogin = () => {
     if (isFormValid) {
+      const expirationTime = Date.now() + 60000; // 1 minute in milliseconds
       localStorage.setItem("adminName", adminName);
       localStorage.setItem("adminPassword", adminPassword);
+      localStorage.setItem("expirationTime", expirationTime);
       setModalOpen(false);
-      resetAdminCredentials();
     } else {
       alert("Invalid admin credentials");
     }
   };
 
- const resetAdminCredentials = () => {
-  console.log("Resetting admin credentials...");
-  setTimeout(() => {
+  const checkLocalStorage = () => {
+    const storedAdminName = localStorage.getItem("adminName");
+    const storedAdminPassword = localStorage.getItem("adminPassword");
+    const expirationTime = localStorage.getItem("expirationTime");
+
+    if (storedAdminName && storedAdminPassword && expirationTime) {
+      const currentTime = Date.now();
+      if (currentTime < parseInt(expirationTime, 10)) {
+        setAdminName(storedAdminName);
+        setAdminPassword(storedAdminPassword);
+        setModalOpen(false);
+      } else {
+        clearLocalStorage();
+      }
+    } else {
+      setModalOpen(true);
+    }
+  };
+
+  const clearLocalStorage = () => {
     localStorage.removeItem("adminName");
     localStorage.removeItem("adminPassword");
-    setModalOpen(true);
-    setAdminName("");
-    setAdminPassword("");
-  }, 60000); // 1 minute in milliseconds
-};
+    localStorage.removeItem("expirationTime");
+    setAdminName(""); // Clear adminName state
+    setAdminPassword(""); // Clear adminPassword state
+    setModalOpen(true); // Reopen the modal for admin login
+  };
 
   const [isHovered, setIsHovered] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false)
@@ -111,6 +127,7 @@ export default function AdminPage() {
   const [filterVerified, setFilterVerified] = useState([])
   const [alternateUsers, setAlternateUsers] = useState([])
   const [alternateVerified, setAlternateVerified] = useState([])
+
 
   const [rollNumber, setRollNumber] = useState("")
   const [cnicNumber, setCnicNumber] = useState("")
@@ -158,6 +175,8 @@ useEffect(() => {
       if (city || course || batch || gender || status || payment) {
         console.log("Condition met! Other state has value.", status, city, batch, course, gender,payment);
         getUsersFromFilter(status,batch,gender,city,course,payment);
+        setAllUsers(filterUsers)
+        setVerifiedUsers(filterVerified)
       }
       else if(!city && !course && !batch && !gender && !status && !payment){
         setAllUsers(alternateUsers)
@@ -212,11 +231,11 @@ useEffect(() => {
             const users = Array.isArray(data) ? data : [data];
             const verified = users.filter(user => user.status === "verified");
 
-            setAllUsers(users);
-            setVerifiedUsers(verified)
+            setFilterUsers(users);
+            setFilterVerified(verified)
         } else if (userData.message === "No students found!") {
-          setAllUsers([]);
-          setVerifiedUsers([])
+          setFilterUsers([]);
+            setFilterVerified([])
             // alert("Student not found with these parameters!");
         } else {
             alert("An error occurred !");
@@ -249,9 +268,9 @@ useEffect(() => {
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
-          setVerifiedRollNo(verified)
+          setVerifiedRollNo([])
           // setAlternateUsers(allUsers)
-          setRollNoUsers(users);
+          setRollNoUsers([]);
         } else {
           alert("An error occurred !");
         }
@@ -283,9 +302,9 @@ useEffect(() => {
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
-          setVerifiedCnic(verified)
+          setVerifiedCnic([])
           // setAlternateUsers(allUsers)
-          setCnicUsers(users);
+          setCnicUsers([]);
         } else {
           alert("An error occurred !");
         }
@@ -318,8 +337,8 @@ useEffect(() => {
           // checkingVerifiedUsers(users);
         } else if( queryData.message === "No students found!") {
           alert("Student not found with this Roll No and Cnic !");
-          setCnicAndRollNoUsers(users);
-          setVerifiedRollNoAndCnic(verified)
+          setCnicAndRollNoUsers([]);
+          setVerifiedRollNoAndCnic([])
         } else {
           alert("An error occurred !");
         }
@@ -330,6 +349,7 @@ useEffect(() => {
   };
 
   useEffect(() => {
+    gettingAdmin();
     gettingUsers();
   }, []);
   
@@ -390,6 +410,23 @@ useEffect(() => {
       console.error("Error fetching users:", error);
     }
   };
+
+  const gettingAdmin = async () => {
+    console.log("gettingAdmin")
+    try {
+      const res = await fetch("http://localhost:3000/api/admins", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      setAdmin(data.data[0])
+      
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+
   console.log("All Users:", allUsers.length, "-->", allUsers);
   console.log("Verified Users:", verifiedUsers.length, "-->", verifiedUsers);
 
@@ -669,12 +706,50 @@ useEffect(() => {
 
 {/* Password */}
 
+<DynamicModal
+        title="Admin Login"
+        visible={modalOpen}
+        footer={null}
+        centered
+        destroyOnClose
+        afterClose={() => {
+          // Reset adminName and adminPassword when the modal is closed
+          setAdminName("");
+          setAdminPassword("");
+        }}
+      >
+        <form className="mx-auto space-y-[20px]">
+          <Input
+            className="w-[100%] h-[40px]"
+            placeholder="Admin Name"
+            value={adminName}
+            onChange={(e) => setAdminName(e.target.value)}
+            autoComplete="off"
+          />
+          <Input.Password
+            className="w-[100%] h-[40px]"
+            placeholder="Admin Key"
+            value={adminPassword}
+            onChange={(e) => setAdminPassword(e.target.value)}
+            autoComplete="off"
+          />
+          <Button
+            className="mx-auto w-[20%] h-[40px] "
+            onClick={handleAdminLogin}
+            disabled={!isFormValid}
+          >
+            Login
+          </Button>
+        </form>
+      </DynamicModal>
 {/* {!modalOpen && ( */}
-        <>
+      
+{!modalOpen && (
+    <>
       <div
       //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
       >
-        <SideNavbar />
+        <SideNavbarComponent/>
       </div>
 
       {/* <AntCardComponent/> */}
@@ -922,7 +997,7 @@ useEffect(() => {
         
       </div>
       </>
-
+)}
 {/* )} */}
 
     </div>

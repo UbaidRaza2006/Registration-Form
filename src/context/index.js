@@ -26,9 +26,10 @@ const PasswordContext = createContext();
 export const PasswordProvider = ({ children }) => {
   const [password, setPassword] = useState('abc');
   const [api, setApi] = useState(false);
+  const [admission, setAdmission] = useState(true);
 
   return (
-    <PasswordContext.Provider value={{ password, setPassword ,api,setApi}}>
+    <PasswordContext.Provider value={{ password, setPassword ,api,setApi, admission,setAdmission}}>
       {children}
     </PasswordContext.Provider>
   );
