@@ -9,14 +9,14 @@ import { message, Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { initializeApp } from 'firebase/app'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import InputComponent from "../components/InputComponent";
 import SelectComponent from "../components/SelectComponent";
 import { registerUser } from "../services/register";
 import { RegistartionformControls, batchOptions, courseOptions, firebaseConfig, firebaseStorageURL } from '../utils';
 import ImageUpload from '../components/UploadComponent';
 import IdCardModal from '../components/IdCardComponent';
-import { GlobalContext } from '../context';
+import { GlobalContext, usePassword } from '../context';
 import Navbar from '../components/Navbar';
 import { Button } from '@mui/material';
 import { Router } from "next/router";
@@ -102,14 +102,14 @@ const initialFormData = {
     email: '',
     course:`${courseOptions[0].label}`,
     batch:`${batchOptions[0]}`,
-    payment:'not-done',
-    paymentImg: 'not-done',
-    status:"un-verified",
+    payment:'Not-Done',
+    paymentImg: 'Not-Done',
+    status:"Un-Verified",
     city: '',
     cnic: '',
     phone: '',
     dateOfBirth: '',
-    gender: 'male',
+    gender: 'Male',
     qualification: '',
     address: '',
     imageUrl: ''
@@ -134,6 +134,13 @@ export default function RegisterUser() {
     // const emailRegex = /^\S+@\S+(\.\S+)?$/;
 
     // const {user,setUser}=useContext(GlobalContext)
+    const { allowAdmission,setAllowAdmission} = usePassword();
+
+    const [admin, setAdmin] = useState(null);
+    const [message, setMessage] = useState("");
+    const [isFormDisabled, setIsFormDisabled] = useState(false);
+
+
 
 
     // const beforeUpload = (file) => {
@@ -491,10 +498,36 @@ console.log(userLocal);
     }
     }
 
+    useEffect(() => {
+        gettingAdmin();
+      }, []);
 
+    const gettingAdmin = async () => {
+        console.log("gettingAdmin")
+        try {
+          const res = await fetch("http://localhost:3000/api/admins", {
+            method: "GET",
+            cache: "no-cache", // Set cache control policy to 'no-cache'
+          });
+          const data = await res.json();
+          console.log(data.data[0])
+          setAdmin(data.data[0])
+          setAllowAdmission(data.data[0].admissions)
+          setMessage(data.data[0].textAdmission)
+          
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      };
     // console.log(formData);
+    useEffect(() => {
+        setIsFormDisabled(allowAdmission !== "Open");
+    }, [allowAdmission]);
 
-
+      function isAdmission() {
+        console.log("allowAdmission-->", allowAdmission);
+        setIsFormDisabled(allowAdmission !== "Open");
+    }
 
     function isFormValid(){
         return formData && formData.fullName && formData.fullName.trim() !== '' && formData.fatherName && formData.fatherName.trim() !== '' && formData.email && formData.email.trim() !== '' && formData.cnic && formData.cnic.trim() !== '' && formData.phone && formData.phone.trim() !== '' && formData.city && formData.city.trim() !== '' && formData.address && formData.address.trim() !== '' && formData.qualification && formData.qualification.trim() !== '' ?true: false
@@ -503,6 +536,9 @@ const closeModal = () => {
     
     setShowModal(false);
   };
+
+const text = "Admissions are Closed!"
+  
 
     return (
         <div className="mr-0 mb-0 ml-0 relative">
@@ -548,11 +584,16 @@ const closeModal = () => {
 
 
 
+{isFormDisabled && message ?(<div className="flex justify-center items-center mb-6">
+    <div className="text-center text-gray-700 text-3xl">
+        {message}
+    </div>
+</div>):null }
 
+            
 
-
-
-            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)'}} className="mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative">
+            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1,pointerEvents: isFormDisabled ? 'none' : 'auto'}} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
+            >
                 <div className="w-full mr-0 mb-0 ml-0 space-y-4 lg:space-y-1 md:space-y-1 mx:space-y-1
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6
                  ">
@@ -679,8 +720,8 @@ const closeModal = () => {
                     <SelectComponent
                         label="Select Gender"
                         options={[
-                            { id: "male", label: "Male" },
-                            { id: "female", label: "Female" },
+                            { id: "Male", label: "Male" },
+                            { id: "Female", label: "Female" },
                           ]}
                         value={formData.gender}
                         onChange={(event) => {

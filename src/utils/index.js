@@ -126,11 +126,11 @@ export const RegistartionformControls = [
 
 export const courseOptions=[
       {
-        id: "webAndApp",
+        id: "Web and App Development",
         label: "Web and App Development",
       },
       {
-        id: "webAndApp1",
+        id: "Web and App Development1",
         label: "Web and App Development1",
       }
     ]

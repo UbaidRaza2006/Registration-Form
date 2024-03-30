@@ -12,6 +12,10 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   await connectToDb();
 
+//   const page = parseInt(new URL(req.url).searchParams.get("page")) || 1; // Get page number from query parameters, default to page 1
+//   const limit = 10;
+//   const skip = (page - 1) * limit
+
   const rollNoQuery = new URL(req.url).searchParams.get("rollNo");
   const cnicQuery = new URL(req.url).searchParams.get("cnic");
   const cityQuery = new URL(req.url).searchParams.get("city");
@@ -23,7 +27,8 @@ export async function GET(req) {
 
   try {
       if (!rollNoQuery && !cnicQuery && !cityQuery && !genderQuery && !courseQuery && !batchQuery && !statusQuery && !paymentQuery) {
-          const students = await Register.find();
+        const students = await Register.find().sort({_id:-1})
+        // .skip(skip).limit(limit); // Implement pagination
           if (students.length > 0) {
               return NextResponse.json({
                   success: true,
@@ -49,7 +54,7 @@ export async function GET(req) {
           if (rollNoQuery) filter1.rollNo = rollNoQuery;
           if (cnicQuery) filter1.cnic = cnicQuery;
 
-          const students = await Register.find(filter1);
+          const students = await Register.find(filter1).sort({_id:-1});
 
           if (students.length > 0) {
               return NextResponse.json({
@@ -82,7 +87,7 @@ export async function GET(req) {
           if (paymentQuery) filter2.payment = paymentQuery; // Adding payment query parameter to the filter
 
           // Find students based on the filter
-          const students = await Register.find(filter2);
+          const students = await Register.find(filter2).sort({_id:-1});
 
           if (students.length > 0) {
               return NextResponse.json({

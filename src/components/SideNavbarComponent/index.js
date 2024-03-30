@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button,  Input,  InputNumber, Layout, Menu, Modal, Switch } from 'antd';
+import { Button,  Input,  InputNumber, Layout, Menu, Modal } from 'antd';
+import "./index.css"
 import {ClassroomOutlined} from '@ant-design/icons';
 import {
   UserOutlined,
@@ -7,6 +8,7 @@ import {
   BlockOutlined,
   LockOutlined,
   StopOutlined,
+  DeleteOutlined,
   NotificationOutlined,
   SettingOutlined,
   SoundOutlined,
@@ -20,6 +22,7 @@ import {
 } from '@ant-design/icons';
 
 import { usePassword } from '../../context';
+import { backdropClasses } from '@mui/material';
 const { Sider } = Layout;
 
 
@@ -35,47 +38,84 @@ function SideNavbarComponent () {
   const [showPassword, setShowPassword] = useState(false);
   const [inputCondition, setInputCondition] = useState("verify");
 
-    const [admissionsOpen, setAdmissionsOpen] = useState(true);
+    const [admissionsOpen, setAdmissionsOpen] = useState("");
     
     const [admin,setAdmin] = useState(null)
     const [admissions,setAdmissions] = useState("")
     const [adminName,setAdminName] = useState("")
     const [adminPassword,setAdminPassword] = useState("")
+    const [message,setMessage] = useState("")
 
 
+  const [allCourses,setAllCourses] = useState([])
+  const [batchValues, setBatchValues] = useState(Array(allCourses.length).fill(0));
 
 
-
-const { password, setPassword,api,setApi,admission,setAdmission} = usePassword();
+const { api,setApi,allowAdmission,setAllowAdmission} = usePassword();
 
 console.log(inputCondition)
 console.log(inputPassword)
 
 useEffect(()=>{
   console.log("admin",admin)
+  if(admin){
+    setAdmissionsOpen(admin.admissions)
+  }
 
 },[admin])
 
 
+// useEffect(()=>{
+//   setAdmissionsOpen(admissions)
+//   console.log("admission-->",admissions);
+// },[admissions])
+
 useEffect(()=>{
-  setAdmissionsOpen(admissions)
-  console.log("admission-->",admissions);
-},[admissions])
+  gettingCourses();
+},[isModalVisible3])
 
 useEffect(()=>{
   gettingAdmin();
-},[])
+},[isModalVisible2])
+
+const updateMesssage = async (adminId) => {
 
 
+  try{
+    if(message){
+    let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
+      method: "PUT",
+      body: JSON.stringify({ _id: adminId, textAdmission:message}), headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    data = await data.json()
+    console.log(data,`http://localhost:3000/api/admins/${adminId}`)
+    // console.log("info-->",data);
+    if (data.success) {
+      alert(`Message has been sent.....  ${data.result.textAdmission}`)
+      setMessage("")
+    }
+    else {
+      console.log(data);
+    }}
+    else{
+      console.log("Message nhi araha")
+    }
+  }
+  catch(error){
+    console.log("error-->",error)
+  }
+  }
 
-const updateAdmin = async (adminId) => {
+const updateAdminPassword = async (adminId) => {
 
 
 try{
-  if(adminPassword){
+  if(inputPassword){
   let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
     method: "PUT",
-    body: JSON.stringify({ _id: adminId, adminPassword}), headers: {
+    body: JSON.stringify({ _id: adminId, adminPassword:inputPassword}), headers: {
       "Content-Type": "application/json"
     }
   })
@@ -83,24 +123,64 @@ try{
   console.log(data,`http://localhost:3000/api/admins/${adminId}`)
   // console.log("info-->",data);
   if (data.success) {
-    alert("Passowrd has been Updated!.. into  ",data.result.adminPassword)
+    alert(`Passowrd has been Updated!.. into  ${data.result.adminPassword}`)
+    setInputCondition("verify")
     // setOpen(false);
   }
   else {
     console.log(data);
   }}
+  else{
+    console.log("adminPassword nhi araha")
+  }
 }
 catch(error){
   console.log("error-->",error)
 }
 }
 
+const updateAdmissions = async (adminId, newStatus) => {
 
-const handleSwitchChange = () => {
-  setAdmissionsOpen(!admissionsOpen);
-  setAdmission(!admission)
-  // handleAdmissionsChange(!admissionsOpen);
-};
+
+  try{
+    // if(admissionsOpen){
+    let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
+      method: "PUT",
+      body: JSON.stringify({ _id: adminId, admissions:newStatus ,textAdmission: "" }), headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    data = await data.json()
+    console.log(data,`http://localhost:3000/api/admins/${adminId}`)
+    // console.log("info-->",data);
+    if (data.success) {
+      alert(`Admission Status has been Updated!.. into  ${data.result.admissions}`)
+      setAllowAdmission(data.result.admissions)
+      // setInputCondition("verify")
+      // setOpen(false);
+    }
+    else {
+      console.log(data);
+    }
+  // }
+    // else{
+    //   console.log("adminsOpen nhi araha")
+    // }
+  }
+  catch(error){
+    console.log("error-->",error)
+  }
+  }
+
+
+  const handleSwitchChange = () => {
+    const newStatus = admissionsOpen === "Open" ? "Close" : "Open";
+    setAdmissionsOpen(newStatus);
+    updateAdmissions(admin._id, newStatus); // Update admission status
+  };
+
+// setAdmission(!admission)
+// handleAdmissionsChange(!admissionsOpen);
 
 
 const handlePassword = () => {
@@ -108,6 +188,7 @@ const handlePassword = () => {
 
   if(inputCondition === "verify"){
     if(inputPassword===admin.adminPassword){
+      console.log(admin.adminPassword)
 setInputCondition("update")
 setInputPassword("")
     }
@@ -125,9 +206,9 @@ setInputCondition("recheck")
   else if(inputCondition === "recheck"){
     if(inputPassword === recheckPassword){
       setAdminPassword(inputPassword)
-      updateAdmin("66032b8c2c0200b18d1d8a4c")
+      updateAdminPassword("66032b8c2c0200b18d1d8a4c")
       setInputPassword("")
-      setInputCondition("verify")
+      setInputCondition("done")
 
       // alert(`Password changed into "${inputPassword}" `)
     }
@@ -149,10 +230,10 @@ setInputCondition("recheck")
  console.log("showModal", par)
  setIsModalVisible2(true)
     }
-//     else if(par===3){
-//  console.log("showModal", par)
-//  setIsModalVisible3(true)
-    // }
+    else if(par===3){
+ console.log("showModal", par)
+ setIsModalVisible3(true)
+    }
   };
 
   const handleCancel = (par) => {
@@ -164,11 +245,20 @@ setInputCondition("recheck")
     console.log("closeModal", par)
     setIsModalVisible2(false)
     }
-    // else if(par===3){
-    // console.log("closeModal", par)
-    // setIsModalVisible3(false)
-    // }
+    else if(par===3){
+    console.log("closeModal", par)
+    setIsModalVisible3(false)
+    }
   };
+  
+  const back = () => {
+    if(inputCondition==="update"){
+      setInputCondition("verify")
+    }
+    else if(inputCondition==="recheck"){
+      setInputCondition("update")
+    }
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -187,6 +277,36 @@ setInputCondition("recheck")
     } catch (error) {
       console.error("Error fetching users:", error);
     }
+  };
+
+
+  const gettingCourses = async () => {
+    console.log("gettingCourses");
+    try {
+      const res = await fetch("http://localhost:3000/api/courses", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      // console.log(data)
+  
+      if (data.success) {
+        const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
+        console.log("allCourses-->",courses)
+        setAllCourses(courses);
+      } else {
+        setAllCourses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+
+  const handleBatchChange = (index, value) => {
+    const newBatchValues = [...batchValues];
+    newBatchValues[index] += value;
+    setBatchValues(newBatchValues);
   };
 
 
@@ -225,7 +345,15 @@ setInputCondition("recheck")
       footer={null}
       centered
     >
-      <div style={{ marginBottom: '20px' }}>
+      {inputCondition=== "done"?(<div className="flex justify-center items-center h-[140px]">
+      <div className="flex  space-x-4">
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
+      </div>
+    </div>):(<><div style={{ marginBottom: '20px' }}>
         <p>{inputCondition === "verify"? "First Verify It is You?!" : inputCondition === "update" ? "Enter The Passowrd to be updated!": "Type again to Confirm"} </p>
         <Input.Password
           value={inputPassword}
@@ -241,6 +369,24 @@ setInputCondition("recheck")
         />
       </div>
       <Button type="primary" style={{backgroundColor:"#0056b3"}} onClick={handlePassword}>{inputCondition === "verify"? "Next" : inputCondition === "update" ? "Save Password": "Confirm"}</Button>
+      <Button type="primary" style={{backgroundColor:"#0056b3", marginLeft:"250px"}} onClick={()=>{back()}}>Back</Button>
+      </>)}
+      {/* <div style={{ marginBottom: '20px' }}>
+        <p>{inputCondition === "verify"? "First Verify It is You?!" : inputCondition === "update" ? "Enter The Passowrd to be updated!": "Type again to Confirm"} </p>
+        <Input.Password
+          value={inputPassword}
+          onChange={(e) => setInputPassword(e.target.value)}
+          placeholder={inputCondition === "verify"? "Enter Current Password" : inputCondition === "update" ? "Enter New Password": "Confirm Password"}
+          addonAfter={
+            showPassword ? (
+              <EyeInvisibleOutlined onClick={togglePasswordVisibility} />
+            ) : (
+              <EyeOutlined onClick={togglePasswordVisibility} />
+            )
+          }
+        />
+      </div>
+      <Button type="primary" style={{backgroundColor:"#0056b3"}} onClick={handlePassword}>{inputCondition === "verify"? "Next" : inputCondition === "update" ? "Save Password": "Confirm"}</Button> */}
     </Modal>
 
 
@@ -264,7 +410,7 @@ setInputCondition("recheck")
             padding: '2px',
             width: '120px',
             height: '60px',
-            backgroundColor: admissionsOpen ? '#1890ff' : '#f5222d',
+            backgroundColor: admissionsOpen === "Open" ? '#1890ff' : '#f5222d',
             cursor: 'pointer',
             transition: 'background-color 0.3s',
           }}
@@ -276,16 +422,112 @@ setInputCondition("recheck")
               borderRadius: '50%',
               backgroundColor: '#fff',
               boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
-              transform: admissionsOpen ? 'translateX(58px)' : 'translateX(2px)',
+              transform: admissionsOpen === "Open"? 'translateX(58px)' : 'translateX(2px)',
               transition: 'transform 0.3s',
             }}
           />
         </div>
-        <p style={{ fontSize: '18px', marginTop: '20px', color: '#333' }}>{admissionsOpen ? 'Open' : 'Closed'}</p>
+        {admissionsOpen === "Close"?(<><p style={{ fontSize: '18px', marginTop: '20px', color: '#333' }}>Enter The Message for Users, while courses are Closed</p> <Input
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Enter Message"
+          
+        />
+        <Button type="primary" style={{ width: '60%', backgroundColor: '#0056b3', color: 'white', border: 'none', marginTop: '20px' }} onClick={() => {updateMesssage(admin._id)}}>Message Done</Button></>):null}
+       
+       
         <Button type="primary" style={{ width: '60%', backgroundColor: '#0056b3', color: 'white', border: 'none', marginTop: '20px' }} onClick={() => {handleCancel(2)}}>Back</Button>
       </div>
     </Modal>
   
+
+   
+
+
+    <Modal
+// style={{ width: "700px !important" }} 
+// id="modal3" 
+  visible={isModalVisible3}
+  onCancel={() => handleCancel(3)}
+  footer={null}
+  centered
+>
+  <div style={{width:"500px"}} className="p-8 bg-white-900 rounded-lg w-[750px] h-[450px] shadow-lg ">  {/* Added overflow-auto for scrollbar */}
+    <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
+    <div className="mb-6 flex items-center">
+      <Input
+        type="text"
+        placeholder="Enter Course"
+        className="border border-gray-300 rounded-md px-3 py-2 w-80 mr-2"
+      />
+      <Button style={{backgroundColor:"dark-blue"}} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center">Add Course</Button>
+    </div>
+<div className= "w-[100%] h-[250px] overflow-auto">
+    <table className="w-full  mb-6">
+      <thead >
+        <tr className="bg-gray-400  text-white text-1xl font-medium">
+          <th className="px-6 py-3 border border-gray-900 w-[300px]">Course</th>
+          <th className="px-3 py-3 border border-gray-900 text-center">Batch</th>
+          <th className="px-3 py-3 border border-gray-900 text-center">Admission</th>
+          <th className="px-3 py-3 border border-gray-900 text-center">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {allCourses.map((item, index) => (
+          <tr key={index} className="border-b border-gray-300"> {/* Added bottom border to each row */}
+            <td className="px-6 py-3">{item.course}</td>
+            <td className="px-3 py-3">
+              <div className="flex items-center justify-center">
+                <span className="cursor-pointer mr-1" onClick={() => handleBatchChange(index, -1)}>-</span>
+                <div
+                  // type="text"
+                  className="border border-gray-300 bg-gray-500 text-white rounded-md px-2 py-1 w-12 text-center"
+                  // value="5"
+                  // readOnly
+                >{item.batch + batchValues[index]}</div>
+                <span className="cursor-pointer ml-1"onClick={() => handleBatchChange(index, +1)}>+</span>
+              </div>
+            </td>
+            <td className="px-3 py-3">
+              <div
+                onClick={handleSwitchChange}
+                className="flex items-center justify-center"
+                style={{
+                  width: '60px',
+                  height: '30px',
+                  border: '2px solid #ccc',
+                  borderRadius: '15px',
+                  backgroundColor: item.admission === "Open" ? '#1890ff' : '#f5222d',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s',
+                }}
+              >
+                <div
+                  style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    backgroundColor: '#fff',
+                    boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)',
+                    transform: item.admission === "Open" ? 'translateX(16px)' : 'translateX(-16px)',
+                    transition: 'transform 0.3s',
+                  }}
+                />
+              </div>
+            </td>
+            <td>
+            <Button style={{backgroundColor:"dark-blue"}} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center"><EditOutlined/></Button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    </div>
+  
+    <Button style={{backgroundColor:"dark-blue"}} className="bg-blue-900 h-8 text-white text-antique-white  rounded-md justify-content-center justify-between items-center  text-center" onClick={() => handleCancel(3)} >Close</Button>
+  </div>
+</Modal>
+
 
 
 

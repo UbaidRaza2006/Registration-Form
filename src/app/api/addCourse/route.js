@@ -1,28 +1,22 @@
 
-// import Register from "@/models/registration";
-import { data } from "autoprefixer";
-// const { v4: uuidv4 } = require('uuid');
-import { v4 as uuidv4 } from 'uuid';
-
+// import Registe
 // import Joi from "joi";
-import { connect } from "mongoose";
-import connectToDb from "../../../database";
-import Admin from "../../../models/admin";
-import { NextResponse } from "next/server";
-import Joi from "joi";
 // import { NextResponse } from "next/server";
-// import connectToDb from "../../../database";
+import { NextResponse } from "next/server";
+import connectToDb from "../../../database";
 // import Register from "../../../models/registration";
 // import { NextResponse } from "next/server";
 
+import Joi from "joi";
+import Course from "../../../models/course";
 
 
 
-const AdminSchema = Joi.object({
-    adminName: Joi.string().required(),
-    adminPassword: Joi.string().required(),
-    admissions: Joi.string().required(),
-    textAdmission: Joi.string().required(),
+
+const CourseSchema = Joi.object({
+    course: Joi.string().required(),
+    batch: Joi.string().required(),
+    admission: Joi.string().required(),
 })
 
 
@@ -34,24 +28,22 @@ export const dynamic = "force-dynamic"
 
 export async function POST(req) {
     try {
-        await connectToDb();
+        await connectToDb()
 
         
 
             const extractData = await req.json();
             const {
-                 adminName,
-                adminPassword,
-                admissions,
-                textAdmission,
+                course,
+                batch,
+                admission,
                 }= extractData;
 
 
-            const { error } = AdminSchema.validate({
-                adminName,
-                adminPassword,
-                admissions,
-                textAdmission,
+            const { error } = CourseSchema.validate({
+                course,
+                batch,
+                admission,
             });
     
             if (error) {
@@ -61,18 +53,31 @@ export async function POST(req) {
                 });
             }
     
-            const adminCreated = await Admin.create({
-                adminName,
-                adminPassword,
-                admissions,
-                textAdmission,
+
+                     const sameCourse=await Course.findOne({course:course})
+
+            if(sameCourse){
+
+                return NextResponse.json({
+                    success: false,
+                    message: "The Course Already exists!",
+                })
+
+            }
+
+
+
+            const courseAdded = await Course.create({
+                course,
+                batch,
+                admission,
             });
 
-            if(adminCreated){
-                console.log(adminCreated);
+            if(courseAdded){
+                console.log(courseAdded);
                 return NextResponse.json({
                     success: true,
-                    admin:adminCreated,
+                    admin:courseAdded,
                     message: "Created Successfully!",
                 })
             }else{
@@ -97,7 +102,7 @@ export async function POST(req) {
         //         message: "A user with the same CNIC already exists.",
         //     });
         // }
-        console.log("Error in creating admin-->", error);
+        console.log("Error in adding Course-->", error);
 
         return NextResponse.json({
             success: false,

@@ -74,7 +74,7 @@ export default function AdminPage() {
 
   const handleAdminLogin = () => {
     if (isFormValid) {
-      const expirationTime = Date.now() + 60000; // 1 minute in milliseconds
+      const expirationTime = Date.now() + 3600000; // 1 hour in milliseconds
       localStorage.setItem("adminName", adminName);
       localStorage.setItem("adminPassword", adminPassword);
       localStorage.setItem("expirationTime", expirationTime);
@@ -138,6 +138,17 @@ export default function AdminPage() {
   const [status, setStatus] = useState("")
   const [payment, setPayment] = useState("")
 
+  const [genderDone, setGenderDone] = useState("")
+  const [batchDone, setBatchDone] = useState("")
+  const [courseDone, setCourseDone] = useState("")
+  const [cityDone, setCityDone] = useState("")
+  const [statusDone, setStatusDone] = useState("")
+  const [paymentDone, setPaymentDone] = useState("")
+  const [rollNumberDone, setRollNumberDone] = useState("")
+  const [cnicNumberDone, setCnicNumberDone] = useState("")
+
+
+
 
   const formatCnicNumber = (input) => {
     // Your formatting logic here (e.g., adding hyphens)
@@ -153,30 +164,43 @@ export default function AdminPage() {
 
 useEffect(() => {
     if (rollNumber.length === 5 && cnicNumber.length !== 15){
+      setCnicNumberDone("")
       console.log("Updated rollNo:", rollNumber);
+      if(rollNumber !== rollNumberDone){
       getUserRollNoData(rollNumber)
-      setAllUsers(rollNoUsers)
-      setVerifiedUsers(verifiedRollNo)
+      // setAllUsers(rollNoUsers)
+      // setVerifiedUsers(verifiedRollNo)
+    }
     }
     else if(rollNumber.length === 5 && cnicNumber.length === 15){
       console.log("Updated cnic:", cnicNumber);
       console.log("Updated rollNo:", rollNumber);
+      if(rollNumber !== rollNumberDone || cnicNumber !== cnicNumberDone){
       getUserCnicAndRollNoData(cnicNumber, rollNumber)
-      setAllUsers(cnicAndRollNoUsers)
-      setVerifiedUsers(verifiedrollNoAndCnic)
+    //   setAllUsers(cnicAndRollNoUsers)
+    //   setVerifiedUsers(verifiedrollNoAndCnic)
+      }
     }
     else if(rollNumber.length !== 5 && cnicNumber.length === 15){
       console.log("Updated cnic:", cnicNumber);
+      if(cnicNumber !== cnicNumberDone || rollNumber.length < rollNumberDone.length){
+        setRollNumberDone("")
       getUserCnicData(cnicNumber)
-      setAllUsers(cnicUsers)
-      setVerifiedUsers(verifiedCnic)
+      // setAllUsers(cnicUsers)
+      // setVerifiedUsers(verifiedCnic)
+      }
     }
     else if(rollNumber.length !== 5  && cnicNumber.length !== 15 ){
+      setRollNumberDone("")
+      setCnicNumberDone("")
       if (city || course || batch || gender || status || payment) {
         console.log("Condition met! Other state has value.", status, city, batch, course, gender,payment);
+        if(city !== cityDone || course !== courseDone || batch !== batchDone || gender !== genderDone || status !== statusDone || payment !== paymentDone){
         getUsersFromFilter(status,batch,gender,city,course,payment);
-        setAllUsers(filterUsers)
-        setVerifiedUsers(filterVerified)
+        // console.log("filterUsers-->",filterUsers)
+        // setAllUsers(filterUsers)
+        // setVerifiedUsers(filterVerified)
+      }
       }
       else if(!city && !course && !batch && !gender && !status && !payment){
         setAllUsers(alternateUsers)
@@ -187,63 +211,76 @@ useEffect(() => {
 
 
   
-  
-  const getUsersFromFilter = async (status, batch, gender, city, course,payment) => {
-    console.log("Filter Query Values-->", status, batch, gender, city, course,payment);
+const [isLoading, setIsLoading] = useState(false);
 
-    let queryParams = '';
+const getUsersFromFilter = async (status, batch, gender, city, course, payment) => {
+  // setIsLoading(true); // Set loading state to true
 
+  console.log("Filter Query Values-->", status, batch, gender, city, course, payment);
 
-    if (status) {
-        queryParams += `${queryParams ? '&' : ''}status=${status}`;
-    }
+  let queryParams = '';
 
-    if (batch) {
-        queryParams += `${queryParams ? '&' : ''}batch=${batch}`;
-    }
-
-    if (gender) {
-        queryParams += `${queryParams ? '&' : ''}gender=${gender}`;
-    }
-
-    if (city) {
-        queryParams += `${queryParams ? '&' : ''}city=${city}`;
-    }
-
-    if (course) {
-        queryParams += `${queryParams ? '&' : ''}course=${course}`;
-    }
-
-    if (payment) {
-      queryParams += `${queryParams ? '&' : ''}payment=${payment}`;
+  if (status) {
+    queryParams += `${queryParams ? '&' : ''}status=${status}`;
   }
 
-    try {
-        let userData = await fetch(`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
-        userData = await userData.json();
-        console.log(userData,"url-->",`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+  if (batch) {
+    queryParams += `${queryParams ? '&' : ''}batch=${batch}`;
+  }
 
-        if (userData.success) {
-            let data = userData.data;
-            console.log("data-->", data,"url-->",`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
-            
-            // Convert single object to an array of length 1
-            const users = Array.isArray(data) ? data : [data];
-            const verified = users.filter(user => user.status === "verified");
+  if (gender) {
+    queryParams += `${queryParams ? '&' : ''}gender=${gender}`;
+  }
 
-            setFilterUsers(users);
-            setFilterVerified(verified)
-        } else if (userData.message === "No students found!") {
-          setFilterUsers([]);
-            setFilterVerified([])
-            // alert("Student not found with these parameters!");
-        } else {
-            alert("An error occurred !");
-        }
-    } catch (error) {
-        console.error("Error fetching user data:", error);
+  if (city) {
+    queryParams += `${queryParams ? '&' : ''}city=${city}`;
+  }
+
+  if (course) {
+    queryParams += `${queryParams ? '&' : ''}course=${course}`;
+  }
+
+  if (payment) {
+    queryParams += `${queryParams ? '&' : ''}payment=${payment}`;
+  }
+
+  try {
+    let userData = await fetch(`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+    userData = await userData.json();
+    console.log(userData, "url-->", `http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+
+    if (userData.success) {
+      let data = userData.data;
+      console.log("data-->", data, "url-->", `http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+
+      // Convert single object to an array of length 1
+      const users = Array.isArray(data) ? data : [data];
+      const verified = users.filter(user => user.status === "verified");
+
+      setStatusDone(status)
+      setBatchDone(batch)
+      setGenderDone(gender)
+      setCityDone(city)
+      setCourseDone(course)
+      setPaymentDone(payment)
+      setAllUsers(users);
+      setVerifiedUsers(verified);
+    } else if (userData.message === "No students found!") {
+      setAllUsers([]);
+      setVerifiedUsers([]);
+      // Consider a more informative message for the user here (e.g., "No students match your filter criteria")
+    } else {
+      alert("An error occurred!"); // Handle other potential errors more gracefully
     }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    // Handle network errors or other issues more gracefully (e.g., display an error message to the user)
+  } 
+  // finally {
+  //   setIsLoading(false); // Set loading state to false after fetching is complete
+  // }
 };
+
   
 
   const getUserRollNoData = async (rollNumber) => {
@@ -262,15 +299,16 @@ useEffect(() => {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setVerifiedRollNo(verified)
+          setRollNumberDone(rollNumber)
+          setAllUsers(users);
+          setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
-          setRollNoUsers(users);
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
-          setVerifiedRollNo([])
+          setAllUsers([])
           // setAlternateUsers(allUsers)
-          setRollNoUsers([]);
+          setVerifiedUsers([]);
         } else {
           alert("An error occurred !");
         }
@@ -296,15 +334,16 @@ useEffect(() => {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setVerifiedCnic(verified)
+          setCnicNumberDone(cnicNumber)
+          setAllUsers(users);
+          setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
-          setCnicUsers(users);
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
           alert("Student not found with this Roll No !");
-          setVerifiedCnic([])
+          setAllUsers([]);
+          setVerifiedUsers([])
           // setAlternateUsers(allUsers)
-          setCnicUsers([]);
         } else {
           alert("An error occurred !");
         }
@@ -331,14 +370,16 @@ useEffect(() => {
           const users = Array.isArray(data) ? data : [data];
           const verified = users.filter(user => user.status === "verified");
 
-          setCnicAndRollNoUsers(users);
-          setVerifiedRollNoAndCnic(verified)
+          setRollNumberDone(rollNumber)
+          setCnicNumberDone(cnicNumber)
+          setAllUsers(users);
+          setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
         } else if( queryData.message === "No students found!") {
           alert("Student not found with this Roll No and Cnic !");
-          setCnicAndRollNoUsers([]);
-          setVerifiedRollNoAndCnic([])
+          setAllUsers([]);
+          setVerifiedUsers([])
         } else {
           alert("An error occurred !");
         }
@@ -443,6 +484,7 @@ useEffect(() => {
     setBatch("");
     setStatus("");
     setPayment("");
+    Gender("");
     // setRollNumber("");
     // setCnicNumber("");
   };
@@ -864,8 +906,8 @@ useEffect(() => {
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Select.Option value="verified">Verified</Select.Option>
-        <Select.Option value="un-verified">Un-Verified</Select.Option>
+        <Select.Option value="Verified">Verified</Select.Option>
+        <Select.Option value="Un-Verified">Un-Verified</Select.Option>
       </Select>
 
       {/* Payment */}
@@ -880,8 +922,8 @@ useEffect(() => {
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Select.Option value="done">Done</Select.Option>
-        <Select.Option value="not-done">Not-Done</Select.Option>
+        <Select.Option value="Done">Done</Select.Option>
+        <Select.Option value="Not-done">Not-Done</Select.Option>
       </Select>
 
       {/* Gender */}
@@ -896,8 +938,8 @@ useEffect(() => {
           option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        <Select.Option value="male">Male</Select.Option>
-        <Select.Option value="female">Female</Select.Option>
+        <Select.Option value="Male">Male</Select.Option>
+        <Select.Option value="Female">Female</Select.Option>
       </Select>
 
       {/* Clear Button */}
