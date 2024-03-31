@@ -312,7 +312,7 @@ setInputCondition("recheck")
 
   return (
     <Layout style={{ minHeight: '100vh', position: 'fixed', marginTop: '-20px' }}>
-      <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px' }} width={80} theme="dark">
+      <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px' ,height:{"100%"}}} width={80}  theme="dark">
         <Menu mode="vertical" className='space-y-5' style={{ backgroundColor: "#0E4C92" }} theme="dark" defaultSelectedKeys={['1']}>
           <Menu.Item key="i1" icon={<img style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }} src='/images/BhattiSahab.jpg' alt='User' />}  />
           <Menu.Item key="1" icon={<LockOutlined />} onClick={() => showModal(1)} />

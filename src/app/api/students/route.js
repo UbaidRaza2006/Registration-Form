@@ -12,9 +12,9 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   await connectToDb();
 
-//   const page = parseInt(new URL(req.url).searchParams.get("page")) || 1; // Get page number from query parameters, default to page 1
-//   const limit = 10;
-//   const skip = (page - 1) * limit
+  const page = parseInt(new URL(req.url).searchParams.get("page")) || 1 ; // Get page number from query parameters, default to page 1
+  const limit = 20;
+  const skip = page * limit
 
   const rollNoQuery = new URL(req.url).searchParams.get("rollNo");
   const cnicQuery = new URL(req.url).searchParams.get("cnic");
@@ -27,8 +27,7 @@ export async function GET(req) {
 
   try {
       if (!rollNoQuery && !cnicQuery && !cityQuery && !genderQuery && !courseQuery && !batchQuery && !statusQuery && !paymentQuery) {
-        const students = await Register.find().sort({_id:-1})
-        // .skip(skip).limit(limit); // Implement pagination
+        const students = await Register.find().sort({_id:-1}).skip(skip).limit(limit); // Implement pagination
           if (students.length > 0) {
               return NextResponse.json({
                   success: true,

@@ -390,6 +390,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   };
 
   useEffect(() => {
+    http://localhost:3000/api/students
     gettingAdmin();
     gettingUsers();
   }, []);
@@ -430,7 +431,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const gettingUsers = async () => {
     console.log("gettingUsers")
     try {
-      const res = await fetch("http://localhost:3000/api/students", {
+      const res = await fetch(`http://localhost:3000/api/students?page=${allUsers.length/20}`, {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
@@ -484,7 +485,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     setBatch("");
     setStatus("");
     setPayment("");
-    Gender("");
+    setGender("");
     // setRollNumber("");
     // setCnicNumber("");
   };
