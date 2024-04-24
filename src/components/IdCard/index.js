@@ -13,23 +13,37 @@ function IdCard({user}) {
     const idCardRef = useRef(null)
     console.log("idCardRef-->",idCardRef);
     
-        const handleDownload = () => {
-            const input = idCardRef.current;
-        
-            if (!input) {
-              console.error("Element with id 'id-card' not found");
-              return;
-            }
-        
-            const options = {
-              filename: "id_card.pdf",
-              html2canvas: { scale: 1 },
-              jsPDF: { orientation: "portrait" },
-            };
-        
-            html2pdf().from(input).save();
-
-          };
+    const handleDownload = () => {
+      const input = idCardRef.current;
+  
+      if (!input) {
+        console.error("Element with id 'id-card' not found");
+        return;
+      }
+  
+      const rollNumber = user.rollNo; // Assuming user.rollNo contains the roll number
+      const filename = `Student_${rollNumber}.idCard.pdf`;
+  
+      const options = {
+        filename: filename,
+        html2canvas: {
+          scale: 5,
+          letterRendering: true,
+          useCORS: true,
+        },
+        jsPDF: {
+          unit: "mm",
+          format: "a4",
+          orientation: "portrait",
+          compression: true,
+          precision: 16,
+        },
+      };
+  
+      html2pdf().set(options).from(input).save();
+    };
+  
+  
   
 
 
@@ -41,49 +55,31 @@ function IdCard({user}) {
               </Button>
 
 
+              <div className="hidden">
+  <div ref={idCardRef} className="bg-white h-[1000px] relative">
 
-    <div  className="hidden">
-    <div ref={idCardRef} className='bg-white h-[1000px]'>
+    {/* Background Image */}
+    <img src="/images/Green Minimalist School ID Card (1).svg" className="absolute ml-[28%] h-[230px] w-[350px] object-cover z-0" />
 
-<div   className="id-card flex border border-gray-200 rounded-md bg-white bg-cover bg-center bg-no-repeat mx-auto h-[350px] w-[230px]" style={{ backgroundImage: 'url("/images/id.PNG")' }}>
-  <div className="card-content flex overflow-hidden ">
-    {/* <div className="bg-[/images/Capture.png]"> */}
-      {/* <img src="/images/Capture.png" alt="" /> */}
-      <img className='w-[40%] h-[80px] mt-[80px] ml-[30%] ' src={user.imageUrl} />
-      <div className='mt-[160px] ml-[-68%] ml-[-55%] w-[150px] overflow-hidden'>
-      
-<p className='text-xs mb-1 mx-auto'><strong>{user.rollNo}</strong></p>
+    {/* ID Card Content */}
+    <div className="id-card flex mx-auto mt-8 h-[230px] w-[350px] relative z-10">
+      {/* Content goes here */}
+      <img className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]" src={user.imageUrl} />
+      <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
+        <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold" }} className="break-words">{user.fullName}</p>
+        <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">{user.course}</p>
+        <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">{user.batch}</p>
+      </div>
+      <div className="absolute mt-[184.5px] ml-[75px] w-[100px] h-[35px] overflow-hidden">
+        <p style={{ color: "white", fontSize: "13px", fontWeight: "bold", letterSpacing: "2px", fontStyle: "italic" }} className="break-words">{user.rollNo}</p>
+      </div>
+    </div>
 
-<p className="break-words text-xs">
-  <strong> Name: </strong>
-  {user.fullName} {user.fatherName}
-</p>
-<p className="break-words text-xs">
-  <strong> Course: </strong>
-  {user.course}
-</p>
-<p className="break-words text-xs">
-  <strong> Batch: </strong>
-  {user.batch}
-</p>
-<p className="break-words text-xs">
-  <strong> Cnic/B-form: </strong>
-  {user.cnic}
-</p>
-<p className="break-words text-xs">
-  <strong> City: </strong>
-  {user.city}
-</p>
-</div>
-      {/* Add more fields and styling as needed */}
-    {/* </div> */}
   </div>
-      
 </div>
 
 
-</div>
-</div>
+
 
     </div>
 

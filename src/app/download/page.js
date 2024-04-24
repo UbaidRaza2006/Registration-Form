@@ -126,6 +126,18 @@ function DownloadIdCard() {
                 Download ID Card
             </div>
 
+
+
+         
+
+
+
+
+
+
+
+
+
             <div className="mx-auto max-w-xl mt-6">
                 <div className="p-4 rounded">
                   

@@ -457,6 +457,7 @@ const formatCnicNumber = (input) => {
 
         const userLocal = localStorage.getItem("user");
 
+        setShowModal(true);
 // Check if userLocalString is not null or undefined before parsing
  // Set the user in the global state
 //  setUser(res?.user);
@@ -465,12 +466,6 @@ const formatCnicNumber = (input) => {
 // Now, userLocal will either contain the parsed user object or be null if parsing fails
 // setUser(userLocal);
 console.log(userLocal);
-    
-       
-        
-
-     
-            setShowModal(true);
         }
 
        

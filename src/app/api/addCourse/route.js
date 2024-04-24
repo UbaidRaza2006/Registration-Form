@@ -15,7 +15,7 @@ import Course from "../../../models/course";
 
 const CourseSchema = Joi.object({
     course: Joi.string().required(),
-    batch: Joi.string().required(),
+    batch: Joi.number().required(),
     admission: Joi.string().required(),
 })
 

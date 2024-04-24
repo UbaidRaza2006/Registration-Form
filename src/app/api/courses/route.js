@@ -16,12 +16,13 @@ export const dynamic = "force-dynamic";
 export async function GET(req) {
   await connectToDb()
 
-  const page = 1;
-  const limit = 10;
-  const skip = (page -1) * limit;
+//   const page = 1;
+//   const limit = 10;
+//   const skip = (page -1) * limit;
 
   try {
-          const course = await Course.find().sort({_id:-1}).skip(skip).limit(limit).toArray();
+          const course = await Course.find().sort({_id:-1})
+        //   .skip(skip).limit(limit).toArray();
           if (course.length > 0) {
               return NextResponse.json({
                   success: true,

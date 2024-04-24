@@ -52,7 +52,7 @@ const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
 export default function AdminPage() {
  
 
-  const {api,setApi} = usePassword();
+  const {api,setApi,coursesToLoad,setCoursesToLoad} = usePassword();
 
 
   const [admin, setAdmin] = useState(null)
@@ -394,6 +394,13 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     gettingAdmin();
     gettingUsers();
   }, []);
+
+  // useEffect(() => {
+  //   if(allUsers.length>0 && admin){
+  //     setCoursesToLoad(true)
+  //     console.log("coursesToLoad-->",coursesToLoad)
+  //   }
+  // }, [allUsers,admin]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -447,6 +454,8 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       // Set all users into state
       setAllUsers(users);
       setAlternateUsers(users)
+           setCoursesToLoad(true)
+      // console.log("coursesToLoad-->",coursesToLoad)
       // checkingVerifiedUsers(users);
     } catch (error) {
       console.error("Error fetching users:", error);
