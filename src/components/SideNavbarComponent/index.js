@@ -24,6 +24,7 @@ import {
 
 import { usePassword } from '../../context';
 import { backdropClasses } from '@mui/material';
+import Batch from '../CourseBatchModal';
 const { Sider } = Layout;
 
 
@@ -285,20 +286,20 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       console.log("showModal", par)
       setIsModalVisible3(true)
     }
-    else if (par === 4 && itemData) {
-      console.log("showModal", par)
-      selectedItemData = itemData
-      setIsModalVisible4(true)
-      console.log("selectedItemData-->",selectedItemData);
-    }
-    else if (par === 5) {
-      console.log("showModal", par)
-      setIsModalVisible5(true)
-    }
-    else if (par === 6) {
-      console.log("showModal", par)
-      setIsModalVisible6(true)
-    }
+    // else if (par === 4 && itemData) {
+    //   console.log("showModal", par)
+    //   selectedItemData = itemData
+    //   setIsModalVisible4(true)
+    //   console.log("selectedItemData-->",selectedItemData);
+    // }
+    // else if (par === 5) {
+    //   console.log("showModal", par)
+    //   setIsModalVisible5(true)
+    // }
+    // else if (par === 6) {
+    //   console.log("showModal", par)
+    //   setIsModalVisible6(true)
+    // }
   };
 
   const handleCancel = (par) => {
@@ -314,18 +315,18 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       console.log("closeModal", par)
       setIsModalVisible3(false)
     }
-    else if (par === 4) {
-      console.log("closeModal", par)
-      setIsModalVisible4(false)
-    }
-    else if (par === 5) {
-      console.log("closeModal", par)
-      setIsModalVisible5(false)
-    }
-    else if (par === 6) {
-      console.log("closeModal", par)
-      setIsModalVisible6(false)
-    }
+    // else if (par === 4) {
+    //   console.log("closeModal", par)
+    //   setIsModalVisible4(false)
+    // }
+    // else if (par === 5) {
+    //   console.log("closeModal", par)
+    //   setIsModalVisible5(false)
+    // }
+    // else if (par === 6) {
+    //   console.log("closeModal", par)
+    //   setIsModalVisible6(false)
+    // }
   };
 
   const back = () => {
@@ -564,9 +565,10 @@ const editBatchOfTheCourse = async (batch, courseId) => {
                         >{item.batch
                             // + batchValues[index]
                           }</div>
-                        <span className="cursor-pointer ml-1" onClick={() => showModal(4,item)}>
+                        {/* <span className="cursor-pointer ml-1" onClick={() => setIsModalVisible4(true)}>
                           <PlusOutlined style={{ fontSize: '18px', color: 'gray', strokeWidth: '2px' }} />
-                        </span>
+                        </span> */}
+                        <Batch selectedItem={item}/>
                       </div>
                     </td>
                     <td className="px-3 py-3">
@@ -611,42 +613,7 @@ const editBatchOfTheCourse = async (batch, courseId) => {
 
 {/* Ye Course walay Modal k under k Modals hein... */}
 
-      <Modal
-        // style={{ width: "700px !important" }} 
-        // id="modal3" 
-        visible={isModalVisible4}
-        onCancel={() => handleCancel(4)}
-        footer={null}
-        centered
-      >
-        <div className="p-8">
-          <h2 className="text-2xl mb-6">`Do You Want to Launch a New Batch No. ${selectedItemData.batch + 1} of Course ${selectedItemData.course}?`</h2>
-          <div className="flex justify-center">
-            <button
-              className={`bg-blue-500 text-white px-6 py-3 mr-4 rounded-lg transition duration-300 ${isAdding ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'}`}
-              onClick={() => {
-                setIsAdding(true);
-
-                editBatchOfTheCourse(selectedItemData.batch+1,selectedItemData._id)
-                // Add logic here
-                // setTimeout(() => {
-                //   setIsAdding(false);
-                  
-                // }, 1000);
-              }}
-              disabled={isAdding}
-            >
-              {isAdding ? 'Adding...' : "Add"}
-            </button>
-            <button
-              className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition duration-300"
-              onClick={() => handleCancel(4)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
+      {/* <Batch isOpen={isModalVisible4} onClose={handleCancel(4)} selectedItem={}/> */}
 
       
       <Modal
