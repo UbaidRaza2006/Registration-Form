@@ -10,8 +10,9 @@ import AntInputComponent from "../../components/AntInput";
 import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
 import ImageUploadComponent from "../../components/AntUpload";
+import NextImage from "next/image"; // Alias one of the imports
 
-import { Image } from "cloudinary-react";
+import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 
 // const cloudinary = require('cloudinary').v2;
 // import { v2 as cloudinary } from "cloudinary";
@@ -146,11 +147,11 @@ const [fullName, setFullName] = useState('');
         setImageee(userData.data.paymentImg);
 
 
-        if(userData.data[0].payment == "done"){
+        if(userData.data[0].payment == "Done"){
           setCheck(true)
         }
         else{
-          setPayment("done")
+          setPayment("Done")
           setCheck(false)
 
         }
@@ -182,7 +183,7 @@ const updateUser = async (userId) => {
     else if(rollNumber.length !== 5 && fullName == ""){
       alert("Enter a correct 5 digit Roll No !")
     }
-    else if(userId && paymentImg !== "not-done" && check == false){
+    else if(userId && paymentImg !== "Not-Done" && check == false){
       // setPayment("done")
       // 27577
     let dataToEdit = await fetch(`http://localhost:3000/api/students/${userId}`, {
@@ -293,19 +294,26 @@ console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
-    <div id="payment" style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}>
+    <div id="payment" 
+    // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
+    >
+
+
+{/* Background Image */}
+<NextImage src="/images/paymentBg5.avif" className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
+
       {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 
       <div
     style={{ boxShadow: "0px -5px 1px 12px rgba(0, 0, 0, 0.1)" }}
-    className="items-center justify-between mt-0 w-screen bg-[#248ba5] lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12"
+    className="items-center justify-between mt-0 w-screen bg-[#248ba5] lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12 relative z-10"
   >
     <p className="mx-auto">
       Payment Verify Form
     </p>
   </div>
 
-      <div className="space-y-6 mx-auto w-[400px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500" style={styles.container}>
+      <div className="space-y-6 mx-auto w-[400px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500 relative z-10" style={styles.container}>
         <div
           style={{
             margin: "0 auto", 
@@ -371,13 +379,14 @@ console.log("Image Url ka baap hon----->", paymentImg)
             placeholder="Upload here"
             onChange={handleImageUpload}
             style={{ display: "none" }}
-          /> {!paymentImg ? (
+          /> {!paymentImg ||  paymentImg === "Not-Done" ? (
             <h1> Upload Here</h1>
           ) : (
-            <img
+            <NextImage
               // cloudName="dbcpfhk6n"
               src={paymentImg}
-              style={{ width: "100%", height: "100%" }}
+              // style={{ width: "100%", height: "100%" }}
+              width={600} height={400}
             />
           )}
 

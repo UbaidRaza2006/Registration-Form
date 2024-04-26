@@ -101,7 +101,7 @@ const VerificationButton = ({ id, userStatus }) => {
   useEffect(() => {
 
     setStatus(userStatus)
-    if(userStatus === "verified"){
+    if(userStatus === "Verified"){
       setButtonColor("green")
       setButtonText("Verified")
     }
@@ -145,11 +145,11 @@ const VerificationButton = ({ id, userStatus }) => {
   // Function to handle button click
   const handleButtonClick = () => {
     // Toggle the verification status and update button text and color accordingly
-    const newStatus = status === 'verified' ? 'un-verified' : 'verified';
+    const newStatus = status === 'Verified' ? 'Un-Verified' : 'Verified';
     console.log("status-->",status)
     setStatus(newStatus);
-    setButtonText(newStatus === 'verified' ? 'Verified' : 'Un-verified');
-    setButtonColor(newStatus === 'verified' ? 'green' : 'red');
+    setButtonText(newStatus === 'Verified' ? 'Verified' : 'Un-Verified');
+    setButtonColor(newStatus === 'Verified' ? 'green' : 'red');
 
     // Call updateUser function to update user data
     updateUserStatus(id, newStatus);

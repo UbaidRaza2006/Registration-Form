@@ -21,8 +21,9 @@ import Navbar from '../components/Navbar';
 import { Button } from '@mui/material';
 import { Router } from "next/router";
 import { useRouter } from "next/navigation";
+import NextImage from "next/image"; // Alias one of the imports
 
-import { Image } from 'cloudinary-react';
+import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 
 
 // const cloudinary = require('cloudinary').v2;
@@ -549,8 +550,7 @@ const text = "Admissions are Closed!"
             <div style={{boxShadow:'1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)'}}  className="w-full bg-white text-[#248ba5] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl  h-6">Service-Education-Registration
             </div>
 
-            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)'}} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><img className="h-[300px] mx-auto w-full rounded-xl"
-                src="/images/Rizwan.png"
+            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)'}} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><NextImage className="h-[300px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" width={600} height={400}
 
             /></div>
 
@@ -811,7 +811,7 @@ const text = "Admissions are Closed!"
         <p className="upload-text">Upload</p>
       )} */}
 
-{image && <img  cloudName="dbcpfhk6n" src={image} style={{ width: '100px', height: '150px' }} />}
+{image && <NextImage  cloudName="dbcpfhk6n" src={image} style={{ width: '100px', height: '150px' }} width={600} height={400}/>}
 
        <style jsx>{`
     .image-uploader {

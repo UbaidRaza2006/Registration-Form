@@ -2,6 +2,7 @@
 
 import { Button } from "antd";
 import  html2pdf  from "html2pdf.js";
+import Image from "next/image";
 // import { html2pdf } from "html2pdf.js";
 import { useRef } from "react";
 
@@ -59,12 +60,12 @@ function IdCard({user}) {
   <div ref={idCardRef} className="bg-white h-[1000px] relative">
 
     {/* Background Image */}
-    <img src="/images/Green Minimalist School ID Card (1).svg" className="absolute ml-[28%] h-[230px] w-[350px] object-cover z-0" />
+    <Image src="/images/Green Minimalist School ID Card (1).svg" className="absolute ml-[28%] h-[230px] w-[350px] object-cover z-0" width={600} height={400}/>
 
     {/* ID Card Content */}
     <div className="id-card flex mx-auto mt-8 h-[230px] w-[350px] relative z-10">
       {/* Content goes here */}
-      <img className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]" src={user.imageUrl} />
+      <Image className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]" src={user.imageUrl} width={600} height={400}/>
       <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
         <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold" }} className="break-words">{user.fullName}</p>
         <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">{user.course}</p>

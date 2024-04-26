@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { EyeOutlined } from "@ant-design/icons";
 import { Button, Drawer, Space } from "antd";
+import Image from "next/image";
 
 const EyeViewDrawerApp = ({ userData }) => {
   const [open, setOpen] = useState(false);
@@ -80,7 +81,7 @@ const EyeViewDrawerApp = ({ userData }) => {
 >
   <div className="p-6">
     <div className="flex justify-center mb-6">
-      <img
+      <Image
         src={userData.imageUrl}
         alt="Student"
         style={{
@@ -90,6 +91,7 @@ const EyeViewDrawerApp = ({ userData }) => {
           border: "4px solid #1890ff",
           boxShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
         }}
+        width={600} height={400}
       />
     </div>
 
@@ -163,13 +165,15 @@ const EyeViewDrawerApp = ({ userData }) => {
     {/* Payment image */}
     <div className="mt-4">
     <div className="mt-4">
-      {userData.paymentImg ? (
+      {userData.paymentImg && userData.paymentImg !== "Not-Done" ? (
         // If payment image exists, display it
         <div className="flex justify-center mb-6">
-          <img
+          <Image
             src={userData.paymentImg}
             alt="Payment"
             className="w-[100%] h-40 rounded-xl shadow-md"
+            width={600} height={400}
+
           />
         </div>
       ) : (

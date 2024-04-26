@@ -25,6 +25,7 @@ import {
 import { usePassword } from '../../context';
 import { backdropClasses } from '@mui/material';
 import Batch from '../CourseBatchModal';
+import Image from 'next/image';
 const { Sider } = Layout;
 
 
@@ -392,7 +393,7 @@ const editBatchOfTheCourse = async (batch, courseId) => {
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '-20px' }}>
       <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px', height: "100%" }} width={80} theme="dark">
         <Menu mode="vertical" className='space-y-5' style={{ backgroundColor: "#0E4C92" }} theme="dark" defaultSelectedKeys={['1']}>
-          <Menu.Item key="i1" icon={<img style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }} src='/images/BhattiSahab.jpg' alt='User' />} />
+          <Menu.Item key="i1" icon={<Image style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }}   width={600} height={400} src='/images/BhattiSahab.jpg' alt='User' />} />
           <Menu.Item key="1" icon={<LockOutlined />} onClick={() => showModal(1)} />
           <Menu.Item key="2" icon={<StopOutlined />} onClick={() => showModal(2)} />
           <Menu.Item key="3" icon={<LaptopOutlined />} onClick={() => showModal(3)} />

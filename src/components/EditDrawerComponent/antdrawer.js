@@ -8,6 +8,7 @@ import { batchOptions, courseOptions } from '../../utils';
 import SelectComponent from '../SelectComponent';
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
+import NextImage from "next/image"; // Alias one of the imports
 
 import { Image } from 'cloudinary-react';
 
@@ -102,7 +103,7 @@ const EditDrawerApp = ({ userData }) => {
   //     setButtonText("Un-verified");
   //   }
   // }, []);
-      if(result.status === "verified"){
+      if(result.status === "Verified"){
         setButtonColor("green")
         setButtonText("Verified")
       }
@@ -152,12 +153,12 @@ const EditDrawerApp = ({ userData }) => {
   const handleButtonClick = () => {
     // Toggle the verification status and update button text and color accordingly
     setVerified(!verified);
-    if (status === "verified") {
-      setStatus("un-verified")
-      setButtonText('Un-verified');
+    if (status === "Verified") {
+      setStatus("Un-Verified")
+      setButtonText('Un-Verified');
       setButtonColor('red');
     } else {
-      setStatus("verified")
+      setStatus("Verified")
       setButtonText('Verified');
       setButtonColor('green');
     }
@@ -421,7 +422,8 @@ const getBase64PaymentImage = async (imageUrl) => {
         <p className="upload-text">Upload</p>
       )} */}
 
-{paymentImage && <img  src={paymentImage} style={{ width: '320px', height: '140px' }} />}
+{paymentImage && paymentImage !== "Not-Done" && <NextImage  src={paymentImage} style={{ width: '320px', height: '140px' }}               width={600} height={400}
+/>}
 
        <style jsx>{`
     .image-uploader {
