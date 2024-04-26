@@ -111,9 +111,10 @@ const EyeViewDrawerApp = ({ userData }) => {
               </div>
               <div className="border-b border-gray-300 col-span-2"></div>
 
-              <div className="font-semibold">Father's Name:</div>
+              <div className="font-semibold">Father&apos;s Name:</div>
               <div>{userData.fatherName}</div>
               <div className="border-b border-gray-300 col-span-2"></div>
+
 
               <div className="font-semibold">CNIC:</div>
               <div>{userData.cnic}</div>

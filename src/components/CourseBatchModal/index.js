@@ -87,8 +87,8 @@ const Batch = ({selectedItem }) => {
     <Modal
     // style={{ width: "700px !important" }} 
     // id="modal3" 
-    isOpen={isModalVisible}
-  onRequestClose={closeModal}
+    visible={isModalVisible}
+  onCancel={()=>closeModal}
     footer={null}
     centered
   >
