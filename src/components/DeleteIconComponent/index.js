@@ -14,7 +14,7 @@ export default function DeleteIconComponent({id}){
 const deleteUser =async ()=>{
 
   console.log("id-->",id)
-let response = await fetch(`http://localhost:3000/api/students/${id}`,{
+let response = await fetch(`/api/students/${id}`,{
   method:"delete"
 })
 response= await response.json()

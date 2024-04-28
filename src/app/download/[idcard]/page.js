@@ -26,7 +26,7 @@ export default function DownloadWithCnic (props){
 
     const getIdData =async()=> {
         let userId=props.params.idcard
-        let userData = await fetch(`http://localhost:3000/api/students/${userId}`)
+        let userData = await fetch(`/api/students/${userId}`)
         userData= await userData.json()
         console.log(userData);
         if(userData.success){

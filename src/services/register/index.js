@@ -26,7 +26,7 @@ export const getAllUsers = async () => {
 
 try{
 
-const res = await fetch("http://localhost:3000/api/students" ,{
+const res = await fetch("/api/students" ,{
     method: "GET",
 });
 
@@ -44,7 +44,7 @@ catch(error){
 
 export const findUserByCNIC = async (cnic) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/findCnic?cnic=${cnic}`, {
+      const response = await fetch(`/api/findCnic?cnic=${cnic}`, {
         // method: 'POST',
         // headers: {
         //   'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const findUserByCNIC = async (cnic) => {
 // export const getUserWithCnic = async (cnicToFind) => {
 //     console.log('cnicToFind -->', cnicToFind);
 //     try {
-//         const response = await fetch(`http://localhost:3000/api/findCnic?cnicToFind=${cnicToFind}`, {
+//         const response = await fetch(`/api/findCnic?cnicToFind=${cnicToFind}`, {
 //             method: "GET",
 //         });
 //         if (!response.ok) {

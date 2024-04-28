@@ -65,7 +65,7 @@ const EditDrawerApp = ({ userData }) => {
 
   const getUserData = async (userId) => {
     console.log("idForUser-->", userId);
-    let data = await fetch(`http://localhost:3000/api/students/${userId}`)
+    let data = await fetch(`/api/students/${userId}`)
     data = await data.json()
     console.log(data);
     if (data.success) {
@@ -132,7 +132,7 @@ const EditDrawerApp = ({ userData }) => {
     }
 
 
-    let data = await fetch(`http://localhost:3000/api/students/${userId}`, {
+    let data = await fetch(`/api/students/${userId}`, {
       method: "PUT",
       body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment,paymentImg, phone, qualification, rollNo, status }), headers: {
         "Content-Type": "application/json"

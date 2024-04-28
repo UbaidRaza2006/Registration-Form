@@ -114,7 +114,7 @@ const [fullName, setFullName] = useState('');
   if(rollNumber){
 
 
-    let userData = await fetch(`http://localhost:3000/api/students?rollNo=${rollNumber}`)
+    let userData = await fetch(`/api/students?rollNo=${rollNumber}`)
     userData = await userData.json()
       console.log(userData)
       if (userData.success) {
@@ -187,7 +187,7 @@ const updateUser = async (userId) => {
     else if(userId && paymentImg !== "Not-Done" && check == false){
       // setPayment("done")
       // 27577
-    let dataToEdit = await fetch(`http://localhost:3000/api/students/${userId}`, {
+    let dataToEdit = await fetch(`/api/students/${userId}`, {
       method: "PUT",
       body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, paymentImg, phone, qualification, rollNo, status }),
       headers: {

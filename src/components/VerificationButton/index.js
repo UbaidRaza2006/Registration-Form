@@ -18,7 +18,7 @@
 
 //   const getUserData = async (userId) => {
 //     console.log("idForUser-->", userId);
-//     let statusData = await fetch(`http://localhost:3000/api/students/${userId}`)
+//     let statusData = await fetch(`/api/students/${userId}`)
 //     statusData = await statusData.json()
 //     console.log(statusData);
 //     if (statusData.success) {
@@ -46,7 +46,7 @@
 //     // handleButtonClick()
 
 
-//     let data = await fetch(`http://localhost:3000/api/students/${userId}`, {
+//     let data = await fetch(`/api/students/${userId}`, {
 //       method: "PUT",
 //       body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment,paymentImg, phone, qualification, rollNo, status:newStatus }), headers: {
 //         "Content-Type": "application/json"
@@ -118,7 +118,7 @@ const VerificationButton = ({ id, userStatus }) => {
   const updateUserStatus = async (id, newStatus) => {
     // const newStatus = status === 'verified' ? 'un-verified' : 'verified';
     try {
-      const response = await fetch(`http://localhost:3000/api/students/${id}`, {
+      const response = await fetch(`/api/students/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

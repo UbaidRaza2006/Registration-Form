@@ -141,14 +141,14 @@ const handlePassword = () => {
 
     try {
       if (inputPassword) {
-        let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
+        let data = await fetch(`/api/admins/${adminId}`, {
           method: "PUT",
           body: JSON.stringify({ _id: adminId, adminPassword: inputPassword }), headers: {
             "Content-Type": "application/json"
           }
         })
         data = await data.json()
-        console.log(data, `http://localhost:3000/api/admins/${adminId}`)
+        console.log(data, `/api/admins/${adminId}`)
         // console.log("info-->",data);
         if (data.success) {
           alert(`Passowrd has been Updated!.. into  ${data.result.adminPassword}`)
@@ -174,14 +174,14 @@ const handlePassword = () => {
 
     try {
       if (message) {
-        let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
+        let data = await fetch(`/api/admins/${adminId}`, {
           method: "PUT",
           body: JSON.stringify({ _id: adminId, textAdmission: message }), headers: {
             "Content-Type": "application/json"
           }
         })
         data = await data.json()
-        console.log(data, `http://localhost:3000/api/admins/${adminId}`)
+        console.log(data, `/api/admins/${adminId}`)
         // console.log("info-->",data);
         if (data.success) {
           alert(`Message has been sent.....  ${data.result.textAdmission}`)
@@ -205,14 +205,14 @@ const handlePassword = () => {
 
     try {
       // if(admissionsOpen){
-      let data = await fetch(`http://localhost:3000/api/admins/${adminId}`, {
+      let data = await fetch(`/api/admins/${adminId}`, {
         method: "PUT",
         body: JSON.stringify({ _id: adminId, admissions: newStatus, textAdmission: "" }), headers: {
           "Content-Type": "application/json"
         }
       })
       data = await data.json()
-      console.log(data, `http://localhost:3000/api/admins/${adminId}`)
+      console.log(data, `/api/admins/${adminId}`)
       // console.log("info-->",data);
       if (data.success) {
         alert(`Admission Status has been Updated!.. into  ${data.result.admissions}`)
@@ -245,14 +245,14 @@ const editBatchOfTheCourse = async (batch, courseId) => {
 
   try {
     if (batch && id) {
-      let data = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+      let data = await fetch(`/api/courses/${courseId}`, {
         method: "PUT",
         body: JSON.stringify({ _id: courseId, batch: batch }), headers: {
           "Content-Type": "application/json"
         }
       })
       data = await data.json()
-      console.log(data, `http://localhost:3000/api/courses/${courseId}`)
+      console.log(data, `/api/courses/${courseId}`)
       // console.log("info-->",data);
       if (data.success) {
         alert(`New Batch No.${data.result.batch} has been Launched!}`)
@@ -348,7 +348,7 @@ const editBatchOfTheCourse = async (batch, courseId) => {
   const gettingAdmin = async () => {
     console.log("gettingAdmin")
     try {
-      const res = await fetch("http://localhost:3000/api/admins", {
+      const res = await fetch("/api/admins", {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
@@ -364,7 +364,7 @@ const editBatchOfTheCourse = async (batch, courseId) => {
   const gettingCourses = async () => {
     console.log("gettingCourses");
     try {
-      const res = await fetch("http://localhost:3000/api/courses", {
+      const res = await fetch("/api/courses", {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });

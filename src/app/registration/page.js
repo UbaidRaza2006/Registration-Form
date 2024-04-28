@@ -245,13 +245,13 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   }
 
   try {
-    let userData = await fetch(`http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+    let userData = await fetch(`/api/students${queryParams ? '?' + queryParams : ''}`);
     userData = await userData.json();
-    console.log(userData, "url-->", `http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+    console.log(userData, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
 
     if (userData.success) {
       let data = userData.data;
-      console.log("data-->", data, "url-->", `http://localhost:3000/api/students${queryParams ? '?' + queryParams : ''}`);
+      console.log("data-->", data, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
 
       // Convert single object to an array of length 1
       const users = Array.isArray(data) ? data : [data];
@@ -287,7 +287,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     console.log("rollNoForUser-->", rollNumber);
     if (rollNumber) {
       try {
-        let userData = await fetch(`http://localhost:3000/api/students?rollNo=${rollNumber}`);
+        let userData = await fetch(`/api/students?rollNo=${rollNumber}`);
         userData = await userData.json();
         console.log(userData);
   
@@ -322,7 +322,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     console.log("cnicForUser-->", cnicNumber);
     if (cnicNumber) {
       try {
-        let userData = await fetch(`http://localhost:3000/api/students?cnic=${cnicNumber}`);
+        let userData = await fetch(`/api/students?cnic=${cnicNumber}`);
         userData = await userData.json();
         console.log(userData);
   
@@ -358,7 +358,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     console.log("cnicForUser-->", cnicNumber);
     if (rollNumber && cnicNumber) {
       try {
-        let queryData = await fetch(`http://localhost:3000/api/students?cnic=${cnicNumber}&rollNo=${rollNumber}`);
+        let queryData = await fetch(`/api/students?cnic=${cnicNumber}&rollNo=${rollNumber}`);
         queryData = await queryData.json();
         console.log(queryData);
   
@@ -390,7 +390,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   };
 
   useEffect(() => {
-    http://localhost:3000/api/students
+    // /api/students
     gettingAdmin();
     gettingUsers();
   }, []);
@@ -408,7 +408,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         console.log("Reload hoja bhai");
   
         try {
-          const res = await fetch("http://localhost:3000/api/students", {
+          const res = await fetch("/api/students", {
             method: "GET",
             cache: "no-cache", // Set cache control policy to 'no-cache'
           });
@@ -438,7 +438,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const gettingUsers = async () => {
     console.log("gettingUsers")
     try {
-      const res = await fetch(`http://localhost:3000/api/students?page=${allUsers.length/20}`, {
+      const res = await fetch(`/api/students?page=${allUsers.length/20}`, {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
@@ -465,7 +465,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const gettingAdmin = async () => {
     console.log("gettingAdmin")
     try {
-      const res = await fetch("http://localhost:3000/api/admins", {
+      const res = await fetch("/api/admins", {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });

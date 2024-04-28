@@ -46,14 +46,14 @@ const Batch = ({selectedItem }) => {
 
         try {
           if (batch && courseId) {
-            let data = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+            let data = await fetch(`/api/courses/${courseId}`, {
               method: "PUT",
               body: JSON.stringify({ _id: courseId, batch: batch }), headers: {
                 "Content-Type": "application/json"
               }
             })
             data = await data.json()
-            console.log(data, `http://localhost:3000/api/courses/${courseId}`)
+            console.log(data, `/api/courses/${courseId}`)
             // console.log("info-->",data);
             if (data.success) {
               alert(`New Batch No.${data.result.batch} has been Launched!}`)

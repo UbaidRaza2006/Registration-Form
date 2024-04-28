@@ -488,7 +488,7 @@ export default function RegisterUser() {
     const gettingAdmin = async () => {
         console.log("gettingAdmin")
         try {
-            const res = await fetch("http://localhost:3000/api/admins", {
+            const res = await fetch("/api/admins", {
                 method: "GET",
                 cache: "no-cache", // Set cache control policy to 'no-cache'
             });
