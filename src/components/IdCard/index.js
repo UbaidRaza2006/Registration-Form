@@ -4,6 +4,7 @@ import { Button } from "antd";
 // import  html2pdf  from "html2pdf.js";
 import Image from "next/image";
 import { useRef } from "react";
+import { PDFDocument, rgb } from '@pdf-lib/core';
 
 
 
@@ -13,35 +14,49 @@ function IdCard({user}) {
     const idCardRef = useRef(null)
     console.log("idCardRef-->",idCardRef);
     
-    const handleDownload = () => {
-    //   const input = idCardRef.current;
-  
-    //   if (!input) {
-    //     console.error("Element with id 'id-card' not found");
-    //     return;
-    //   }
-  
-    //   const rollNumber = user.rollNo; // Assuming user.rollNo contains the roll number
-    //   const filename = `Student_${rollNumber}.idCard.pdf`;
-  
-    //   const options = {
-    //     filename: filename,
-    //     html2canvas: {
-    //       scale: 5,
-    //       letterRendering: true,
-    //       useCORS: true,
-    //     },
-    //     jsPDF: {
-    //       unit: "mm",
-    //       format: "a4",
-    //       orientation: "portrait",
-    //       compression: true,
-    //       precision: 16,
-    //     },
-    //   };
-  
-    //   html2pdf().set(options).from(input).save();
+
+    const handleDownload = async () => {
+      const input = idCardRef.current;
+    
+      if (!input) {
+        console.error("Element with id 'id-card' not found");
+        return;
+      }
+    
+      const userFromStorage = localStorage.getItem("user");
+      const user = JSON.parse(userFromStorage);
+    
+      const rollNumber = user.rollNo; // Assuming user.rollNo contains the roll number
+      const filename = `Student_${rollNumber}.idCard.pdf`;
+    
+      try {
+        const { width, height } = input.getBoundingClientRect();
+        const pdfDoc = await PDFDocument.create();
+        const page = pdfDoc.addPage([width, height]);
+        const svgString = new XMLSerializer().serializeToString(input);
+        const svg = await SVGtoPDF(page, svgString, 0, 0, { assumePt: true });
+        const pdfBytes = await pdfDoc.save();
+    
+        // Create a blob from the PDF bytes
+        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+    
+        // Create a temporary anchor element to trigger the download
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+    
+        // Append the anchor to the body and click it programmatically
+        document.body.appendChild(link);
+        link.click();
+    
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+      }
     };
+    
 
   return (
     
