@@ -1,4 +1,3 @@
-
 'use client'
 
 // import style from "./globals.css"
@@ -23,21 +22,17 @@ import { Router } from "next/router";
 import { useRouter } from "next/navigation";
 import NextImage from "next/image"; // Alias one of the imports
 
-import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
-
-
 // const cloudinary = require('cloudinary').v2;
 // import { v2 as cloudinary } from "cloudinary";
 
-if (typeof window === 'undefined') {
-    const { v2: cloudinary } = require('cloudinary');
-cloudinary.config({
-    cloud_name: "dbcpfhk6n",
-    api_key: "588376267435949",
-    api_secret:"ax1LWxiCFgecD5A2ve7Rfm4kBoA"
-});
-}
-
+// if (typeof window === 'undefined') {
+//     const { v2: cloudinary } = require('cloudinary');
+//     cloudinary.config({
+//         cloud_name: "dbcpfhk6n",
+//         api_key: "588376267435949",
+//         api_secret: "ax1LWxiCFgecD5A2ve7Rfm4kBoA"
+//     });
+// }
 
 // const getBase64 = (img, callback) => {
 //     const reader = new FileReader();
@@ -54,7 +49,7 @@ const storage = getStorage(app, firebaseStorageURL)
 //     reader.addEventListener('load', () => callback(reader.result));
 //     reader.readAsDataURL(img);
 //   };
-  
+
 //   const beforeUpload = (file) => {
 //     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
 //     if (!isJpgOrPng) {
@@ -66,7 +61,7 @@ const storage = getStorage(app, firebaseStorageURL)
 //     }
 //     return isJpgOrPng && isLt2M;
 //   };
-  const createUniqueFileName = (getFile) => {
+const createUniqueFileName = (getFile) => {
     const timeStamp = Date.now();
 
     const randomStringValue = Math.random().toString(36).substring(2, 16)
@@ -95,17 +90,15 @@ async function helperForUploadingImageToFirebase(file) {
     })
 }
 
-
-
 const initialFormData = {
     fullName: '',
     fatherName: '',
     email: '',
-    course:`${courseOptions[0].label}`,
-    batch:`${batchOptions[0]}`,
-    payment:'Not-Done',
+    course: `${courseOptions[0].label}`,
+    batch: `${batchOptions[0]}`,
+    payment: 'Not-Done',
     paymentImg: 'Not-Done',
-    status:"Un-Verified",
+    status: "Un-Verified",
     city: '',
     cnic: '',
     phone: '',
@@ -116,9 +109,6 @@ const initialFormData = {
     imageUrl: ''
 }
 
-
-
-
 export default function RegisterUser() {
 
     const [resData, setResData] = useState(null)
@@ -126,21 +116,21 @@ export default function RegisterUser() {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
     const [formData, setFormData] = useState(initialFormData)
-    const [isButtonClicked,setButtonClicked]= useState(false)
-    const [isButtonClicked1,setButtonClicked1]= useState(false)
-    const [emailState,setEmailState]= useState(false)
+    const [isButtonClicked, setButtonClicked] = useState(false)
+    const [isButtonClicked1, setButtonClicked1] = useState(false)
+    const [emailState, setEmailState] = useState(false)
     const inputRef = useRef(null);
     const router = useRouter()
     const nameRegex = /^[A-Za-z][a-z]*(?: [A-Za-z][a-z]*)*$/;
     // const emailRegex = /^\S+@\S+(\.\S+)?$/;
 
     // const {user,setUser}=useContext(GlobalContext)
-    const { allowAdmission,setAllowAdmission} = usePassword();
+    const { allowAdmission, setAllowAdmission } = usePassword();
 
     const [admin, setAdmin] = useState(null);
     const [message, setMessage] = useState("");
     const [isFormDisabled, setIsFormDisabled] = useState(false);
-
+    const [currentUser, setCurrentUser] = useState(null)
 
 
 
@@ -179,21 +169,21 @@ export default function RegisterUser() {
     //         console.log(info.file);
 
     //         const extractImageUrl = await helperForUploadingImageToFirebase(info.file)
-    
+
     //         console.log(extractImageUrl);
-    
+
     //         if (extractImageUrl) {
     //             setFormData({
     //                 ...formData,
     //                 imageUrl: extractImageUrl
     //             })
-    
+
     //         }
 
     //       }
 
-        
-        
+
+
     // }
 
     // async function handleChange(info) {
@@ -204,11 +194,12 @@ export default function RegisterUser() {
 
 
     const handleImageUpload = async (e) => {
+
         const file = e.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'Rizwan_Tayyab');
-    
+
         try {
             const response = await fetch(
                 'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
@@ -219,30 +210,30 @@ export default function RegisterUser() {
             );
             const data = await response.json();
             console.log("Data.response hon->>>", data.secure_url);
-    
+
             // Set the image URL received from Cloudinary
-            if(data.secure_url){
-            setImage(data.secure_url);
-        }
+            if (data.secure_url) {
+                setImage(data.secure_url);
+            }
             // Convert the image to base64
             const base64Image = await getBase64Image(data.secure_url);
             console.log("Base64 image:", base64Image);
-    
+
             // Update the form data with the base64 representation of the image
 
-            if(data.secure_url){
+            if (data.secure_url) {
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     imageUrl: base64Image,
                 }));
             }
 
-            
+
         } catch (error) {
             console.error('Error uploading image to Cloudinary:', error);
         }
     };
-    
+
     // Function to convert an image URL to base64
     const getBase64Image = async (imageUrl) => {
         try {
@@ -268,7 +259,7 @@ export default function RegisterUser() {
     //     const formData = new FormData();
     //     formData.append('file', file);
     //     formData.append('upload_preset', 'Rizwan_Tayyab');
-        
+
     //     console.log("Me file hon->>>",file)
     //     try {
     //       const response = await fetch(
@@ -281,7 +272,7 @@ export default function RegisterUser() {
     //       const data = await response.json();
     //       console.log("Data.response hon->>>",data.secure_url)
     //       setImage(data.secure_url);
-        
+
     //     //   console.log("setImage hon->>>", setImage)
     //     setFormData((prevFormData) => ({
     //         ...prevFormData,
@@ -297,8 +288,8 @@ export default function RegisterUser() {
     //     } catch (error) {
     //       console.error('Error uploading image to Cloudinary:', error);
     //     }
-    
-        
+
+
     //             };
 
 
@@ -323,7 +314,7 @@ export default function RegisterUser() {
     //       };
     //       reader.readAsDataURL(selectedImage);
     //     }
-    
+
 
 
     //     console.log(event.target.files);
@@ -346,20 +337,20 @@ export default function RegisterUser() {
 
 
 
-    
+
     //     if (info.file.status === 'done') {
     //         // Get this url from response in the real world.
     //         getBase64(info.file.originFileObj, (url) => {
     //             setLoading(false);
     //             setImageUrl(url);
     //         });
-    
+
     //         console.log(info.file);
-    
+
     //         try {
     //             const extractImageUrl = await helperForUploadingImageToFirebase(info.file);
     //             console.log("extractImageUrl:", extractImageUrl);
-    
+
     //             if (extractImageUrl) {
     //                 setFormData({
     //                     ...formData,
@@ -372,51 +363,53 @@ export default function RegisterUser() {
     //     }
     // }
 
-// cnic and phone
-const formatPhoneNumber = (input) => {
-    // Your formatting logic here (e.g., adding hyphens)
-    // This is just a basic example, you may need to adjust it based on your requirements
-    const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
-    return formattedNumber;
-  };
+    // cnic and phone
+    const formatPhoneNumber = (input) => {
+        // Your formatting logic here (e.g., adding hyphens)
+        // This is just a basic example, you may need to adjust it based on your requirements
+        const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
+        return formattedNumber;
+    };
 
-  const handleChange2 = (event) => {
-    const inputValue=event.target.value
+    const handleChange2 = (event) => {
+        const inputValue = event.target.value
 
-    if (inputValue.length <= 12) {
-        const formattedPhone = formatPhoneNumber(inputValue);
-
-
-    setFormData({
-        ...formData,
-        phone: formattedPhone
-    });}
-}
+        if (inputValue.length <= 12) {
+            const formattedPhone = formatPhoneNumber(inputValue);
 
 
-const formatCnicNumber = (input) => {
-    // Your formatting logic here (e.g., adding hyphens)
-    // This is just a basic example, you may need to adjust it based on your requirements
-    const formattedCnic = input.replace(/\D/g, '').replace(/^(\d{5})(\d{7})(\d{1})$/, '$1-$2-$3');
-    return formattedCnic;
-  };
-
-  const handleChange1 = (event) => {
-    const inputValue=event.target.value
-
-    if (inputValue.length <= 15) {
-        const formattedCnic = formatCnicNumber(inputValue);
+            setFormData({
+                ...formData,
+                phone: formattedPhone
+            });
+        }
+    }
 
 
-    setFormData({
-        ...formData,
-        cnic: formattedCnic
-    });}
-}
+    const formatCnicNumber = (input) => {
+        // Your formatting logic here (e.g., adding hyphens)
+        // This is just a basic example, you may need to adjust it based on your requirements
+        const formattedCnic = input.replace(/\D/g, '').replace(/^(\d{5})(\d{7})(\d{1})$/, '$1-$2-$3');
+        return formattedCnic;
+    };
 
-  
+    const handleChange1 = (event) => {
+        const inputValue = event.target.value
 
-// cnic and phone
+        if (inputValue.length <= 15) {
+            const formattedCnic = formatCnicNumber(inputValue);
+
+
+            setFormData({
+                ...formData,
+                cnic: formattedCnic
+            });
+        }
+    }
+
+
+
+    // cnic and phone
     async function handleRegister() {
 
         // if (image) {
@@ -429,112 +422,106 @@ const formatCnicNumber = (input) => {
         // }
 
 
-        if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')){
+        if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')) {
 
-
-            
-            
-            
-            console.log("formData-->",formData);
+            console.log("formData-->", formData);
             const res = await registerUser(formData);
             // setResData(res.user)
-            console.log("res-->",res);
+            console.log("res-->", res);
 
-    //         if(res.message=== "Student from this Cnic/B-form is already registered!"){
+            //         if(res.message=== "Student from this Cnic/B-form is already registered!"){
 
-    //             const cnicInput = document.getElementById('cnicInput');
-    //   if (cnicInput) {
-    //     cnicInput.focus();
-    //     alert('Student from this Cnic/B-form is already registered!');
-    //     return;
-    //   }
+            //             const cnicInput = document.getElementById('cnicInput');
+            //   if (cnicInput) {
+            //     cnicInput.focus();
+            //     alert('Student from this Cnic/B-form is already registered!');
+            //     return;
+            //   }
 
-    //         }
+            //         }
 
-            if(res.success){
+            if (res.success) {
 
-        localStorage.setItem("user", JSON.stringify(res?.user));
+                setCurrentUser(res)
+
+                setShowModal(true);
+                // Check if userLocalString is not null or undefined before parsing
+                // Set the user in the global state
+                //  setUser(res?.user);
+                //  console.log('user-->', user);
+
+                // Now, userLocal will either contain the parsed user object or be null if parsing fails
+                // setUser(userLocal);
+                // console.log(userLocal);
+            }
 
 
-        const userLocal = localStorage.getItem("user");
 
-        setShowModal(true);
-// Check if userLocalString is not null or undefined before parsing
- // Set the user in the global state
-//  setUser(res?.user);
-//  console.log('user-->', user);
 
-// Now, userLocal will either contain the parsed user object or be null if parsing fails
-// setUser(userLocal);
-console.log(userLocal);
+
+            setButtonClicked(true);
+
+            // Set a timeout to reset the button state after a certain duration
+            setTimeout(() => {
+                setButtonClicked(false);
+            }, 300);
         }
-
-       
-      
-         
-
-        setButtonClicked(true);
-
-    // Set a timeout to reset the button state after a certain duration
-    setTimeout(() => {
-      setButtonClicked(false);
-    }, 300);}
-    else{
+        else {
 
 
-        const emailInput = document.getElementById('emailInput');
-      if (emailInput) {
-        emailInput.focus();
-        alert('Please enter a valid email address.');
-        return;
-      }
-      // Optionally, you can show an error message or handle the validation failure in another way
-      console.log("id error");
-          
-    }
+            const emailInput = document.getElementById('emailInput');
+            if (emailInput) {
+                emailInput.focus();
+                alert('Please enter a valid email address.');
+                return;
+            }
+            // Optionally, you can show an error message or handle the validation failure in another way
+            console.log("id error");
+
+        }
     }
 
     useEffect(() => {
         gettingAdmin();
-      }, []);
+    }, []);
 
     const gettingAdmin = async () => {
         console.log("gettingAdmin")
         try {
-          const res = await fetch("http://localhost:3000/api/admins", {
-            method: "GET",
-            cache: "no-cache", // Set cache control policy to 'no-cache'
-          });
-          const data = await res.json();
-          console.log(data.data[0])
-          setAdmin(data.data[0])
-          setAllowAdmission(data.data[0].admissions)
-          setMessage(data.data[0].textAdmission)
-          
+            const res = await fetch("http://localhost:3000/api/admins", {
+                method: "GET",
+                cache: "no-cache", // Set cache control policy to 'no-cache'
+            });
+            const data = await res.json();
+            console.log(data.data[0])
+            setAdmin(data.data[0])
+            setAllowAdmission(data.data[0].admissions)
+            setMessage(data.data[0].textAdmission)
+
         } catch (error) {
-          console.error("Error fetching users:", error);
+            console.error("Error fetching users:", error);
         }
-      };
+    };
     // console.log(formData);
     useEffect(() => {
         setIsFormDisabled(allowAdmission !== "Open");
     }, [allowAdmission]);
 
-      function isAdmission() {
+    function isAdmission() {
         console.log("allowAdmission-->", allowAdmission);
         setIsFormDisabled(allowAdmission !== "Open");
     }
 
-    function isFormValid(){
-        return formData && formData.fullName && formData.fullName.trim() !== '' && formData.fatherName && formData.fatherName.trim() !== '' && formData.email && formData.email.trim() !== '' && formData.cnic && formData.cnic.trim() !== '' && formData.phone && formData.phone.trim() !== '' && formData.city && formData.city.trim() !== '' && formData.address && formData.address.trim() !== '' && formData.qualification && formData.qualification.trim() !== '' ?true: false
-     }
-const closeModal = () => {
-    
-    setShowModal(false);
-  };
+    function isFormValid() {
+        return formData && formData.fullName && formData.fullName.trim() !== '' && formData.fatherName && formData.fatherName.trim() !== '' && formData.email && formData.email.trim() !== '' && formData.cnic && formData.cnic.trim() !== '' && formData.phone && formData.phone.trim() !== '' && formData.city && formData.city.trim() !== '' && formData.address && formData.address.trim() !== '' && formData.qualification && formData.qualification.trim() !== '' ? true : false
+    }
+    const closeModal = () => {
 
-const text = "Admissions are Closed!"
-  
+        setShowModal(false);
+    };
+
+    const text = "Admissions are Closed!"
+
 
     return (
         <div className="mr-0 mb-0 ml-0 relative">
@@ -545,49 +532,49 @@ const text = "Admissions are Closed!"
                 >Payment Verify</button>
             </div> */}
 
-            <Navbar/>
+            <Navbar />
 
-            <div style={{boxShadow:'1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)'}}  className="w-full bg-white text-[#248ba5] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl  h-6">Service-Education-Registration
+            <div style={{ boxShadow: '1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)' }} className="w-full bg-white text-[#248ba5] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl  h-6">Service-Education-Registration
             </div>
 
-            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)'}} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><NextImage className="h-[300px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" width={600} height={400}
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><NextImage className="h-[300px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" width={600} height={400}
 
             /></div>
 
             <div className="bg-none flex items-center justify-center rounded-xl space-x-0 mt-4 mb-4">
-            <Button color="inherit"
-          id='button1'
-          onClick={()=>{router.push("/download")}}
-          className='h-12 w-[14%] md:w-[20%] border border-white-900   justify-between items-center text-center'
-          sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
-        >
-          <p className='font-bold '>Download ID Card</p>
-          </Button>
-        
+                <Button color="inherit"
+                    id='button1'
+                    onClick={() => { router.push("/download") }}
+                    className='h-12 w-[14%] md:w-[20%] border border-white-900   justify-between items-center text-center'
+                    sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
+                >
+                    <p className='font-bold '>Download ID Card</p>
+                </Button>
 
-        <Button
-          color="inherit"    
-          id='button2'
-          onClick={()=>{router.push("/payment")}}
-          className='h-12 w-[14%] md:w-[20%] border border-white-900 bg-[#248ba5]  justify-between items-center  text-center'
-          sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
-        >
-          <p className='font-bold '>Payment Verify</p>
-        </Button>
+
+                <Button
+                    color="inherit"
+                    id='button2'
+                    onClick={() => { router.push("/payment") }}
+                    className='h-12 w-[14%] md:w-[20%] border border-white-900 bg-[#248ba5]  justify-between items-center  text-center'
+                    sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
+                >
+                    <p className='font-bold '>Payment Verify</p>
+                </Button>
 
             </div>
 
 
 
-{isFormDisabled && message ?(<div className="flex justify-center items-center mb-6">
-    <div className="text-center text-gray-700 text-3xl">
-        {message}
-    </div>
-</div>):null }
+            {isFormDisabled && message ? (<div className="flex justify-center items-center mb-6">
+                <div className="text-center text-gray-700 text-3xl">
+                    {message}
+                </div>
+            </div>) : null}
 
-            
 
-            <div style={{boxShadow:'1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1,pointerEvents: isFormDisabled ? 'none' : 'auto'}} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
+
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1, pointerEvents: isFormDisabled ? 'none' : 'auto' }} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
             >
                 <div className="w-full mr-0 mb-0 ml-0 space-y-4 lg:space-y-1 md:space-y-1 mx:space-y-1
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6
@@ -604,7 +591,7 @@ const text = "Admissions are Closed!"
 
                             // Capitalize the first letter of each word
                             const formattedName = newName.replace(/\b\w/g, (char) => char.toUpperCase());
-                    
+
                             // Update the state with the formatted name
                             setFormData({
                                 ...formData,
@@ -622,32 +609,32 @@ const text = "Admissions are Closed!"
 
                             // Capitalize the first letter of each word
                             const formattedFatherName = newFatherName.replace(/\b\w/g, (char) => char.toUpperCase());
-                    
+
                             // Update the state with the formatted name
                             setFormData({
                                 ...formData,
                                 fatherName: formattedFatherName
                             });
                         }} />
-                   <InputComponent
-   id="emailInput"
-   type="text"
-    placeholder="Email"
-    label="Email"
-    value={formData.email}
-    onChange={(event) => {
-      
-        setFormData({
-            ...formData,
-            email: event.target.value
-        });
-    
+                    <InputComponent
+                        id="emailInput"
+                        type="text"
+                        placeholder="Email"
+                        label="Email"
+                        value={formData.email}
+                        onChange={(event) => {
 
-    }}
-/>
+                            setFormData({
+                                ...formData,
+                                email: event.target.value
+                            });
+
+
+                        }}
+                    />
 
                     <InputComponent
-   id="cnicInput"
+                        id="cnicInput"
                         type="text"
                         maxLength="15"
                         inputMode="numeric"
@@ -657,13 +644,13 @@ const text = "Admissions are Closed!"
                         value={formData.cnic}
                         onChange={(event) => {
 
-                           
+
 
                             handleChange1(event)
 
-                            
 
-                            
+
+
                         }} />
                     <InputComponent
                         type="text"
@@ -676,8 +663,8 @@ const text = "Admissions are Closed!"
                         onChange={(event) => {
 
                             handleChange2(event)
-                            
-                            
+
+
                         }} />
                     <InputComponent
                         type="text"
@@ -689,7 +676,7 @@ const text = "Admissions are Closed!"
 
                             // Capitalize the first letter of each word
                             const formattedCity = newCity.replace(/\b\w/g, (char) => char.toUpperCase());
-                    
+
                             // Update the state with the formatted name
                             setFormData({
                                 ...formData,
@@ -709,15 +696,15 @@ const text = "Admissions are Closed!"
                             });
                         }} />
 
-</div>
-                        <div className='mt-[5px] w-full mr-0 mb-0 ml-0 space-y-8 lg:space-y-3 md:space-y-3 mx:space-y-3
+                </div>
+                <div className='mt-[5px] w-full mr-0 mb-0 ml-0 space-y-8 lg:space-y-3 md:space-y-3 mx:space-y-3
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6'>
                     <SelectComponent
                         label="Select Gender"
                         options={[
                             { id: "Male", label: "Male" },
                             { id: "Female", label: "Female" },
-                          ]}
+                        ]}
                         value={formData.gender}
                         onChange={(event) => {
                             setFormData({
@@ -730,7 +717,7 @@ const text = "Admissions are Closed!"
 
 
 
-              
+
 
                     <SelectComponent
                         label="Select Course"
@@ -775,8 +762,8 @@ const text = "Admissions are Closed!"
 
                 </div>
 
-                
-{/* <ImageUpload 
+
+                {/* <ImageUpload 
 // beforeUpload={beforeUpload}
 //         onChange={handleChange}
         /> */}
@@ -790,8 +777,8 @@ const text = "Admissions are Closed!"
         beforeUpload={beforeUpload}
         onChange={handleImage}
       > */}
-        {/* {imageUploadUrl ? <img src={imageUploadUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton} */}
-      {/* </Upload> */}
+                {/* {imageUploadUrl ? <img src={imageUploadUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton} */}
+                {/* </Upload> */}
 
 
                 {/* <input className="lg:w-[20%] xl md:w-[20%]" style={{ border: '2px solid gray', borderRadius: '8px', height: '100px', }}
@@ -803,17 +790,17 @@ const text = "Admissions are Closed!"
                 />  */}
 
 
-<div className="image-uploader" onClick={() => document.getElementById('image-upload').click()}>
-      <input id="image-upload" type="file"  onChange={handleImageUpload} style={{ display: 'none' }} />
-      {/* {image ? (
+                <div className="image-uploader" onClick={() => document.getElementById('image-upload').click()}>
+                    <input id="image-upload" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+                    {/* {image ? (
         <img src={image} alt="ID Card" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '5px' }} /> */}
-      {/* ) : (
+                    {/* ) : (
         <p className="upload-text">Upload</p>
       )} */}
 
-{image && <NextImage  cloudName="dbcpfhk6n" src={image} style={{ width: '100px', height: '150px' }} width={600} height={400}/>}
+                    {image && <NextImage cloudName="dbcpfhk6n" src={image} style={{ width: '100px', height: '150px' }} width={600} height={400} />}
 
-       <style jsx>{`
+                    <style jsx>{`
     .image-uploader {
       width: 120px;
       height: 120px; /* Reduced height */
@@ -840,15 +827,15 @@ const text = "Admissions are Closed!"
       cursor: pointer;
     }
   `}</style>
-    </div>
+                </div>
 
-{/* Checking Github */}
+                {/* Checking Github */}
 
-    <button
-        onClick={handleRegister}
-        className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
-        disabled={!isFormValid()}
-        >Register</button>
+                <button
+                    onClick={handleRegister}
+                    className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
+                    disabled={!isFormValid()}
+                >Register</button>
 
                 {/* </div>
 
@@ -867,12 +854,12 @@ const text = "Admissions are Closed!"
                 >Payment Verify</button> */}
             </div>
 
-    <div>
-      <IdCardModal isOpen={showModal} onClose={closeModal} />
-    </div>
+            <div>
+                <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} />
+            </div>
 
 
-        
+
 
         </div>
 

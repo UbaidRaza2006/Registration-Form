@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import { Drawer, Button } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';

@@ -1,3 +1,5 @@
+"use client"
+
 
 import { Table, Space} from "antd";
 // import 'antd/dist/antd.css';

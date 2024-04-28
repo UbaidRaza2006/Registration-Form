@@ -1,3 +1,6 @@
+"use client"
+
+
 // AntInputComponent.js
 import React from 'react';
 import { Input } from 'antd';

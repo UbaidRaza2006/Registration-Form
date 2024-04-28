@@ -1,9 +1,9 @@
+"use client"
+
 import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import html2pdf from 'html2pdf.js';
-import html2pdfmake from 'html2pdfmake';
 import { Button } from 'antd';
 
 import { useRouter } from 'next/navigation';
@@ -80,17 +80,21 @@ const Batch = ({selectedItem }) => {
 
   return (
 <>
-<span className="cursor-pointer ml-1" onClick={() => setIsModalVisible(true)}>
+<span className="cursor-pointer z-20 ml-1" onClick={() => setIsModalVisible(true)}>
                           <PlusOutlined style={{ fontSize: '18px', color: 'gray', strokeWidth: '2px' }} />
                         </span>
 
     <Modal
     // style={{ width: "700px !important" }} 
     // id="modal3" 
-    visible={isModalVisible}
-  onCancel={()=>closeModal}
+    isOpen={isModalVisible}
+  onRequestClose={closeModal}
     footer={null}
     centered
+    // visible={isModalVisible3}
+    // onCancel={() => handleCancel(3)}
+    // footer={null}
+    // centered
   >
     <div className="p-8">
       <h2 className="text-2xl mb-6">`Do You Want to Launch a New Batch No. ${selectedItem.batch + 1} of Course ${selectedItem.course}?`</h2>

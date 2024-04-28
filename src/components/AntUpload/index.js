@@ -1,3 +1,5 @@
+"use client"
+
 import { PlusOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 // import ImageIcon from './ImageIcon'; // Assuming you have an ImageIcon component

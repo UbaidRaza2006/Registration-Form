@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import RightSideModel from '/src/components/SideModalsComponent/ModalsComponent/index'; // Update the path based on your project structure
 

@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react';
 import { message, Upload} from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';

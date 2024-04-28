@@ -1,9 +1,8 @@
 "use client"
 
 import { Button } from "antd";
-import  html2pdf  from "html2pdf.js";
+// import  html2pdf  from "html2pdf.js";
 import Image from "next/image";
-// import { html2pdf } from "html2pdf.js";
 import { useRef } from "react";
 
 
@@ -15,38 +14,34 @@ function IdCard({user}) {
     console.log("idCardRef-->",idCardRef);
     
     const handleDownload = () => {
-      const input = idCardRef.current;
+    //   const input = idCardRef.current;
   
-      if (!input) {
-        console.error("Element with id 'id-card' not found");
-        return;
-      }
+    //   if (!input) {
+    //     console.error("Element with id 'id-card' not found");
+    //     return;
+    //   }
   
-      const rollNumber = user.rollNo; // Assuming user.rollNo contains the roll number
-      const filename = `Student_${rollNumber}.idCard.pdf`;
+    //   const rollNumber = user.rollNo; // Assuming user.rollNo contains the roll number
+    //   const filename = `Student_${rollNumber}.idCard.pdf`;
   
-      const options = {
-        filename: filename,
-        html2canvas: {
-          scale: 5,
-          letterRendering: true,
-          useCORS: true,
-        },
-        jsPDF: {
-          unit: "mm",
-          format: "a4",
-          orientation: "portrait",
-          compression: true,
-          precision: 16,
-        },
-      };
+    //   const options = {
+    //     filename: filename,
+    //     html2canvas: {
+    //       scale: 5,
+    //       letterRendering: true,
+    //       useCORS: true,
+    //     },
+    //     jsPDF: {
+    //       unit: "mm",
+    //       format: "a4",
+    //       orientation: "portrait",
+    //       compression: true,
+    //       precision: 16,
+    //     },
+    //   };
   
-      html2pdf().set(options).from(input).save();
+    //   html2pdf().set(options).from(input).save();
     };
-  
-  
-  
-
 
   return (
     

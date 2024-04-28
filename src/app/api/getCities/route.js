@@ -3,12 +3,16 @@ import { NextResponse } from "next/server";
 import connectToDb from "../../../database";
 import Register from "../../../models/registration";
 
+export const POST = async (req, res) => {
+  const data = await req?.json()
+}
+
 // Export default async function handler
 export async function GET(req, res) {
   try {
     // Connect to MongoDB
     // const { db } = await connectToDb();
-  await connectToDb();
+    await connectToDb();
 
 
     // Aggregate query to group users by city and count
@@ -27,7 +31,7 @@ export async function GET(req, res) {
     return NextResponse.json({
       success: true,
       data: cities,
-  });
+    });
   } catch (error) {
     // Handle any errors
     console.error("An error occurred:", error);
@@ -35,6 +39,6 @@ export async function GET(req, res) {
     return NextResponse.json({
       success: false,
       message: "Internal Server Error",
-  });
+    });
   }
 }

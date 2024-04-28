@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import { Button, Input, InputNumber, Layout, Menu, Modal } from 'antd';
 import "./index.css"

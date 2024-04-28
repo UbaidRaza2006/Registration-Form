@@ -1,3 +1,5 @@
+"use client"
+
 import { Input } from 'antd';
 
 export default function InputComponent({ label, onChange, value,oninput, type, placeholder, inputMode ,classname,id},ref) {

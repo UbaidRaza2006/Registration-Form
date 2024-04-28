@@ -50,32 +50,32 @@ export default function DownloadWithCnic (props){
 //         };
 //     }
 // }, [idData.imageUrl, downloaded]);
-    
+    // 
       const handleDownload = async () => {
-        const canvas = await html2canvas(cardRef.current, { scale: 2 });
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-        });
+        // const canvas = await html2canvas(cardRef.current, { scale: 2 });
+        // const pdf = new jsPDF({
+        //   orientation: "portrait",
+        //   unit: "mm",
+        //   format: "a4",
+        // });
     
-        // Calculate the scale factor for the image
-        const scaleFactor = 210 / canvas.width;
+        // // Calculate the scale factor for the image
+        // const scaleFactor = 210 / canvas.width;
     
-        // Add image to PDF, adjusting width and height based on the scale factor
-        pdf.addImage(
-          canvas.toDataURL("image/png"),
-          "PNG",
-          0,
-          0,
-          210,
-          canvas.height * scaleFactor,
-          null,
-          "FAST"
-        );
+        // // Add image to PDF, adjusting width and height based on the scale factor
+        // pdf.addImage(
+        //   canvas.toDataURL("image/png"),
+        //   "PNG",
+        //   0,
+        //   0,
+        //   210,
+        //   canvas.height * scaleFactor,
+        //   null,
+        //   "FAST"
+        // );
     
-        // Save the PDF
-        pdf.save("id_card.pdf");
+        // // Save the PDF
+        // pdf.save("id_card.pdf");
       };
     
 

@@ -11,6 +11,7 @@ import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
 import ImageUploadComponent from "../../components/AntUpload";
 import NextImage from "next/image"; // Alias one of the imports
+import img from "../../../public/images/paymentBg5.avif"
 
 import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 
@@ -300,7 +301,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
 
 
 {/* Background Image */}
-<NextImage src="/images/paymentBg5.avif" className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
+<NextImage src={img} className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
 
       {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 

@@ -20,6 +20,7 @@
     "cloudinary": "^2.0.0",
     "cloudinary-react": "^1.8.1",
     "firebase": "^10.7.2",
+    "fs": "^0.0.1-security",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
     "html2pdfmake": "^0.0.10",
@@ -31,6 +32,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-modal": "^3.16.1",
+    "sharp": "^0.33.3",
     "styled-components": "^6.1.8",
     "uuid": "^9.0.1"
   },
