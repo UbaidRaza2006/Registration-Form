@@ -2,9 +2,8 @@
 
 import React, { useState, useRef } from 'react';
 import Modal from 'react-modal';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
-import { Button } from 'antd';
+import "../SideNavbarComponent/index.css"
+
 
 import { useRouter } from 'next/navigation';
 
@@ -80,7 +79,7 @@ const Batch = ({selectedItem }) => {
 
   return (
 <>
-<span className="cursor-pointer z-20 ml-1" onClick={() => setIsModalVisible(true)}>
+<span className="cursor-pointer ml-1" onClick={() => setIsModalVisible(true)}>
                           <PlusOutlined style={{ fontSize: '18px', color: 'gray', strokeWidth: '2px' }} />
                         </span>
 
@@ -91,6 +90,8 @@ const Batch = ({selectedItem }) => {
   onRequestClose={closeModal}
     footer={null}
     centered
+    className="batch-modal"
+
     // visible={isModalVisible3}
     // onCancel={() => handleCancel(3)}
     // footer={null}

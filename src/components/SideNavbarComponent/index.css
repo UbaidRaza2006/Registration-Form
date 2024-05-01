@@ -2,3 +2,25 @@
     width: 700px;
     /* background-color: #018394; */
 }
+/* styles.css */
+.modal1 {
+    position: fixed;
+    margin-top: 20%;
+    /* margin-left: 40%; */
+    transform: translate(-50%, -50%);
+    width: 800px;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    z-index: 10; /* Set z-index lower than Batch modal */
+    padding: 20px;
+  }
+  
+  .batch-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    z-index: 50; /* Set z-index higher than Modal 1 */
+    padding: 20px;
+  }
+  

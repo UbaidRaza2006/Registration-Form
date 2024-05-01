@@ -526,14 +526,15 @@ const editBatchOfTheCourse = async (batch, courseId) => {
 
 
       <Modal
-        // style={{ width: "700px !important" }} 
+        // style={{ width: "7000em" }} 
         // id="modal3" 
         visible={isModalVisible3}
         onCancel={() => handleCancel(3)}
         footer={null}
         centered
+        className=""
       >
-        <div style={{ width: "500px" }} className="p-8 bg-white-900 rounded-lg w-[750px] h-[450px] shadow-lg ">  {/* Added overflow-auto for scrollbar */}
+        <div  className="p-8 bg-white-900 rounded-lg shadow-lg z-0">  {/* Added overflow-auto for scrollbar */}
           <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
           <div className="mb-6 flex items-center">
             <Input

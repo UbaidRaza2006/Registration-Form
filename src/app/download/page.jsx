@@ -87,6 +87,7 @@ function DownloadIdCard() {
     console.log("cnicForUser-->", cnicNumber);
     if (cnicNumber) {
       try {
+        console.log("ruko zara, sabar karo!")
         let userData = await fetch(`/api/students?cnic=${cnicNumber}`);
         userData = await userData.json();
         console.log(userData);
@@ -106,6 +107,9 @@ function DownloadIdCard() {
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
+    }
+    else{
+      console.log("cnicNumber nhi araha!")
     }
   };
 
