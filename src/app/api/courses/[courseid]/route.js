@@ -20,3 +20,20 @@ export async function PUT(request, content) {
             // return res.status(500).json({ success: false, message: "Internal Server Error" });
           }
   }
+
+export async function DELETE(request, content) {
+    // if (req.method === 'GET') {
+        try {
+            await connectToDb();
+            
+            const  courseId = content.params.courseid
+            const record = {_id:courseId}
+            const result = await Course.deleteOne(record)
+            
+            return NextResponse.json({result,success:true})
+        } catch (error) {
+            console.log("Error in deleting this course:", error);
+            return NextResponse.json({success:false})
+            // return res.status(500).json({ success: false, message: "Internal Server Error" });
+          }
+  }

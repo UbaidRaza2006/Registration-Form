@@ -34,6 +34,7 @@ const admissionOfCourse = async (courseId, newStatus) => {
     if (data.success) {
       alert(`Admission Status of course: ${data.result.course} has been Updated!.. into  ${data.result.admission}`)
       setCoursesToLoad(true)
+      onClose()
     }
     else {
       console.log(data);

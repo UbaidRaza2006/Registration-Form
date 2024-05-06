@@ -34,6 +34,7 @@ import AdmissionModal from '../CourseAdmission';
 import ReactModal from 'react-modal';
 import { CheckCircle } from '@mui/icons-material';
 import BatchModal from '../CourseBatch';
+import DeleteModal from '../CourseDelete';
 const { Sider } = Layout;
 
 
@@ -350,10 +351,12 @@ const handlePassword = () => {
       setCurrentUser(itemData)
       setIsModalVisible5(true)
     }
-    // else if (par === 6) {
-    //   console.log("showModal", par)
-    //   setIsModalVisible6(true)
-    // }
+    else if (par === 6) {
+      console.log("showModal", par)
+      // console.log("item", itemData)
+      setCurrentUser(itemData)
+      setIsModalVisible6(true)
+    }
   };
 
   const handleCancel = (par) => {
@@ -377,10 +380,10 @@ const handlePassword = () => {
       console.log("closeModal", par)
       setIsModalVisible5(false)
     }
-    // else if (par === 6) {
-    //   console.log("closeModal", par)
-    //   setIsModalVisible6(false)
-    // }
+    else if (par === 6) {
+      console.log("closeModal", par)
+      setIsModalVisible6(false)
+    }
   };
 
   const back = () => {
@@ -619,23 +622,23 @@ const handlePassword = () => {
       </Button>
     </div>
     <div className="w-full h-[250px] overflow-y-auto max-h-[250px] rounded-md border-4 border-[#4d4b4b]" style={scrollStyles}>
-      <table className="w-full">
+      <table className="w-[528px]">
       <thead className=''>
           <tr className=" text-white text-1xl font-large">
-            <th className="px-6 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] ">Course</th>
+            <th className="px-6 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] w-[275px]">Course</th>
             <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Batch</th>
-            <th className="px-3 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] text-center">Admission</th>
+            <th className="px-3 py-3 bg-[#727272] border-r-3 border-[#4d4b4b]  text-center">Admission</th>
             <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Delete</th>
           </tr>
         </thead>
         <tbody className=''>
           {
-            allCourses.length>0?
+            allCourses.length<0?
 
           allCourses.map((item) => (
                 <tr key={item._id} className="border-b border-gray-300"> {/* Added bottom border to each row */}
-                  <td className="px-3 py-3">{item.course}</td>
-                  <td className="px-3 py-3 text-center">
+                  <td className="px-3 py-3 w-[300px]">{item.course}</td>
+                  <td className="px-3 py-3 text-center w-[130px]">
                     <div className="flex items-center justify-center ">
 
                       <p className="text-2xl font-bold text-blue-600">{item.batch}</p>
@@ -645,7 +648,7 @@ const handlePassword = () => {
                       {/* <Batch selectedItem={item}/> */}
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-center">
+                  <td className="px-3 py-3 text-center w-[130px]">
                     {/* <Button onClick={()=>{showModal(5,item)}}>Admission</Button> */}
                     <Button className='text-0.5xl font-small'
     style={{ opacity: '75%', backgroundColor: item.admission ==="Opened"? "green" : "red", width: '70px', height: '30px', color: 'white', padding: '5px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
@@ -655,14 +658,15 @@ const handlePassword = () => {
   </Button>
                   </td>
                   <td className='text-center'>
-                    <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center"><DeleteOutlined /></Button>
+                    <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center" onClick={()=>{showModal(6 , item)}}><DeleteOutlined /></Button>
                   </td>
                 </tr>
               ))
               
               :
-              
-              <div className="flex justify-center items-center mt-[-25px] ml-[200px] h-screen">
+              <tr>
+     <td colSpan="4">
+              <div className="flex justify-center items-center mt-[-25px] ml-[265px] h-screen w-[10px]">
       <div className="flex mt-[-300px] space-x-4">
         <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
         <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
@@ -671,9 +675,12 @@ const handlePassword = () => {
         {/* <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div> */}
       </div>
      </div>
+     </td>
+     </tr>
 
 }
 </tbody>
+        
       </table>
     </div>
     <Button
@@ -712,6 +719,7 @@ const handlePassword = () => {
 
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
 <AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
+<DeleteModal isOpen={isModalVisible6} onClose={()=>{handleCancel(6)}} user={currentUser}/>
 
     </Layout>
   );
