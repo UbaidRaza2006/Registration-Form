@@ -21,7 +21,7 @@ export async function GET(req) {
 //   const skip = (page -1) * limit;
 
   try {
-          const course = await Course.find().sort({_id:-1})
+          const course = await Course.find()
         //   .skip(skip).limit(limit).toArray();
           if (course.length > 0) {
               return NextResponse.json({

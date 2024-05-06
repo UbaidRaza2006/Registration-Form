@@ -9,6 +9,8 @@ import {
   LaptopOutlined,
   BlockOutlined,
   LockOutlined,
+  LockTwoTone,
+  CheckCircleTwoTone,
   StopOutlined,
   DeleteOutlined,
   NotificationOutlined,
@@ -26,8 +28,12 @@ import {
 
 import { usePassword } from '../../context';
 import { backdropClasses } from '@mui/material';
-import Batch from '../CourseBatchModal';
+import Batch from '../CourseBatch';
 import Image from 'next/image';
+import AdmissionModal from '../CourseAdmission';
+import ReactModal from 'react-modal';
+import { CheckCircle } from '@mui/icons-material';
+import BatchModal from '../CourseBatch';
 const { Sider } = Layout;
 
 
@@ -60,10 +66,54 @@ function SideNavbarComponent() {
   const [allCourses, setAllCourses] = useState([])
   const [batchValues, setBatchValues] = useState(Array(allCourses.length).fill(0));
 
+  const [currentUser, setCurrentUser] = useState(null)
   const [isAdding, setIsAdding] = useState(false);
   // const [selectedItemData, setSelectedItemData] = useState(null)
 
   let selectedItemData = null
+
+  const customStyles = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1000
+    },
+    content: {
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      border: 'none',
+      borderRadius: '8px',
+      padding: '0px',
+      maxWidth: '600px', // Adjust width as needed
+      width: '90%',
+      maxHeight: '90vh',
+      height:"457px",
+      overflow: 'auto',
+      
+    }
+  };
+  const scrollStyles = {
+    // Scrollbar styles
+  scrollbarWidth: 'thin',
+  scrollbarColor: '#6b7280 #d1d5db', // thumb color, track color
+  }
+
+//   const customScrollbarStyles = `
+//   /* Custom scrollbar styles */
+//   .custom-scrollbar::-webkit-scrollbar {
+//     width: 8px; /* Width of vertical scrollbar */
+//   }
+
+//   .custom-scrollbar::-webkit-scrollbar-thumb {
+//     background-color: #a5a5a5; /* Color of scrollbar thumb */
+//     border-radius: 4px; /* Border radius of scrollbar thumb */
+//   }
+
+//   .custom-scrollbar::-webkit-scrollbar-track {
+//     background-color: #f0f0f0; /* Color of scrollbar track */
+//   }
+// `;
+
 
   const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad } = usePassword();
 
@@ -239,38 +289,38 @@ const handlePassword = () => {
     updateAdmissions(admin._id, newStatus); // Update admission status
   };
 
-// isModalVisible3
-const editBatchOfTheCourse = async (batch, courseId) => {
+// // isModalVisible3
+// const editBatchOfTheCourse = async (batch, courseId) => {
 
 
-  try {
-    if (batch && id) {
-      let data = await fetch(`/api/courses/${courseId}`, {
-        method: "PUT",
-        body: JSON.stringify({ _id: courseId, batch: batch }), headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      data = await data.json()
-      console.log(data, `/api/courses/${courseId}`)
-      // console.log("info-->",data);
-      if (data.success) {
-        alert(`New Batch No.${data.result.batch} has been Launched!}`)
-        setIsAdding(false)
-        // setOpen(false);
-      }
-      else {
-        console.log(data);
-      }
-    }
-    else {
-      console.log("batch wagerah aa hi nhi rahaa")
-    }
-  }
-  catch (error) {
-    console.log("error-->", error)
-  }
-}
+//   try {
+//     if (batch && id) {
+//       let data = await fetch(`/api/courses/${courseId}`, {
+//         method: "PUT",
+//         body: JSON.stringify({ _id: courseId, batch: batch }), headers: {
+//           "Content-Type": "application/json"
+//         }
+//       })
+//       data = await data.json()
+//       console.log(data, `/api/courses/${courseId}`)
+//       // console.log("info-->",data);
+//       if (data.success) {
+//         alert(`New Batch No.${data.result.batch} has been Launched!}`)
+//         setIsAdding(false)
+//         // setOpen(false);
+//       }
+//       else {
+//         console.log(data);
+//       }
+//     }
+//     else {
+//       console.log("batch wagerah aa hi nhi rahaa")
+//     }
+//   }
+//   catch (error) {
+//     console.log("error-->", error)
+//   }
+// }
  
 
 
@@ -289,16 +339,17 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       console.log("showModal", par)
       setIsModalVisible3(true)
     }
-    // else if (par === 4 && itemData) {
-    //   console.log("showModal", par)
-    //   selectedItemData = itemData
-    //   setIsModalVisible4(true)
-    //   console.log("selectedItemData-->",selectedItemData);
-    // }
-    // else if (par === 5) {
-    //   console.log("showModal", par)
-    //   setIsModalVisible5(true)
-    // }
+    else if (par === 4 && itemData) {
+      console.log("showModal", par)
+      setCurrentUser(itemData)
+      setIsModalVisible4(true)
+    }
+    else if (par === 5) {
+      console.log("showModal", par)
+      // console.log("item", itemData)
+      setCurrentUser(itemData)
+      setIsModalVisible5(true)
+    }
     // else if (par === 6) {
     //   console.log("showModal", par)
     //   setIsModalVisible6(true)
@@ -318,14 +369,14 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       console.log("closeModal", par)
       setIsModalVisible3(false)
     }
-    // else if (par === 4) {
-    //   console.log("closeModal", par)
-    //   setIsModalVisible4(false)
-    // }
-    // else if (par === 5) {
-    //   console.log("closeModal", par)
-    //   setIsModalVisible5(false)
-    // }
+    else if (par === 4) {
+      console.log("closeModal", par)
+      setIsModalVisible4(false)
+    }
+    else if (par === 5) {
+      console.log("closeModal", par)
+      setIsModalVisible5(false)
+    }
     // else if (par === 6) {
     //   console.log("closeModal", par)
     //   setIsModalVisible6(false)
@@ -375,6 +426,7 @@ const editBatchOfTheCourse = async (batch, courseId) => {
         const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
         console.log("allCourses-->", courses)
         setAllCourses(courses);
+        setCoursesToLoad(false)
       } else {
         setAllCourses([]);
       }
@@ -390,6 +442,11 @@ const editBatchOfTheCourse = async (batch, courseId) => {
   //   setBatchValues(newBatchValues);
   // };
 
+
+  const reloadButton = () => {
+    console.log("reloadButton")
+    setCoursesToLoad(true)
+  }
 
   return (
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '-20px' }}>
@@ -522,150 +579,139 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       </Modal>
 
 
-
-
-
-      <Modal
-        // style={{ width: "7000em" }} 
-        // id="modal3" 
-        visible={isModalVisible3}
-        onCancel={() => handleCancel(3)}
-        footer={null}
-        centered
-        className=""
+      <ReactModal
+  isOpen={isModalVisible3}
+  onRequestClose={() => handleCancel(3)}
+  style={customStyles}
+  contentLabel="Custom Modal"
+>
+  <div className="py-4 px-8 bg-white rounded-lg shadow-lg">
+    <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
+    <div className="mb-6 flex items-center">
+      <Input
+        type="text"
+        placeholder="Enter Course"
+        className="border border-gray-300 rounded-md px-3 py-2 w-80 mr-2"
+      />
+      <Button
+        style={{ backgroundColor: "dark-blue" }}
+        className="bg-blue-900 h-10 text-white text-antique-white rounded-md justify-between items-center text-center"
       >
-        <div  className="p-8 bg-white-900 rounded-lg shadow-lg z-0">  {/* Added overflow-auto for scrollbar */}
-          <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
-          <div className="mb-6 flex items-center">
-            <Input
-              type="text"
-              placeholder="Enter Course"
-              className="border border-gray-300 rounded-md px-3 py-2 w-80 mr-2"
-            />
-            <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center">Add Course</Button>
-          </div>
-          <div className="w-[100%] h-[250px] overflow-auto">
-            <table className="w-full  mb-6">
-              <thead >
-                <tr className="bg-gray-400  text-white text-1xl font-medium">
-                  <th className="px-6 py-3 border border-gray-900 w-[300px]">Course</th>
-                  <th className="px-3 py-3 border border-gray-900 text-center">Batch</th>
-                  <th className="px-3 py-3 border border-gray-900 text-center">Admission</th>
-                  <th className="px-3 py-3 border border-gray-900 text-center">Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {allCourses.map((item, index) => (
-                  <tr key={index} className="border-b border-gray-300"> {/* Added bottom border to each row */}
-                    <td className="px-6 py-3">{item.course}</td>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center justify-center">
-                        {/* <span className="cursor-pointer mr-1" onClick={() => handleBatchChange(index, -1)}>-</span> */}
-                        <div
-                          // type="text"
-                          className="border border-gray-300 bg-gray-500 text-white rounded-md px-2 py-1 w-12 text-center"
-                        // value="5"
-                        // readOnly
-                        >{item.batch
-                            // + batchValues[index]
-                          }</div>
-                        {/* <span className="cursor-pointer ml-1" onClick={() => setIsModalVisible4(true)}>
-                          <PlusOutlined style={{ fontSize: '18px', color: 'gray', strokeWidth: '2px' }} />
-                        </span> */}
-                        <Batch selectedItem={item}/>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div
-                        onClick={handleSwitchChange}
-                        className="flex items-center justify-center"
-                        style={{
-                          width: '60px',
-                          height: '30px',
-                          border: '2px solid #ccc',
-                          borderRadius: '15px',
-                          backgroundColor: item.admission === "Opened" ? '#1890ff' : '#f5222d',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.3s',
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: '26px',
-                            height: '26px',
-                            borderRadius: '50%',
-                            backgroundColor: '#fff',
-                            boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.2)',
-                            transform: item.admission === "Opened" ? 'translateX(16px)' : 'translateX(-16px)',
-                            transition: 'transform 0.3s',
-                          }}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center"><DeleteOutlined /></Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-8 text-white text-antique-white  rounded-md justify-content-center justify-between items-center  text-center" onClick={() => handleCancel(3)} >Close</Button>
+        Add Course
+      </Button>
+      <Button
+        style={{ backgroundColor: "dark-blue" }}
+        className="bg-blue-600 h-10 w-[20%] text-white text-antique-white rounded-md justify-between my-auto items-center text-center"
+        onClick={()=>{reloadButton()}}
+      >
+        {coursesToLoad?
+        (
+          <div className="flex items-center space-x-2 ml-[20%]">
+          <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+          <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+          <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+          <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
         </div>
-      </Modal>
+        ):
+        (<> Reload <ReloadOutlined /></>)
+      }
+       
+      </Button>
+    </div>
+    <div className="w-full h-[250px] overflow-y-auto max-h-[250px] rounded-md border-4 border-[#4d4b4b]" style={scrollStyles}>
+      <table className="w-full">
+      <thead className=''>
+          <tr className=" text-white text-1xl font-large">
+            <th className="px-6 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] ">Course</th>
+            <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Batch</th>
+            <th className="px-3 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] text-center">Admission</th>
+            <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Delete</th>
+          </tr>
+        </thead>
+        <tbody className=''>
+          {
+            allCourses.length>0?
+
+          allCourses.map((item) => (
+                <tr key={item._id} className="border-b border-gray-300"> {/* Added bottom border to each row */}
+                  <td className="px-3 py-3">{item.course}</td>
+                  <td className="px-3 py-3 text-center">
+                    <div className="flex items-center justify-center ">
+
+                      <p className="text-2xl font-bold text-blue-600">{item.batch}</p>
+                      <span className="cursor-pointer ml-1" onClick={()=>{showModal(4 , item)}}>
+                          <PlusOutlined style={{ fontSize: '18px', color: 'gray', strokeWidth: '2px' }} />
+                        </span>
+                      {/* <Batch selectedItem={item}/> */}
+                    </div>
+                  </td>
+                  <td className="px-3 py-3 text-center">
+                    {/* <Button onClick={()=>{showModal(5,item)}}>Admission</Button> */}
+                    <Button className='text-0.5xl font-small'
+    style={{ opacity: '75%', backgroundColor: item.admission ==="Opened"? "green" : "red", width: '70px', height: '30px', color: 'white', padding: '5px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
+    onClick={()=>{showModal(5 , item)}}
+  >
+    {item.admission}
+  </Button>
+                  </td>
+                  <td className='text-center'>
+                    <Button style={{ backgroundColor: "dark-blue" }} className="bg-blue-900 h-10 text-white  text-antique-white rounded-md justify-between items-center  text-center"><DeleteOutlined /></Button>
+                  </td>
+                </tr>
+              ))
+              
+              :
+              
+              <div className="flex justify-center items-center mt-[-25px] ml-[200px] h-screen">
+      <div className="flex mt-[-300px] space-x-4">
+        <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+        {/* <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div> */}
+      </div>
+     </div>
+
+}
+</tbody>
+      </table>
+    </div>
+    <Button
+      style={{ backgroundColor: "dark-blue" }}
+      className="bg-blue-600 h-8 w-[100px] mt-4 text-white text-antique-white rounded-md justify-content-center justify-between items-center text-center ml-[82%]"
+      onClick={() => { handleCancel(3) }}
+    >
+      Close
+    </Button>
+  </div>
+</ReactModal>
+
+
+  
+
+   
+
+
+
+   
+
+
+
+      
 
 {/* Ye Course walay Modal k under k Modals hein... */}
 
       {/* <Batch isOpen={isModalVisible4} onClose={handleCancel(4)} selectedItem={}/> */}
 
       
-      <Modal
-        visible={isModalVisible5}
-        onCancel={() => handleCancel(5)}
-        footer={null}
-        centered
-      >
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <p style={{ fontSize: '24px', marginBottom: '20px' }}>Do You want to Close the admissions?</p>
-          {/* <div
-            className='mx-auto'
-            // onClick={handleSwitchChange}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              border: '2px solid #ccc',
-              borderRadius: '30px',
-              padding: '2px',
-              width: '120px',
-              height: '60px',
-              backgroundColor: admissionsOpen === "Open" ? '#1890ff' : '#f5222d',
-              cursor: 'pointer',
-              transition: 'background-color 0.3s',
-            }}
-          >
-            <div
-              style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                backgroundColor: '#fff',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
-                transform: admissionsOpen === "Open" ? 'translateX(58px)' : 'translateX(2px)',
-                transition: 'transform 0.3s',
-              }}
-            />
-          </div> */}
-         
-
-
-          <Button type="primary" style={{ width: '60%', backgroundColor: '#0056b3', color: 'white', border: 'none', marginTop: '20px' }} onClick={() => { handleCancel(5) }}>Back</Button>
-        </div>
-      </Modal>
+     
 
 {/* Ye Course walay Modal k under k Modals hein... */}
 
+
+
+<BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
+<AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
 
     </Layout>
   );

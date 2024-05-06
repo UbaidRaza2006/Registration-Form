@@ -804,27 +804,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         <SideNavbarComponent/>
       </div>
 
-      {/* <AntCardComponent/> */}
-
-
-
-      {/* Card Component */}
-      {/* <div
-        className="space-x-[150px] mx-auto"
-        style={{ display: "flex", marginLeft: "220px" }} >
-
-        <Card title="Total Students" style={{ width: 250 }}>
-          <p style={{ fontSize: "30px", fontWeight: 1000 }}>{allUsers.length}</p>
-        </Card>
-
-        <Card title="Verified Students" style={{ width: 250 }}>
-          <p style={{ fontSize: "30px", fontWeight: 1000 }}>{verifiedUsers.length}</p>
-        </Card>
-
-        <Card title="Unverified Students" style={{ width: 250 }}>
-          <p style={{ fontSize: "30px", fontWeight: 1000 }}>{allUsers.length - verifiedUsers.length}</p>
-        </Card>
-      </div> */}
+   
 
 <div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
       {/* First card */}
