@@ -19,7 +19,7 @@ const RegistrationSchema = Joi.object({
     fatherName: Joi.string().required(),
     email: Joi.string().required(),
     course: Joi.string().required(),
-    batch: Joi.string().required(),
+    batch: Joi.number().required(),
     rollNo:Joi.string().required(),
     payment:Joi.string().required(),
     paymentImg:Joi.string().required(),
@@ -69,47 +69,6 @@ export async function POST(req) {
                 const generateRandomNumber = () => Math.floor(10000 + Math.random() * 90000);
                 const generatedRollNo=generateRandomNumber()
 
-            // const { error } = RegistrationSchema.validate({
-            //     fullName,
-            //     fatherName,
-            //     email,
-            //     rollNo:generatedRollNo.toString(),
-            //     course,
-            //     batch,
-            //     payment,
-            //     status,
-            //     city,
-            //     cnic,
-            //     phone,
-            //     dateOfBirth,
-            //     gender,
-            //     qualification,
-            //     address,
-            //     imageUrl
-            // })
-
-            // if (error) {
-            //     return NextResponse.json({
-            //         success: false,
-            //         message: error.details[0].message,
-            //     })
-            // }
-
-            // // const sameCnic=await Register.findOne({cnic:cnic})
-
-            // // if(sameCnic){
-
-            // //     return NextResponse.json({
-            // //         success: false,
-            // //         message: "Student from this Cnic/B-form is already registered!",
-            // //     })
-
-            // // }
-
-            // const newlyRegisteredUser = await Register.create({
-            //     ...extractData,
-            //     rollNo: generatedRollNo.toString(),
-            //  } )
 
 
             const { error } = RegistrationSchema.validate({

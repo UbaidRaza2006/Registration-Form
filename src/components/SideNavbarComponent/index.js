@@ -9,6 +9,7 @@ import {
   LaptopOutlined,
   BlockOutlined,
   LockOutlined,
+  GlobalOutlined,
   LockTwoTone,
   CheckCircleTwoTone,
   StopOutlined,
@@ -27,7 +28,7 @@ import {
 } from '@ant-design/icons';
 
 import { usePassword } from '../../context';
-import { backdropClasses } from '@mui/material';
+import { Icon, backdropClasses } from '@mui/material';
 import Batch from '../CourseBatch';
 import Image from 'next/image';
 import AdmissionModal from '../CourseAdmission';
@@ -35,6 +36,8 @@ import ReactModal from 'react-modal';
 import { CheckCircle } from '@mui/icons-material';
 import BatchModal from '../CourseBatch';
 import DeleteModal from '../CourseDelete';
+import img from "../../../public/images/—Pngtree—line building dubai city silhouette_5978784.png"
+import img1 from "../../../public/images/images1.png"
 const { Sider } = Layout;
 
 
@@ -49,6 +52,7 @@ function SideNavbarComponent() {
   const [isModalVisible4, setIsModalVisible4] = useState(false);
   const [isModalVisible5, setIsModalVisible5] = useState(false);
   const [isModalVisible6, setIsModalVisible6] = useState(false);
+  const [isModalVisible7, setIsModalVisible7] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -62,16 +66,17 @@ function SideNavbarComponent() {
   const [adminName, setAdminName] = useState("")
   const [adminPassword, setAdminPassword] = useState("")
   const [message, setMessage] = useState("")
+  const [courseName, setCourseName] = useState("")
 
 
   const [allCourses, setAllCourses] = useState([])
+  const [uniqueCities, setUniqueCities] = useState([])
   const [batchValues, setBatchValues] = useState(Array(allCourses.length).fill(0));
 
   const [currentUser, setCurrentUser] = useState(null)
   const [isAdding, setIsAdding] = useState(false);
   // const [selectedItemData, setSelectedItemData] = useState(null)
 
-  let selectedItemData = null
 
   const customStyles = {
     overlay: {
@@ -99,21 +104,32 @@ function SideNavbarComponent() {
   scrollbarColor: '#6b7280 #d1d5db', // thumb color, track color
   }
 
-//   const customScrollbarStyles = `
-//   /* Custom scrollbar styles */
-//   .custom-scrollbar::-webkit-scrollbar {
-//     width: 8px; /* Width of vertical scrollbar */
-//   }
-
-//   .custom-scrollbar::-webkit-scrollbar-thumb {
-//     background-color: #a5a5a5; /* Color of scrollbar thumb */
-//     border-radius: 4px; /* Border radius of scrollbar thumb */
-//   }
-
-//   .custom-scrollbar::-webkit-scrollbar-track {
-//     background-color: #f0f0f0; /* Color of scrollbar track */
-//   }
-// `;
+  const customStyles1 = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1000
+    },
+    content: {
+      backgroundColor:'rgba(204, 227, 230, 0.98)',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      border: 'none',
+      borderRadius: '8px',
+      padding: '20px',
+      width: '400px', // Reduced width for a narrower modal
+      maxHeight: '500px', // Increased height for more content space
+      height:'450px',
+      overflow: 'hidden', // Prevent modal overflow
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+      // backgroundColor: '#f5f5f5', // Light grey background
+      color: '#333', // Dark grey text color
+      fontFamily: 'Georgia, serif', // Classic serif font
+      display: 'flex',
+      flexDirection: 'column'
+    }
+  };
+  
 
 
   const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad } = usePassword();
@@ -130,10 +146,6 @@ function SideNavbarComponent() {
   }, [admin])
 
 
-  // useEffect(()=>{
-  //   setAdmissionsOpen(admissions)
-  //   console.log("admission-->",admissions);
-  // },[admissions])
 
   useEffect(() => {
     console.log("coursesToLoad-->", coursesToLoad)
@@ -147,6 +159,18 @@ function SideNavbarComponent() {
   useEffect(() => {
     gettingAdmin();
   }, [isModalVisible2])
+
+  useEffect(() => {
+    if(allCourses.length>0){
+      gettingCities()
+    };
+  }, [allCourses])
+
+  useEffect(() => {
+    if(api){
+      gettingCities()
+    };
+  }, [api])
 
   
 // isModalVisible1
@@ -357,6 +381,10 @@ const handlePassword = () => {
       setCurrentUser(itemData)
       setIsModalVisible6(true)
     }
+    else if (par === 7) {
+      console.log("showModal", par)
+      setIsModalVisible7(true)
+    }
   };
 
   const handleCancel = (par) => {
@@ -383,6 +411,10 @@ const handlePassword = () => {
     else if (par === 6) {
       console.log("closeModal", par)
       setIsModalVisible6(false)
+    }
+    else if (par === 7) {
+      console.log("closeModal", par)
+      setIsModalVisible7(false)
     }
   };
 
@@ -438,6 +470,26 @@ const handlePassword = () => {
     }
   };
 
+  const gettingCities = async () => {
+    console.log("gettingCities")
+    try {
+      const res = await fetch("/api/getCities", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      if(data.success){
+      setUniqueCities(data.data)
+      console.log("UniqueCities-->",data.data)
+      }
+      else{
+        console.log(data)
+      }
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  };
+
 
   // const handleBatchChange = (index, value) => {
   //   const newBatchValues = [...batchValues];
@@ -451,6 +503,39 @@ const handlePassword = () => {
     setCoursesToLoad(true)
   }
 
+  const addCourse = async () => {
+    console.log("courseName-->",courseName)
+    const formattedValue = courseName.trim().replace(/\s+/g, ' ');
+    console.log("formattedValue-->",formattedValue)
+
+      try {
+          const response = await fetch("/api/addCourse",
+              {
+                  method: 'POST',
+                  headers: {
+                      'content-type': 'application/json',
+                  },
+                  body: JSON.stringify({course:formattedValue, admission: "Closed", batch: 1 })
+  
+                  
+              });
+              
+              const data = await response.json()
+              if(data.success){
+                alert("Course Added ",data.course.course)
+                console.log("data-->",data)
+              }
+              else{
+                console.log("data-->",data)
+              }
+              
+          } 
+          catch (e) {
+              console.log('error', e);
+          }
+      }
+
+
   return (
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '-20px' }}>
       <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px', height: "100%" }} width={80} theme="dark">
@@ -459,7 +544,8 @@ const handlePassword = () => {
           <Menu.Item key="1" icon={<LockOutlined />} onClick={() => showModal(1)} />
           <Menu.Item key="2" icon={<StopOutlined />} onClick={() => showModal(2)} />
           <Menu.Item key="3" icon={<LaptopOutlined />} onClick={() => showModal(3)} />
-          <Menu.Item key="4" icon={api ? (
+          <Menu.Item key="4" icon={<GlobalOutlined/>} onClick={() => showModal(7)} />
+          <Menu.Item key="5" icon={api ? (
             <div className="flex items-center space-x-2">
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
@@ -479,7 +565,7 @@ const handlePassword = () => {
       </Sider>
 
 
-
+          {/* ye admin password ka he... */}
       <Modal
         visible={isModalVisible1}
         onCancel={() => handleCancel(1)}
@@ -530,7 +616,7 @@ const handlePassword = () => {
       <Button type="primary" style={{backgroundColor:"#0056b3"}} onClick={handlePassword}>{inputCondition === "verify"? "Next" : inputCondition === "update" ? "Save Password": "Confirm"}</Button> */}
       </Modal>
 
-
+      {/* ye admissions off ka he.... */}
       <Modal
         visible={isModalVisible2}
         onCancel={() => handleCancel(2)}
@@ -582,6 +668,9 @@ const handlePassword = () => {
       </Modal>
 
 
+
+
+      {/* ye courses ka he..           */}
       <ReactModal
   isOpen={isModalVisible3}
   onRequestClose={() => handleCancel(3)}
@@ -592,13 +681,27 @@ const handlePassword = () => {
     <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
     <div className="mb-6 flex items-center">
       <Input
-        type="text"
-        placeholder="Enter Course"
-        className="border border-gray-300 rounded-md px-3 py-2 w-80 mr-2"
+       type="text"
+       placeholder="Enter Course"
+       label="Course"
+       className="border border-gray-300 rounded-md px-3 py-2 w-80 mr-2"
+       value={courseName}
+       onChange={(event) => {
+
+           const newCourse = event.target.value;
+
+           // Capitalize the first letter of each word
+           const formattedCourse = newCourse.replace(/\b\w/g, (char) => char.toUpperCase());
+          // console.log("formattedCourse-->",formattedCourse)
+           // Update the state with the formatted name
+           setCourseName(formattedCourse)
+       }} 
+        
       />
       <Button
         style={{ backgroundColor: "dark-blue" }}
         className="bg-blue-900 h-10 text-white text-antique-white rounded-md justify-between items-center text-center"
+        onClick={()=>{addCourse()}}
       >
         Add Course
       </Button>
@@ -621,24 +724,26 @@ const handlePassword = () => {
        
       </Button>
     </div>
-    <div className="w-full h-[250px] overflow-y-auto max-h-[250px] rounded-md border-4 border-[#4d4b4b]" style={scrollStyles}>
+    <div className="w-full h-[250px] overflow-y-auto overflow-x-hidden max-h-[250px] rounded-md border-4 border-[#4d4b4b]" 
+    // style={scrollStyles}
+    >
       <table className="w-[528px]">
-      <thead className=''>
-          <tr className=" text-white text-1xl font-large">
-            <th className="px-6 py-3 bg-[#727272] border-r-3 border-[#4d4b4b] w-[275px]">Course</th>
-            <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Batch</th>
-            <th className="px-3 py-3 bg-[#727272] border-r-3 border-[#4d4b4b]  text-center">Admission</th>
-            <th className="px-3 py-3 bg-[#5e5d5d] border-r-3 border-[#4d4b4b] text-center">Delete</th>
+      <thead className='border-b-2 border-[#4d4b4b]'>
+          <tr className=" text-white text-1xl font-large ">
+            <th className="px-6 py-3 bg-[#9e9e9efa] border-r-3 border-[#4d4b4b] w-[275px]">Course</th>
+            <th className="px-3 py-3 bg-[#8d8c8cfa] border-r-3 border-[#4d4b4b] text-center">Batch</th>
+            <th className="px-3 py-3 bg-[#9e9e9efa] border-r-3 border-[#4d4b4b]  text-center">Admission</th>
+            <th className="px-3 py-3 bg-[#8d8c8cfa] border-r-3 border-[#4d4b4b] w-[80px] text-center">Delete</th>
           </tr>
         </thead>
         <tbody className=''>
           {
-            allCourses.length<0?
+            allCourses.length>0?
 
           allCourses.map((item) => (
                 <tr key={item._id} className="border-b border-gray-300"> {/* Added bottom border to each row */}
-                  <td className="px-3 py-3 w-[300px]">{item.course}</td>
-                  <td className="px-3 py-3 text-center w-[130px]">
+                  <td className="px-3 py-3 ">{item.course}</td>
+                  <td className="px-3 py-3 text-center">
                     <div className="flex items-center justify-center ">
 
                       <p className="text-2xl font-bold text-blue-600">{item.batch}</p>
@@ -648,7 +753,7 @@ const handlePassword = () => {
                       {/* <Batch selectedItem={item}/> */}
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-center w-[130px]">
+                  <td className="px-3 py-3 text-center">
                     {/* <Button onClick={()=>{showModal(5,item)}}>Admission</Button> */}
                     <Button className='text-0.5xl font-small'
     style={{ opacity: '75%', backgroundColor: item.admission ==="Opened"? "green" : "red", width: '70px', height: '30px', color: 'white', padding: '5px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
@@ -667,7 +772,7 @@ const handlePassword = () => {
               <tr>
      <td colSpan="4">
               <div className="flex justify-center items-center mt-[-25px] ml-[265px] h-screen w-[10px]">
-      <div className="flex mt-[-300px] space-x-4">
+      <div className="flex mt-[-370px] space-x-4">
         <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
         <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
         <div className="loader-dot w-4 h-4 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
@@ -691,30 +796,52 @@ const handlePassword = () => {
       Close
     </Button>
   </div>
-</ReactModal>
+      </ReactModal>
 
 
-  
+      {/* <ReactModal
+  isOpen={isModalVisible7}
+  onRequestClose={() => handleCancel(7)}
+  style={customStyles1}
+  contentLabel="Custom Modal"
+>
+  <div className="py-4 px-8 bg-white rounded-lg shadow-lg">
+    <h1>Data</h1>
+  </div>
+      </ReactModal> */}
 
-   
 
 
-
-   
-
-
-
-      
-
-{/* Ye Course walay Modal k under k Modals hein... */}
-
-      {/* <Batch isOpen={isModalVisible4} onClose={handleCancel(4)} selectedItem={}/> */}
-
-      
-     
-
-{/* Ye Course walay Modal k under k Modals hein... */}
-
+      {/* ye cities ka he... */}
+      <ReactModal
+        isOpen={isModalVisible7}
+        onRequestClose={() => handleCancel(7)}
+        style={customStyles1}
+        contentLabel="Custom Modal"
+      >
+        <div className="flex flex-col w-full h-full">  {/* Full modal width and height */}
+          <div className="flex-grow overflow-hidden"> {/* Upper section with content, hidden overflow */}
+            <h1 className="text-3xl font-bold text-center mb-4">Students From Everywhere</h1>
+            <p className="text-lg text-gray-700 mb-8">These are the cities which have at least one of your students:</p>
+          </div>
+          <div className="overflow-y-auto border-4 border-[#0e686efa] bg-[#e2f0f1fa] mx-auto rounded-xl shadow-xl w-[80%] h-[70%]"> {/* Scrollable list container with bottom border, rounded corners, and shadow */}
+            <ul className="divide-y divide-gray-200 list-none"> {/* List styling */}
+              {uniqueCities &&
+                uniqueCities.map((city, index) => (
+                  <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]"> {/* Classic and subtle hover effect */}
+                    <span className="flex-shrink-0 h-10 w-10 ml-[5px] rounded-md hover:bg-[#e2f0f1fa]  text-white bg-gray-900 flex items-center justify-center mr-4">
+                      {/* Replace with your desired Ant Design icon */}
+                      {/* <Icon name="icon-name" className="h-4 w-4" /> */}
+                      <Image src={img} alt='Some'/>
+                      {/* <Image src={img1} alt='Some' className='bg-current'/> */}
+                    </span>
+                    <span className="text-lg ml-3">{city._id}</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        </div>
+      </ReactModal>
 
 
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
@@ -727,144 +854,4 @@ const handlePassword = () => {
 
 export default SideNavbarComponent;
 
-
-
-
-
-// import React, { useState } from 'react';
-// import { Button, Input, Layout, Menu, Modal } from 'antd';
-// import { UserOutlined, ReloadOutlined, EyeOutlined, EyeInvisibleOutlined,LockOutlined,BlockOutlined } from '@ant-design/icons';
-// import { usePassword } from '../../context';
-
-// const { Sider } = Layout;
-
-// // Custom Icon Component
-// const CourseBatchIcon = () => (
-//   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-//     <path d="M12 2L1 9l11 7 10-7-11-7zm0 2.1L3.8 9 12 13.9 20.2 9 12 4.1zM2.5 9l9.5 6.3L21.5 9 12 2.7 2.5 9z"/>
-//   </svg>
-// );
-
-// const SideNavbarComponent = () => {
-//   const [isModalVisible1, setIsModalVisible1] = useState(false);
-//     const [isModalVisible2, setIsModalVisible2] = useState(false);
-//     const [isModalVisible3, setIsModalVisible3] = useState(false);
-//     const [selectedIcon, setSelectedIcon] = useState(null);
-//     const [inputPassword, setInputPassword] = useState('');
-//     const [recheckPassword, setRecheckPassword] = useState('');
-//     const [showPassword, setShowPassword] = useState(false);
-//     const [inputCondition, setInputCondition] = useState("verify");
-//   // const [isModalVisible1, setIsModalVisible1] = useState(false);
-//   // const [inputPassword, setInputPassword] = useState('');
-//   // const [recheckPassword, setRecheckPassword] = useState('');
-//   // const [showPassword, setShowPassword] = useState(false);
-//   // const [inputCondition, setInputCondition] = useState("verify");
-
-//   const { password, setPassword, api, setApi } = usePassword();
-
-//  const handlePassword = () => {
-
-
-//   if(inputCondition === "verify"){
-//     if(inputPassword===password){
-// setInputCondition("update")
-// setInputPassword("")
-//     }
-//     else{
-//       alert("First , enter correct current Password")
-//     }
-//   }
-//   else if(inputCondition === "update"){
-//     setRecheckPassword(inputPassword)
-//     setInputPassword("")
-// setInputCondition("recheck")
-//   }
-//   else if(inputCondition === "recheck"){
-//     if(inputPassword === recheckPassword){
-//       setPassword(inputPassword)
-//       setInputPassword("")
-//       setInputCondition("verify")
-//       alert(`Pssword changed into "${inputPassword}" `)
-//     }
-//     else {
-//       alert("Type Again!")
-//     }
-//   }
-//   // setPassword(inputPassword);
-//   // setInputPassword('');
-// };
-
-
-//   const showModal = (par) => {
-//     if(par===1){
-//  console.log("showModal", par)
-//  setIsModalVisible1(true)
-//     }
-//     else if(par===2){
-//  console.log("showModal", par)
-//  setIsModalVisible2(true)
-//     }
-// //     else if(par===3){
-// //  console.log("showModal", par)
-// //  setIsModalVisible3(true)
-//     // }
-//   };
-
-//   const handleCancel = (par) => {
-//     if(par===1){
-//     console.log("closeModal", par)
-//     setIsModalVisible1(false)
-//     }
-//     else if(par===2){
-//     console.log("closeModal", par)
-//     setIsModalVisible2(false)
-//     }
-//     // else if(par===3){
-//     // console.log("closeModal", par)
-//     // setIsModalVisible3(false)
-//     // }
-//   };
-
-
-//   const togglePasswordVisibility = () => {
-//     setShowPassword(!showPassword);
-//   };
-
-//   return (
-//     <Layout style={{ minHeight: '100vh', position: 'fixed', marginTop: '-20px' }}>
-//       <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px' }} width={80} theme="dark">
-//         <Menu mode="vertical" className='space-y-5' style={{ backgroundColor: "#0E4C92" }} theme="dark" defaultSelectedKeys={['1']}>
-//           <Menu.Item key="i1" icon={<UserOutlined />} />
-//           <Menu.Item key="1" icon={<LockOutlined />} onClick={() => showModal(1)} />
-//           <Menu.Item key="1" icon={<BlockOutlined />} onClick={() => showModal(2)} />
-//           <Menu.Item key="1" icon={<CourseBatchIcon />} onClick={() => showModal(3)} />
-//           <Menu.Item key="2" icon={api ? (
-//             <div className="flex items-center space-x-2">
-//               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-//               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-//               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-//               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-//             </div>
-//           ) : (<ReloadOutlined />)} onClick={() => { setApi(true) }} />
-//         </Menu>
-//       </Sider>
-
-//       <Modal
-//         visible={isModalVisible1}
-//         onCancel={() => handleCancel(1)}
-//         footer={null}
-//         centered
-//       >
-//         <div style={{ marginBottom: '20px' }}>
-//           {/* Input and password handling UI here... */}
-//         </div>
-//         <Button type="primary" style={{ backgroundColor: "#0056b3" }} onClick={handlePassword}>
-//           {inputCondition === "verify" ? "Next" : inputCondition === "update" ? "Save Password" : "Confirm"}
-//         </Button>
-//       </Modal>
-//     </Layout>
-//   );
-// };
-
-// export default SideNavbarComponent;
 

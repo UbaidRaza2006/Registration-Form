@@ -2,7 +2,7 @@
 
 import { Input } from 'antd';
 
-export default function InputComponent({ label, onChange, value,oninput, type, placeholder, inputMode ,classname,id},ref) {
+const InputComponent = ({ label, onChange, value,onInput, type, placeholder, inputMode ,classname,id},ref) => {
 
     return (
         <div className="relative h-14">
@@ -16,7 +16,7 @@ export default function InputComponent({ label, onChange, value,oninput, type, p
                 onChange={onChange}
                 inputMode={inputMode}
                 className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-white"
-                oninput={oninput}
+                onInput={onInput}
                 
             />
         </div>
@@ -24,3 +24,5 @@ export default function InputComponent({ label, onChange, value,oninput, type, p
 
     )
 }
+
+export default InputComponent

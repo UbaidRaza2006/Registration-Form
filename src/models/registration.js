@@ -8,7 +8,7 @@ const RegistrationSchema = new mongoose.Schema({
     email: String,
     rollNo:String,
     course:String,
-    batch:String,
+    batch:Number,
     payment:String,
     paymentImg:String,
     status:String,

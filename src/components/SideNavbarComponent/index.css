@@ -3,7 +3,7 @@
     /* background-color: #018394; */
 }
 .abc{
-  background-color: #ebe9e9;
+  background-color: #8d8c8cfa;
 }
 /* styles.css */
 .modal1 {
@@ -26,4 +26,16 @@
     z-index: 50; /* Set z-index higher than Modal 1 */
     padding: 20px;
   }
+
   
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 8px; /* Adjust width as needed */
+    background-color: #f5f5f5; /* Match modal background */
+    border-radius: 10px; /* Rounded corners */
+    
+  }
+  
+  .overflow-y-auto::-webkit-scrollbar-thumb {
+    background-color: #999898; /* Light grey for thumb */
+    border-radius: 5px; /* Rounded corners */
+  }

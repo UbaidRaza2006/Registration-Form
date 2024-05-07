@@ -2,45 +2,43 @@
 
 
 import style from "../app/globals.css"
-import { message, Upload } from 'antd';
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { initializeApp } from 'firebase/app'
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 import { useContext, useEffect, useRef, useState } from "react";
 import InputComponent from "../components/InputComponent";
 import SelectComponent from "../components/SelectComponent";
-import { registerUser } from "../services/register";
-import { RegistartionformControls, batchOptions, courseOptions, firebaseConfig, firebaseStorageURL } from '../utils';
-import ImageUpload from '../components/UploadComponent';
-import IdCardModal from '../components/IdCardComponent';
-import { GlobalContext, usePassword } from '../context';
+import { batchOptions, courseOptions} from '../utils';
+// import IdCardModal from '../components/IdCardComponent';
+import { usePassword } from '../context';
 import Navbar from '../components/Navbar';
 import { Button } from '@mui/material';
-import { Router } from "next/router";
 import { useRouter } from "next/navigation";
-import Image from "next/image"; 
+import Image from "next/image";
 
 
 
-const initialFormData = {
-    fullName: '',
-    fatherName: '',
-    email: '',
-    course: `${courseOptions[0].label}`,
-    batch: `${batchOptions[0]}`,
-    payment: 'Not-Done',
-    paymentImg: 'Not-Done',
-    status: "Un-Verified",
-    city: '',
-    cnic: '',
-    phone: '',
-    dateOfBirth: '',
-    gender: 'Male',
-    qualification: '',
-    address: '',
-    imageUrl: ''
-}
-export default function RegisterUser() {
+export default function MainPage() {
+    
+    
+    
+    const [allCourses, setAllCourses] = useState([])
+    
+    const initialFormData = {
+        fullName: '',
+        fatherName: '',
+        email: '',
+        course: allCourses.length > 0 ? allCourses[0]._id : '', // Set course based on allCourses,
+        batch: 0,
+        payment: 'Not-Done',
+        paymentImg: 'Not-Done',
+        status: "Un-Verified",
+        city: '',
+        cnic: '',
+        phone: '',
+        dateOfBirth: '',
+        gender: 'Male',
+        qualification: '',
+        address: '',
+        imageUrl: ''
+    }
 
     const [resData, setResData] = useState(null)
     const [showModal, setShowModal] = useState(false);
@@ -59,8 +57,6 @@ export default function RegisterUser() {
     const [message, setMessage] = useState("");
     const [isFormDisabled, setIsFormDisabled] = useState(false);
     const [currentUser, setCurrentUser] = useState(null)
-
-
 
   
 
@@ -138,8 +134,6 @@ export default function RegisterUser() {
 
     // cnic and phone
     const formatPhoneNumber = (input) => {
-        // Your formatting logic here (e.g., adding hyphens)
-        // This is just a basic example, you may need to adjust it based on your requirements
         const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
         return formattedNumber;
     };
@@ -188,6 +182,7 @@ export default function RegisterUser() {
 
             console.log("formData-->", formData);
             const res = await registerUser(formData);
+            
             // setResData(res.user)
             console.log("res-->", res);
 
@@ -224,9 +219,43 @@ export default function RegisterUser() {
         }
     }
 
+
+    const registerUser= async (formData) => {
+        try {
+            const response = await fetch("/api/registartion",
+                {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+    
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json()
+                return data;
+                
+            } 
+            catch (e) {
+                console.log('error', e);
+            }
+        }
+
+
     useEffect(() => {
         gettingAdmin();
+        gettingCourses();
     }, []);
+
+    // useEffect(() => {
+    //     // Check if allCourses has data and the course field is not already set in formData
+    //     if (allCourses.length > 0 && !formData.course) {
+    //       setFormData({
+    //         ...formData,
+    //         course: allCourses[0].course // Set course to the _id of the first course
+    //       });
+    //     }
+    //   }, [allCourses, formData.course]);
 
     const gettingAdmin = async () => {
         console.log("gettingAdmin")
@@ -245,6 +274,31 @@ export default function RegisterUser() {
             console.error("Error fetching users:", error);
         }
     };
+
+    const gettingCourses = async () => {
+        console.log("gettingCourses");
+        try {
+          const res = await fetch("/api/courses", {
+            method: "GET",
+            cache: "no-cache", // Set cache control policy to 'no-cache'
+          });
+          const data = await res.json();
+          console.log("gettingCourses ka data-->", data)
+    
+          if (data.success) {
+            const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
+            console.log("allCourses-->", courses)
+            setAllCourses(courses);
+          } else {
+            setAllCourses([]);
+            console.log(data)
+          }
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+        }
+      };
+
+
     // console.log(formData);
     useEffect(() => {
         setIsFormDisabled(allowAdmission !== "Open");
@@ -446,18 +500,21 @@ export default function RegisterUser() {
                         }}
                     />
 
-                    <SelectComponent
-                        label="Select Course"
-                        options={courseOptions}
-                        value={formData.course}
-                        onChange={(event) => {
-                            setFormData({
-                                ...formData,
-                                course: event.target.value,
-                            });
-                        }}
-                    />
-
+<SelectComponent
+  label="Select Course"
+  options={allCourses
+    .filter((course) => course.admission === 'Opened')
+    .map((course) => ({ value: course.course, label: course.course }))}
+  value={formData.course}
+  onChange={(event) => {
+    const selectedCourse = allCourses.find((course) => course.course === event.target.value);
+    setFormData({
+      ...formData,
+      course: event.target.value,
+      batch: selectedCourse?.batch, // Set batch if selectedCourse exists
+    });
+  }}
+/>
 
 
                 </div>
@@ -535,7 +592,7 @@ export default function RegisterUser() {
          </div>
 
             <div>
-                <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} />
+                {/* <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} /> */}
             </div>
  </div>
 

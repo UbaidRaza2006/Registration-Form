@@ -1,43 +1,14 @@
 "use client";
 import dynamic from "next/dynamic";
 
-// import ButtonComponent from "@/components/AntButtonComponent";
-// import AntCardComponent from "@/components/AntCard Component";
-// import SearchBox from "@/components/AntSearchComponent";
-// import TableComponent from "@/components/AntTableComponents";
-// import MyAntTable from "@/components/AntTableComponents/index2";
-// import ApprovingSelectBox from "@/components/ApprovingSelectBox";
-// import BatchSelectBox from "@/components/BatchSelectBox";
-// import CitySelectBox from "@/components/CitySelectBox";
-// import CourseSelectBox from "@/components/CourseSelectBox";
-// import DrawerApp from "@/components/EditDrawerComponent/antdrawer";
-// import EditStudentDrawerComponent from "@/components/EditDrawerComponent/index2";
-// import DrawerComponent from "@/components/EditDrawerComponent/index2";
-// import EyeViewDrawerComponent from "@/components/EyeViewDrawerComponent";
-// import SimpleDrawer from "@/components/EyeViewDrawerComponent";
-// import GenderSelectBox from "@/components/GenderSelectbox";
-// import EyeViewComponent from "@/components/SideModalsComponent/EyeViewModalComponent";
-// import RightSideModal from "@/components/SideModalsComponent/ModalsComponent";
-// import YourPageComponent from "@/components/SideModalsComponent/ModalsComponent/index2";
-// import SideNavbar from "@/components/SideNavbarComponent";
+
 import React, { useEffect } from "react";
-import AntCardComponent from "../../components/AntCard Component";
-import CitySelectBox from "../../components/CitySelectBox";
-import CourseSelectBox from "../../components/CourseSelectBox";
-import BatchSelectBox from "../../components/BatchSelectBox";
-import ApprovingSelectBox from "../../components/ApprovingSelectBox";
-import GenderSelectBox from "../../components/GenderSelectbox";
-import ButtonComponent from "../../components/AntButtonComponent";
-import SearchBox from "../../components/AntSearchComponent";
-import MyAntTable from "../../components/AntTableComponents/index2";
-import { getAllUsers } from "../../services/register";
 import { useState } from "react";
 import { Button, Card, Select, Space, Table } from "antd";
 import EditDrawerApp from "../../components/EditDrawerComponent/antdrawer";
 import DeleteIconComponent from "../../components/DeleteIconComponent";
 import EyeViewDrawerApp from "../../components/EyeViewDrawerComponent/eyeantdrawer";
 import SideNavbarComponent from "../../components/SideNavbarComponent"
-// import ButtonComponent from "../../components/AntButtonComponent";
 import { Input } from 'antd';
 import VerificationButton from "../../components/VerificationButton";
 import { usePassword } from "../../context";

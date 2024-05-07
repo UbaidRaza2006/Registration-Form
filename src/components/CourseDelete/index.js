@@ -83,7 +83,7 @@ const customStyles = {
        <h2 className="text-2xl mb-6 mt-[-15px] text-center">
   Do You Want to <span className='text-red-900'>delete</span> the course {user ? (
     <span>
-       <span className="text-2xl font-bolder">{user.course}</span> and all of it's data</span>
+       <span className="text-2xl font-bolder">{user.course}</span> and all of it&apos;s data</span>
   ) : null} ?
 </h2>
       <div className="flex justify-center mt-[15px] mb-[-20px]">

@@ -77,7 +77,7 @@ export async function POST(req) {
                 console.log(courseAdded);
                 return NextResponse.json({
                     success: true,
-                    admin:courseAdded,
+                    course:courseAdded,
                     message: "Created Successfully!",
                 })
             }else{

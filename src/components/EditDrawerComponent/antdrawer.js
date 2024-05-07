@@ -131,10 +131,23 @@ const EditDrawerApp = ({ userData }) => {
 
     }
 
+    
+    const formattedAddress = address.trim().replace(/\s+/g, ' ');
+    const formattedQualification = qualification.trim().replace(/\s+/g, ' ');
+    const formattedCity = city.trim().replace(/\s+/g, ' ');
+    const formattedCourse = course.trim().replace(/\s+/g, ' ');
+    const formattedFullName = fullName.trim().replace(/\s+/g, ' ');
+    const formattedFatherName = fatherName.trim().replace(/\s+/g, ' ');
+    const formattedGender = gender.trim().replace(/\s+/g, ' ');
+    const formattedBatch = batch.trim().replace(/\s+/g, ' ');
+
+
+
+
 
     let data = await fetch(`/api/students/${userId}`, {
       method: "PUT",
-      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment,paymentImg, phone, qualification, rollNo, status }), headers: {
+      body: JSON.stringify({ _id: userId, address:formattedAddress, batch:formattedBatch, city:formattedCity, cnic, course:formattedCourse, dateOfBirth, email, fatherName:formattedFatherName, fullName:formattedFullName, gender:formattedGender, imageUrl, payment,paymentImg, phone, qualification:formattedQualification, rollNo, status }), headers: {
         "Content-Type": "application/json"
       }
     })
