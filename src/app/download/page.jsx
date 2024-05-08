@@ -12,7 +12,7 @@ import style from "../globals.css"
 import Link from "next/link";
 import InputComponent from "../../components/InputComponent";
 import { findUserByCNIC, getAllUsers, getUserWithCnic } from "../../services/register";
-import IdCard from "../../components/IdCard";
+// import IdCard from "../../components/IdCard";
 import dynamic from "next/dynamic";
 
 function DownloadIdCard() {
@@ -63,14 +63,14 @@ function DownloadIdCard() {
       dataIndex: 'batch',
       key: 'batch',
     },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <IdCard user={record} />
-      ),
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   render: (text, record) => (
+    //     <IdCard user={record} />
+    //   ),
 
-    },
+    // },
   ];
 
   const formatCnicNumber = (input) => {

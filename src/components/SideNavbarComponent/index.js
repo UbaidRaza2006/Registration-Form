@@ -38,6 +38,7 @@ import BatchModal from '../CourseBatch';
 import DeleteModal from '../CourseDelete';
 import img from "../../../public/images/—Pngtree—line building dubai city silhouette_5978784.png"
 import img1 from "../../../public/images/images1.png"
+import InputComponent from '../InputComponent';
 const { Sider } = Layout;
 
 
@@ -71,10 +72,13 @@ function SideNavbarComponent() {
 
   const [allCourses, setAllCourses] = useState([])
   const [uniqueCities, setUniqueCities] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [searchedCities, setSearchedCities] = useState([])
   const [batchValues, setBatchValues] = useState(Array(allCourses.length).fill(0));
 
   const [currentUser, setCurrentUser] = useState(null)
   const [isAdding, setIsAdding] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const [selectedItemData, setSelectedItemData] = useState(null)
 
 
@@ -460,6 +464,17 @@ const handlePassword = () => {
       if (data.success) {
         const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
         console.log("allCourses-->", courses)
+
+        const sortedCourses = courses.slice().sort((a, b) => {
+          const courseA = a.course.toLowerCase(); // Convert to lowercase for case-insensitive sorting
+          const courseB = b.course.toLowerCase();
+        
+          // Natural sorting using localeCompare with options
+          return courseA.localeCompare(courseB, undefined, { numeric: true });
+        });
+
+
+
         setAllCourses(courses);
         setCoursesToLoad(false)
       } else {
@@ -534,6 +549,43 @@ const handlePassword = () => {
               console.log('error', e);
           }
       }
+
+      const searchingCities = (uniqueCities, searchTerm) => {
+        console.log("function running here are searchCities value -->", searchTerm); // Log searchTerm for debugging
+        const lowerCaseTerm = searchTerm.toLowerCase(); // Ensure case-insensitive search
+      
+        // If searchTerm is empty, return all uniqueCities in lowercase for comparison:
+        if (!searchTerm) {
+          return uniqueCities.map(city => ({ ...city, _id: city._id.toLowerCase() }));
+        }
+      
+        return uniqueCities.filter((city) => {
+          const lowerCaseCity = city._id.toLowerCase();
+          // Combine prefix and substring search:
+          return lowerCaseCity.startsWith(lowerCaseTerm) || lowerCaseCity.includes(lowerCaseTerm);
+        });
+      };
+
+      
+      useEffect(() => {
+        const handleSearch = async () => {
+          setIsLoading(true); // Set loading state to true
+          try {
+            const newSearchedCities = await searchingCities(uniqueCities, searchTerm);
+            setSearchedCities(newSearchedCities);
+          } catch (error) {
+            console.error('Error performing search:', error);
+            // Handle errors appropriately (e.g., display an error message)
+          } finally {
+            setIsLoading(false); // Set loading state to false regardless of success or error
+          }
+        };
+      
+        if (searchTerm) {
+          handleSearch();
+        }
+      }, [searchTerm, uniqueCities]);
+
 
 
   return (
@@ -821,14 +873,42 @@ const handlePassword = () => {
       >
         <div className="flex flex-col w-full h-full">  {/* Full modal width and height */}
           <div className="flex-grow overflow-hidden"> {/* Upper section with content, hidden overflow */}
-            <h1 className="text-3xl font-bold text-center mb-4">Students From Everywhere</h1>
-            <p className="text-lg text-gray-700 mb-8">These are the cities which have at least one of your students:</p>
+            <h1 className="text-3xl font-bold text-center mb-2">Students From Everywhere</h1>
           </div>
-          <div className="overflow-y-auto border-4 border-[#0e686efa] bg-[#e2f0f1fa] mx-auto rounded-xl shadow-xl w-[80%] h-[70%]"> {/* Scrollable list container with bottom border, rounded corners, and shadow */}
-            <ul className="divide-y divide-gray-200 list-none"> {/* List styling */}
-              {uniqueCities &&
-                uniqueCities.map((city, index) => (
-                  <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]"> {/* Classic and subtle hover effect */}
+
+          <div className='mt-4 border-4 border-[#0e686efa] hover:border-[#50b6b9fa] rounded-xl h-12'>
+          <InputComponent
+                        type="text"
+                        placeholder="Search"
+                        label=""
+                        value={searchTerm}
+                        onChange={(event) => {
+
+                            const newValue = event.target.value;
+
+                            // Capitalize the first letter of each word
+                            const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+
+                            // Update the state with the formatted name
+                            setSearchTerm(formattedValue)
+                            console.log(formattedValue)
+                        }} />
+          </div>
+
+
+
+
+<div className="overflow-y-auto border-4 border-[#0e686efa] bg-[#e2f0f1fa] mx-auto mt-4 rounded-xl shadow-xl w-[80%] h-[70%]">
+  <ul className="divide-y divide-gray-200 list-none">
+    {/* Display loading message if searchTerm has a value and searchedCities are not yet available */}
+    {searchTerm && !searchedCities && (
+      <p className="text-center text-gray-500">Searching...</p>
+    )}
+
+    {/* Display searched cities if searchTerm has a value and searchedCities are available */}
+    {searchTerm && searchedCities?.length > 0 && (
+      searchedCities.map((city, index) => (
+        <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]"> {/* Classic and subtle hover effect */}
                     <span className="flex-shrink-0 h-10 w-10 ml-[5px] rounded-md hover:bg-[#e2f0f1fa]  text-white bg-gray-900 flex items-center justify-center mr-4">
                       {/* Replace with your desired Ant Design icon */}
                       {/* <Icon name="icon-name" className="h-4 w-4" /> */}
@@ -837,9 +917,31 @@ const handlePassword = () => {
                     </span>
                     <span className="text-lg ml-3">{city._id}</span>
                   </li>
-                ))}
-            </ul>
-          </div>
+      ))
+    )}
+
+    {/* Display message if searchTerm has a value but searchedCities is empty */}
+    {searchTerm && searchedCities?.length === 0 && (
+      <p className="text-center text-gray-500">No results found for your search.</p>
+    )}
+
+    {/* Display uniqueCities if searchTerm is empty or searchedCities are not yet available (or there's an error) */}
+    {!searchTerm  && ( // Use optional chaining and error stat
+      uniqueCities.map((city, index) => (
+        <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]"> {/* Classic and subtle hover effect */}
+                    <span className="flex-shrink-0 h-10 w-10 ml-[5px] rounded-md hover:bg-[#e2f0f1fa]  text-white bg-gray-900 flex items-center justify-center mr-4">
+                      {/* Replace with your desired Ant Design icon */}
+                      {/* <Icon name="icon-name" className="h-4 w-4" /> */}
+                      <Image src={img} alt='Some'/>
+                      {/* <Image src={img1} alt='Some' className='bg-current'/> */}
+                    </span>
+                    <span className="text-lg ml-3">{city._id}</span>
+                  </li>
+      ))
+    )}
+  </ul>
+</div>
+
         </div>
       </ReactModal>
 

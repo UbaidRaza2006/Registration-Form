@@ -26,11 +26,18 @@ export async function GET(req, res) {
       ]
     )
 
+    const sortedCities = cities.slice().sort((a, b) => {
+      const cityA = a._id.toLowerCase();
+      const cityB = b._id.toLowerCase();
+      return cityA.localeCompare(cityB, undefined, { numeric: true });
+    });
+
+
     // Send the unique city names as response
     // res.status(200).json({ cities });
     return NextResponse.json({
       success: true,
-      data: cities,
+      data: sortedCities,
     });
   } catch (error) {
     // Handle any errors
