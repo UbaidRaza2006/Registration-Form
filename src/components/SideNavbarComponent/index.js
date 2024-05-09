@@ -909,7 +909,7 @@ const handlePassword = () => {
     {searchTerm && searchedCities?.length > 0 && (
       searchedCities.map((city, index) => (
         <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]"> {/* Classic and subtle hover effect */}
-                    <span className="flex-shrink-0 h-10 w-10 ml-[5px] rounded-md hover:bg-[#e2f0f1fa]  text-white bg-gray-900 flex items-center justify-center mr-4">
+                    <span className="flex-shrink-0 h-10 w-10 ml-[5px] rounded-md focus:bg-[#e2f0f1fa]  text-white bg-gray-900 flex items-center justify-center mr-4">
                       {/* Replace with your desired Ant Design icon */}
                       {/* <Icon name="icon-name" className="h-4 w-4" /> */}
                       <Image src={img} alt='Some'/>
@@ -936,6 +936,12 @@ const handlePassword = () => {
                       {/* <Image src={img1} alt='Some' className='bg-current'/> */}
                     </span>
                     <span className="text-lg ml-3">{city._id}</span>
+                    <span className="flex-shrink-0 h-6 w-6 rounded-md text-gray-900 border-2 border-[#0e686efa] flex items-center justify-center ml-auto mr-[-10px]">
+                      {/* Replace with your desired Ant Design icon */}
+                      {/* <Icon name="icon-name" className="h-4 w-4" /> */}
+                          <EyeOutlined/>
+                      {/* <Image src={img1} alt='Some' className='bg-current'/> */}
+                    </span>
                   </li>
       ))
     )}
