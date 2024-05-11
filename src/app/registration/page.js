@@ -104,14 +104,14 @@ export default function AdminPage() {
   const [rollNumber, setRollNumber] = useState("")
   const [cnicNumber, setCnicNumber] = useState("")
   const [gender, setGender] = useState("")
-  const [batch, setBatch] = useState("")
+  const [batch, setBatch] = useState(null)
   const [course, setCourse] = useState("")
   const [city, setCity] = useState("")
   const [status, setStatus] = useState("")
   const [payment, setPayment] = useState("")
 
   const [genderDone, setGenderDone] = useState("")
-  const [batchDone, setBatchDone] = useState("")
+  const [batchDone, setBatchDone] = useState(null)
   const [courseDone, setCourseDone] = useState("")
   const [cityDone, setCityDone] = useState("")
   const [statusDone, setStatusDone] = useState("")
@@ -485,7 +485,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const resetSelectInputs = () => {
     setCity("");
     setCourse("");
-    setBatch("");
+    setBatch(null);
     setStatus("");
     setPayment("");
     setGender("");
@@ -784,37 +784,6 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
 
       <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
       {/* City */}
-      {/* <Select
-        showSearch
-        value={city || undefined}
-        style={{ width: 120 }}
-        placeholder="City"
-        optionFilterProp="children"
-        onChange={(value) => setCity(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Karachi">Karachi</Select.Option>
-        <Select.Option value="Lahore">Lahore</Select.Option>
-        <Select.Option value="Quetta">Quetta</Select.Option>
-      </Select> */}
-
-      {/* <InputComponent
-                        type="text"
-                        placeholder="City"
-                        label=""
-                        value={city || undefined}
-                        onChange={(event) => {
-
-                            const newValue = event.target.value;
-
-                            // Capitalize the first letter of each word
-                            const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
-
-                            // Update the state with the formatted name
-                            setCity(formattedValue)
-                        }} /> */}
 
 <Input
                 style={{height:"32px", width:"115px"}}
@@ -900,7 +869,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         }
       >
         <Select.Option value="Done">Done</Select.Option>
-        <Select.Option value="Not-done">Not-Done</Select.Option>
+        <Select.Option value="Not-Done">Not-Done</Select.Option>
       </Select>
 
       {/* Gender */}

@@ -1,73 +1,91 @@
-// import { Button } from 'antd';
-// import { useRef } from 'react';
-// import Image from 'next/image';
-// import { PDFExport } from '@progress/kendo-react-pdf';
-// import { CloseFullscreen } from '@mui/icons-material';
+"use client";
 
-// function IdCard({ user }) {
-//   const pdfExportComponent = useRef(null);
+import { useState } from "react";
+import { Button } from "antd";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import Image from "next/image";
+import { useRef } from "react";
 
-//   const handleDownload = () => {
-//     console.log("function chal raha he!")
-//     if (pdfExportComponent.current) {
-//       console.log("pdfExportComponent.current mil raha!")
+function IdCard({ user }) {
+  const idCardRef = useRef(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-//       pdfExportComponent.current.save();
-//     }
-//     else{
-//       console.log("pdfExportComponent.current nhi mil raha!")
-//     }
-//   };
+  const handleDownload = async () => {
+    setIsGenerating(true);
 
-//   return (
-//     <div>
-//       <Button style={{ backgroundColor: '#248ba5' }} onClick={handleDownload}>
-//         Download
-//       </Button>
+    const inputData = idCardRef.current;
 
-//       <div className="">
-//         <PDFExport ref={pdfExportComponent} paperSize="A4">
-//           <div className="bg-white h-[1000px] relative">
-//             {/* Background Image */}
-//             <Image
-//               src="/images/Green Minimalist School ID Card (1).svg"
-//               className="absolute ml-[28%] h-[230px] w-[350px] object-cover z-0"
-//               width={600}
-//               height={400}
-//             />
+    try {
+      const canvas = await html2canvas(inputData, {
+        scale: 9,
+        letterRendering: true,
+      });
 
-//             {/* ID Card Content */}
-//             <div className="id-card flex mx-auto mt-8 h-[230px] w-[350px] relative z-10">
-//               {/* Content goes here */}
-//               <Image
-//                 className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]"
-//                 alt="User-Image"
-//                 src={user.imageUrl}
-//                 width={600}
-//                 height={400}
-//               />
-//               <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
-//                 <p style={{ color: '#018394', fontSize: '10px', fontWeight: 'bold' }} className="break-words">
-//                   {user.fullName}
-//                 </p>
-//                 <p style={{ color: '#018394', fontSize: '10px', fontWeight: 'bold', marginTop: '2px' }} className="break-words">
-//                   {user.course}
-//                 </p>
-//                 <p style={{ color: '#018394', fontSize: '10px', fontWeight: 'bold', marginTop: '2px' }} className="break-words">
-//                   {user.batch}
-//                 </p>
-//               </div>
-//               <div className="absolute mt-[184.5px] ml-[75px] w-[100px] h-[35px] overflow-hidden">
-//                 <p style={{ color: 'white', fontSize: '13px', fontWeight: 'bold', letterSpacing: '2px', fontStyle: 'italic' }} className="break-words">
-//                   {user.rollNo}
-//                 </p>
-//               </div>
-//             </div>
-//           </div>
-//         </PDFExport>
-//       </div>
-//     </div>
-//   );
-// }
+      const imageData = canvas.toDataURL("image/png", 0.8);
 
-// export default IdCard;
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: "a4",
+      });
+
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+
+      pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
+      pdf.save(`Student:${user.rollNo}.pdf`);
+
+      setIsGenerating(false);
+    } catch (e) {
+      console.error("Error generating PDF:", e);
+      setIsGenerating(false);
+    }
+  };
+
+  return (
+    <div>
+      <Button style={{ backgroundColor: "#248ba5" }} onClick={handleDownload} disabled={isGenerating}>
+        {isGenerating ? "Generating..." : "Download"}
+      </Button>
+
+      <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+        <div ref={idCardRef} className="relative">
+          <Image
+            src="/images/Green Minimalist School ID Card (1).svg"
+            className="absolute ml-[28%] h-[100px] w-[180px] object-cover z-0"
+            width={600}
+            height={400}
+          />
+          <div className="id-card flex mx-auto mt-8 h-[230px] w-[350px] relative z-10">
+            <Image
+              className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]"
+              alt="User-Image"
+              src={user.imageUrl}
+              width={600}
+              height={400}
+            />
+            <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
+              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold" }} className="break-words">
+                {user.fullName}
+              </p>
+              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
+                {user.course}
+              </p>
+              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
+                {user.batch}
+              </p>
+            </div>
+            <div className="absolute mt-[184.5px] ml-[75px] w-[100px] h-[35px] overflow-hidden">
+              <p style={{ color: "white", fontSize: "13px", fontWeight: "bold", letterSpacing: "2px", fontStyle: "italic" }} className="break-words">
+                {user.rollNo}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default IdCard;

@@ -12,6 +12,7 @@ import Navbar from '../components/Navbar';
 import { Button } from '@mui/material';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import IdCardModal from "../components/IdCardComponent";
 
 
 
@@ -188,9 +189,9 @@ export default function MainPage() {
 
             if (res.success) {
 
+                setShowModal(true);
                 setCurrentUser(res.user)
 
-                setShowModal(true);
             }
 
 
@@ -592,7 +593,7 @@ export default function MainPage() {
             </div>
 
             <div>
-                {/* <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} /> */}
+                <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} />
             </div>
         </div>
 
