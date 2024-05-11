@@ -66,9 +66,16 @@ export async function POST(req) {
                 address,
                 imageUrl}= extractData;
 
-                const generateRandomNumber = () => Math.floor(10000 + Math.random() * 90000);
-                const generatedRollNo=generateRandomNumber()
+                // const generateRandomNumber = () => Math.floor(10000 + Math.random() * 90000);
+                // const generatedRollNo=generateRandomNumber()
 
+
+                const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 });
+
+        // Increment the last roll number or start from 1 if no user exists
+        const lastRollNo = lastRegisteredUser ? parseInt(lastRegisteredUser.rollNo) : 0;
+        const nextRollNo = lastRollNo + 1;
+        const generatedRollNo = nextRollNo.toString().padStart(5, '0');
 
 
             const { error } = RegistrationSchema.validate({
@@ -88,7 +95,7 @@ export async function POST(req) {
                 qualification,
                 address,
                 imageUrl,
-                rollNo: generatedRollNo.toString()
+                rollNo: generatedRollNo
             });
     
             if (error) {
@@ -115,7 +122,7 @@ export async function POST(req) {
                 qualification,
                 address,
                 imageUrl,
-                rollNo: generatedRollNo.toString(),
+                rollNo: generatedRollNo,
             });
 
             if(newlyRegisteredUser){

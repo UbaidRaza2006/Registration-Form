@@ -19,15 +19,14 @@ import IdCardModal from "../components/IdCardComponent";
 export default function MainPage() {
 
 
-
     const [allCourses, setAllCourses] = useState([])
 
     const initialFormData = {
         fullName: '',
         fatherName: '',
         email: '',
-        course: allCourses.length > 0 ? allCourses[0]._id : '', // Set course based on allCourses,
-        batch: 0,
+        course: '', // Set course based on allCourses,
+        batch: null,
         payment: 'Not-Done',
         paymentImg: 'Not-Done',
         status: "Un-Verified",
@@ -248,6 +247,16 @@ export default function MainPage() {
         gettingCourses();
     }, []);
 
+    useEffect(() => {
+        if (allCourses.length > 0) {
+            const courseUpdate =  allCourses.filter((course) => course.admission === 'Opened')
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                course: courseUpdate[0].course,
+                batch: courseUpdate[0].batch// Or use whatever field you need from allCourses
+            }));
+        }
+    }, [allCourses]);
     // useEffect(() => {
     //     // Check if allCourses has data and the course field is not already set in formData
     //     if (allCourses.length > 0 && !formData.course) {
