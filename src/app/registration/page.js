@@ -4,14 +4,15 @@ import dynamic from "next/dynamic";
 
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Button, Card, Select, Space, Table } from "antd";
+import { Button, Card, Input, Select, Space, Table } from "antd";
 import EditDrawerApp from "../../components/EditDrawerComponent/antdrawer";
 import DeleteIconComponent from "../../components/DeleteIconComponent";
 import EyeViewDrawerApp from "../../components/EyeViewDrawerComponent/eyeantdrawer";
 import SideNavbarComponent from "../../components/SideNavbarComponent"
-import { Input } from 'antd';
+// import { Input } from 'antd';
 import VerificationButton from "../../components/VerificationButton";
 import { usePassword } from "../../context";
+import InputComponent from "../../components/InputComponent";
 const { Search } = Input;
 
 const { Option } = Select;
@@ -23,7 +24,7 @@ const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
 export default function AdminPage() {
  
 
-  const {api,setApi,coursesToLoad,setCoursesToLoad} = usePassword();
+  const {api,setApi,coursesToLoad,setCoursesToLoad, sideNavbarCity, setSideNavbarCity} = usePassword();
 
 
   const [admin, setAdmin] = useState(null)
@@ -117,6 +118,7 @@ export default function AdminPage() {
   const [paymentDone, setPaymentDone] = useState("")
   const [rollNumberDone, setRollNumberDone] = useState("")
   const [cnicNumberDone, setCnicNumberDone] = useState("")
+
 
 
 
@@ -366,6 +368,14 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     gettingUsers();
   }, []);
 
+  useEffect(() => {
+    if(sideNavbarCity.length > 0){
+    console.log("sideNavbarCity from /registration -->",sideNavbarCity);
+    setCity(sideNavbarCity);
+    setSideNavbarCity("")
+    }
+  }, [sideNavbarCity]);
+
   // useEffect(() => {
   //   if(allUsers.length>0 && admin){
   //     setCoursesToLoad(true)
@@ -409,11 +419,14 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const gettingUsers = async () => {
     console.log("gettingUsers")
     try {
-      const res = await fetch(`/api/students?page=${allUsers.length/20}`, {
+      console.log("try chal raha he")
+      const res = await fetch(`/api/students`, {
         method: "GET",
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
       const data = await res.json();
+      console.log(data)
+      if(data.success){
       
       // Convert single object to an array of length 1
       const users = Array.isArray(data.data) ? data.data : [data.data];
@@ -428,8 +441,18 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
            setCoursesToLoad(true)
       // console.log("coursesToLoad-->",coursesToLoad)
       // checkingVerifiedUsers(users);
+      }
+      else if(data.message === "No students found!"){
+        console.log("No students found!")
+        alert("No students found!")
+      }
+      else{
+        alert("error occured fro api!")
+        console.log("error occured fro api!")
+      }
     } catch (error) {
-      console.error("Error fetching users:", error);
+
+      console.log("Error fetching users:", error);
     }
   };
 
@@ -686,48 +709,6 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   return (
     <div style={{}}>
 
-{/* Password */}
-
-
-{/* <DynamicModal
-  title="Admin Login"
-  visible={modalOpen}
-  footer={null}
-  centered
-  destroyOnClose
-  // afterClose={() => {
-  //   // Reset adminName and adminPassword when the modal is closed
-  //   setAdminName("");
-  //   setAdminPassword("");
-  // }}
->
-  <form className="mx-auto space-y-[20px]">
-    <Input
-      className="w-[100%] h-[40px]"
-      placeholder="Admin Name"
-      value={adminName}
-      onChange={(e) => setAdminName(e.target.value)}
-      autoComplete="off"
-    />
-    <Input.Password
-      className="w-[100%] h-[40px]"
-      placeholder="Admin Key"
-      value={adminPassword}
-      onChange={(e) => setAdminPassword(e.target.value)}
-      autoComplete="off"
-    />
-    <Button
-      className="mx-auto w-[20%] h-[40px] "
-      onClick={handleAdminLogin}
-      disabled={!isFormValid}
-    >
-      Login
-    </Button>
-  </form>
-</DynamicModal> */}
-
-
-{/* Password */}
 
 <DynamicModal
         title="Admin Login"
@@ -765,7 +746,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           </Button>
         </form>
       </DynamicModal>
-{/* {!modalOpen && ( */}
+
       
 {!modalOpen && (
     <>
@@ -776,7 +757,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       </div>
 
    
-
+{/* Cards */}
 <div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
       {/* First card */}
       <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
@@ -798,12 +779,12 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     </div>
 
 
-      {/* Card Component */}
+      {/* Search Bar */}
 <div className="mx-auto flex space-x-2 items-center mt-7 ml-[8%]">
 
       <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
       {/* City */}
-      <Select
+      {/* <Select
         showSearch
         value={city || undefined}
         style={{ width: 120 }}
@@ -817,7 +798,42 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         <Select.Option value="Karachi">Karachi</Select.Option>
         <Select.Option value="Lahore">Lahore</Select.Option>
         <Select.Option value="Quetta">Quetta</Select.Option>
-      </Select>
+      </Select> */}
+
+      {/* <InputComponent
+                        type="text"
+                        placeholder="City"
+                        label=""
+                        value={city || undefined}
+                        onChange={(event) => {
+
+                            const newValue = event.target.value;
+
+                            // Capitalize the first letter of each word
+                            const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+
+                            // Update the state with the formatted name
+                            setCity(formattedValue)
+                        }} /> */}
+
+<Input
+                style={{height:"32px", width:"115px"}}
+                className="placeholder-gray-300 text-md bg-white"
+                type="text"
+                placeholder="City"
+                label=""
+                value={city || undefined}
+                onChange={(event) => {
+
+                    const newValue = event.target.value;
+
+                    // Capitalize the first letter of each word
+                    const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+
+                    // Update the state with the formatted name
+                    setCity(formattedValue)
+                }} />
+                
 
       {/* Course */}
       <Select
@@ -947,7 +963,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
 
       </div>
 
-
+{/* Table */}
       <div className="mt-8 ml-[-1.5%]">
 
         {/* <TableComponent /> */}

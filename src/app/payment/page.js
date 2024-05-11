@@ -14,6 +14,7 @@ import NextImage from "next/image"; // Alias one of the imports
 import img from "../../../public/images/paymentBg5.avif"
 
 import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
+import Notification from "../../components/Notification";
 
 // const cloudinary = require('cloudinary').v2;
 // import { v2 as cloudinary } from "cloudinary";
@@ -67,6 +68,8 @@ export default function PaymentVerify() {
 
 // const [myPaymentData , setMyPaymentData ] = useState("")
 const [user,setUser] = useState(null)
+
+const [notification, setNotification] = useState(null); // Notification state
 
 
 const [idForUser, setIdForUser] = useState('');
@@ -179,6 +182,7 @@ const [fullName, setFullName] = useState('');
 const updateUser = async (userId) => {
   try {
     if(check){
+      setNotification({ message: 'Payment is Already Done!', success: true });
       alert("Your payment is already done!")
     }
     else if(rollNumber.length !== 5 && fullName == ""){
@@ -198,7 +202,8 @@ const updateUser = async (userId) => {
     dataToEdit = await dataToEdit.json();
 
     if (dataToEdit.success) {
-      alert("Your Payment process has been done!..");
+      // alert("Your Payment process has been done!..");
+      setNotification({ message: 'Payment successful!', success: true });
       setFullName("")
       setFatherName("")
       setCourse("")
@@ -208,6 +213,7 @@ const updateUser = async (userId) => {
       setRollNumber("")
       setCheck(false)
     } else {
+      setNotification({ message: 'Payment update failed!', success: false });
       console.log(dataToEdit.error);
     }
   }
@@ -301,7 +307,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
 
 
 {/* Background Image */}
-<NextImage src={img} className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
+<NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
 
       {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 
@@ -384,6 +390,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
             <h1> Upload Here</h1>
           ) : (
             <NextImage
+            alt="image"
               // cloudName="dbcpfhk6n"
               src={paymentImg}
               // style={{ width: "100%", height: "100%" }}
@@ -430,6 +437,10 @@ console.log("Image Url ka baap hon----->", paymentImg)
          >Submit</Button> */}
 
          <button onClick={() => updateUser(idForUser)}>Submit</button>
+
+         
+
+         {notification && <Notification message={notification.message} success={notification.success} />}
 
       </div>
     </div>

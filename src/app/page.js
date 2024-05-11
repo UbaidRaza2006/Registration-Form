@@ -5,7 +5,7 @@ import style from "../app/globals.css"
 import { useContext, useEffect, useRef, useState } from "react";
 import InputComponent from "../components/InputComponent";
 import SelectComponent from "../components/SelectComponent";
-import { batchOptions, courseOptions} from '../utils';
+import { batchOptions, courseOptions } from '../utils';
 // import IdCardModal from '../components/IdCardComponent';
 import { usePassword } from '../context';
 import Navbar from '../components/Navbar';
@@ -16,11 +16,11 @@ import Image from "next/image";
 
 
 export default function MainPage() {
-    
-    
-    
+
+
+
     const [allCourses, setAllCourses] = useState([])
-    
+
     const initialFormData = {
         fullName: '',
         fatherName: '',
@@ -58,7 +58,7 @@ export default function MainPage() {
     const [isFormDisabled, setIsFormDisabled] = useState(false);
     const [currentUser, setCurrentUser] = useState(null)
 
-  
+
 
 
     const handleImageUpload = async (e) => {
@@ -101,36 +101,36 @@ export default function MainPage() {
             console.error('Error uploading image to Cloudinary:', error);
         }
     };
-    
+
     // Function to convert an image URL to base64
     const getBase64Image = async (imageUrl) => {
         // Check if window is defined (i.e., we're in the browser environment)
         if (typeof window !== 'undefined') {
-          try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(reader.result);
-              reader.onerror = reject;
-              reader.readAsDataURL(blob);
-            });
-          } catch (error) {
-            console.error('Error fetching image for base64 conversion:', error);
-            return null;
-          }
+            try {
+                const response = await fetch(imageUrl);
+                const blob = await response.blob();
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                console.error('Error fetching image for base64 conversion:', error);
+                return null;
+            }
         } else {
-          // Handle the case where window is not defined (e.g., in a server-side context)
-          console.warn('getBase64Image function is being executed in a non-browser context.');
-          return null;
+            // Handle the case where window is not defined (e.g., in a server-side context)
+            console.warn('getBase64Image function is being executed in a non-browser context.');
+            return null;
         }
-      };
-      
-    
-    
-    
-    
-   
+    };
+
+
+
+
+
+
 
     // cnic and phone
     const formatPhoneNumber = (input) => {
@@ -182,7 +182,7 @@ export default function MainPage() {
 
             console.log("formData-->", formData);
             const res = await registerUser(formData);
-            
+
             // setResData(res.user)
             console.log("res-->", res);
 
@@ -192,7 +192,7 @@ export default function MainPage() {
 
                 setShowModal(true);
             }
-            
+
 
 
 
@@ -220,7 +220,7 @@ export default function MainPage() {
     }
 
 
-    const registerUser= async (formData) => {
+    const registerUser = async (formData) => {
         try {
             const response = await fetch("/api/registartion",
                 {
@@ -228,18 +228,18 @@ export default function MainPage() {
                     headers: {
                         'content-type': 'application/json',
                     },
-    
+
                     body: JSON.stringify(formData)
                 });
-                
-                const data = await response.json()
-                return data;
-                
-            } 
-            catch (e) {
-                console.log('error', e);
-            }
+
+            const data = await response.json()
+            return data;
+
         }
+        catch (e) {
+            console.log('error', e);
+        }
+    }
 
 
     useEffect(() => {
@@ -278,25 +278,25 @@ export default function MainPage() {
     const gettingCourses = async () => {
         console.log("gettingCourses");
         try {
-          const res = await fetch("/api/courses", {
-            method: "GET",
-            cache: "no-cache", // Set cache control policy to 'no-cache'
-          });
-          const data = await res.json();
-          console.log("gettingCourses ka data-->", data)
-    
-          if (data.success) {
-            const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
-            console.log("allCourses-->", courses)
-            setAllCourses(courses);
-          } else {
-            setAllCourses([]);
-            console.log(data)
-          }
+            const res = await fetch("/api/courses", {
+                method: "GET",
+                cache: "no-cache", // Set cache control policy to 'no-cache'
+            });
+            const data = await res.json();
+            console.log("gettingCourses ka data-->", data)
+
+            if (data.success) {
+                const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
+                console.log("allCourses-->", courses)
+                setAllCourses(courses);
+            } else {
+                setAllCourses([]);
+                console.log(data)
+            }
         } catch (error) {
-          console.error("Error fetching courses:", error);
+            console.error("Error fetching courses:", error);
         }
-      };
+    };
 
 
     // console.log(formData);
@@ -500,21 +500,21 @@ export default function MainPage() {
                         }}
                     />
 
-<SelectComponent
-  label="Select Course"
-  options={allCourses
-    .filter((course) => course.admission === 'Opened')
-    .map((course) => ({ value: course.course, label: course.course }))}
-  value={formData.course}
-  onChange={(event) => {
-    const selectedCourse = allCourses.find((course) => course.course === event.target.value);
-    setFormData({
-      ...formData,
-      course: event.target.value,
-      batch: selectedCourse?.batch, // Set batch if selectedCourse exists
-    });
-  }}
-/>
+                    <SelectComponent
+                        label="Select Course"
+                        options={allCourses
+                            .filter((course) => course.admission === 'Opened')
+                            .map((course) => ({ value: course.course, label: course.course }))}
+                        value={formData.course}
+                        onChange={(event) => {
+                            const selectedCourse = allCourses.find((course) => course.course === event.target.value);
+                            setFormData({
+                                ...formData,
+                                course: event.target.value,
+                                batch: selectedCourse?.batch, // Set batch if selectedCourse exists
+                            });
+                        }}
+                    />
 
 
                 </div>
@@ -547,7 +547,7 @@ export default function MainPage() {
                 </div>
 
 
-                          <div className="image-uploader" onClick={() => document.getElementById('image-upload').click()}>
+                <div className="image-uploader" onClick={() => document.getElementById('image-upload').click()}>
                     <input id="image-upload" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
 
                     {image && <Image cloudName="dbcpfhk6n" src={image} alt="image" style={{ width: '100px', height: '150px' }} width={600} height={400} />}
@@ -589,12 +589,12 @@ export default function MainPage() {
                     disabled={!isFormValid()}
                 >Register</button>
 
-         </div>
+            </div>
 
             <div>
                 {/* <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} /> */}
             </div>
- </div>
+        </div>
 
     )
 }

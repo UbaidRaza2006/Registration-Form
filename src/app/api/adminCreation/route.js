@@ -22,7 +22,7 @@ const AdminSchema = Joi.object({
     adminName: Joi.string().required(),
     adminPassword: Joi.string().required(),
     admissions: Joi.string().required(),
-    textAdmission: Joi.string().required(),
+    textAdmission: Joi.string(),
 })
 
 

@@ -21,6 +21,7 @@ import {
   HistoryOutlined,
   SaveOutlined,
   EditOutlined,
+  CloseOutlined,
   EyeOutlined,
   PlusOutlined,
   ReloadOutlined,
@@ -33,7 +34,6 @@ import Batch from '../CourseBatch';
 import Image from 'next/image';
 import AdmissionModal from '../CourseAdmission';
 import ReactModal from 'react-modal';
-import { CheckCircle } from '@mui/icons-material';
 import BatchModal from '../CourseBatch';
 import DeleteModal from '../CourseDelete';
 import img from "../../../public/images/—Pngtree—line building dubai city silhouette_5978784.png"
@@ -136,7 +136,7 @@ function SideNavbarComponent() {
   
 
 
-  const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad } = usePassword();
+  const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad, sideNavbarCity,setSideNavbarCity } = usePassword();
 
   console.log(inputCondition)
   console.log(inputPassword)
@@ -201,7 +201,7 @@ const handlePassword = () => {
   else if (inputCondition === "recheck") {
     if (inputPassword === recheckPassword) {
       setAdminPassword(inputPassword)
-      updateAdminPassword("66032b8c2c0200b18d1d8a4c")
+      updateAdminPassword(admin._id)
       setInputPassword("")
       setInputCondition("done")
 
@@ -231,6 +231,8 @@ const handlePassword = () => {
         // console.log("info-->",data);
         if (data.success) {
           alert(`Passowrd has been Updated!.. into  ${data.result.adminPassword}`)
+          gettingAdmin()
+          handleCancel(1)
           setInputCondition("verify")
           // setOpen(false);
         }
@@ -566,6 +568,11 @@ const handlePassword = () => {
         });
       };
 
+      const eyeOutlinedClick = (value) => {
+        console.log("sideNavbarCity-->",value)
+        setSideNavbarCity(value)
+      };
+
       
       useEffect(() => {
         const handleSearch = async () => {
@@ -872,6 +879,7 @@ const handlePassword = () => {
         contentLabel="Custom Modal"
       >
         <div className="flex flex-col w-full h-full">  {/* Full modal width and height */}
+        <CloseOutlined onClick={() => handleCancel(7)} className='absolute right-2 top-2 text-gray-500 cursor-pointer' />
           <div className="flex-grow overflow-hidden"> {/* Upper section with content, hidden overflow */}
             <h1 className="text-3xl font-bold text-center mb-2">Students From Everywhere</h1>
           </div>
@@ -916,6 +924,12 @@ const handlePassword = () => {
                       {/* <Image src={img1} alt='Some' className='bg-current'/> */}
                     </span>
                     <span className="text-lg ml-3">{city._id}</span>
+                    <span className="flex-shrink-0 h-6 w-6 rounded-md text-gray-900 border-2 border-[#0e686efa] flex items-center justify-center ml-auto mr-[-10px]">
+                      {/* Replace with your desired Ant Design icon */}
+                      {/* <Icon name="icon-name" className="h-4 w-4" /> */}
+                          <EyeOutlined onClick={()=>{eyeOutlinedClick(city._id)}}/>
+                      {/* <Image src={img1} alt='Some' className='bg-current'/> */}
+                    </span>
                   </li>
       ))
     )}
@@ -939,7 +953,7 @@ const handlePassword = () => {
                     <span className="flex-shrink-0 h-6 w-6 rounded-md text-gray-900 border-2 border-[#0e686efa] flex items-center justify-center ml-auto mr-[-10px]">
                       {/* Replace with your desired Ant Design icon */}
                       {/* <Icon name="icon-name" className="h-4 w-4" /> */}
-                          <EyeOutlined/>
+                          <EyeOutlined onClick={()=>{eyeOutlinedClick(city._id)}}/>
                       {/* <Image src={img1} alt='Some' className='bg-current'/> */}
                     </span>
                   </li>

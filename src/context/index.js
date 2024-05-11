@@ -28,9 +28,10 @@ export const PasswordProvider = ({ children }) => {
   const [api, setApi] = useState(false);
   const [coursesToLoad, setCoursesToLoad] = useState(false);
   const [allowAdmission,setAllowAdmission] = useState("");
+  const [sideNavbarCity,setSideNavbarCity] = useState("");
 
   return (
-    <PasswordContext.Provider value={{ password, setPassword ,api,setApi, allowAdmission,setAllowAdmission,coursesToLoad, setCoursesToLoad}}>
+    <PasswordContext.Provider value={{ password, setPassword ,api,setApi, allowAdmission,setAllowAdmission,coursesToLoad, setCoursesToLoad, sideNavbarCity,setSideNavbarCity}}>
       {children}
     </PasswordContext.Provider>
   );

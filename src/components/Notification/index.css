@@ -1,0 +1,43 @@
+.notification {
+  position: fixed;
+  top: 10px; /* Adjust for position preference (can be bottom) */
+  right: 10px;
+  padding: 1rem; /* Adjust padding for content size */
+  border-radius: 4px;
+  z-index: 9999; /* Ensure notification is above other content */
+  font-size: 0.8rem;
+  min-width: 200px; /* Set minimum width for notification */
+  background-color: #fff; /* Adjust background color if needed */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.notification.success {
+  color: #388e3c; /* Green text for success notifications */
+}
+
+.notification.error {
+  color: #a94442; /* Red text for error notifications */
+}
+
+.notification.hidden {
+  opacity: 0;
+  transform: translateY(-10px); /* Animate notification exit */
+}
+
+.message {
+  margin: 0; /* Remove default margin for better spacing */
+}
+
+.progressBar {
+  height: 5px; /* Adjust height for a cleaner bar */
+  width: 100%;
+  background-color: #388e3c; /* Green progress bar for success */
+  background-color: #a94442; /* Red progress bar for error */
+  position: absolute; /* Position bar at the bottom */
+  bottom: 0; /* Align bar to the bottom edge */
+  left: 0; /* Align bar to the left edge */
+  transition: width 0.5s ease-in-out; /* Animate progress bar depletion */
+  background-color: #fff; /* Set progress bar background to white */
+  transition: width + (duration / 1000) + 's ease-in-out'; /* Adjust transition duration based on desired time (3 seconds here) */
+}
