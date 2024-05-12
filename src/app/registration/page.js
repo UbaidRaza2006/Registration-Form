@@ -119,6 +119,10 @@ export default function AdminPage() {
   const [rollNumberDone, setRollNumberDone] = useState("")
   const [cnicNumberDone, setCnicNumberDone] = useState("")
 
+  const [allCourses, setAllCourses] = useState([])
+  const [city123, setCity123] = useState("")
+
+
 
 
 
@@ -366,6 +370,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     // /api/students
     gettingAdmin();
     gettingUsers();
+    gettingCourses();
   }, []);
 
   useEffect(() => {
@@ -471,9 +476,44 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     }
   };
 
+  const gettingCourses = async () => {
+    console.log("gettingCourses");
+    try {
+      const res = await fetch("/api/courses", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      console.log("gettingCourses ka data-->", data)
+
+      if (data.success) {
+        const courses = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
+        console.log("allCourses-->", courses)
+
+        const sortedCourses = courses.slice().sort((a, b) => {
+          const courseA = a.course.toLowerCase(); // Convert to lowercase for case-insensitive sorting
+          const courseB = b.course.toLowerCase();
+        
+          // Natural sorting using localeCompare with options
+          return courseA.localeCompare(courseB, undefined, { numeric: true });
+        });
+
+
+
+        setAllCourses(courses);
+        setCoursesToLoad(false)
+      } else {
+        setAllCourses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
 
   console.log("All Users:", allUsers.length, "-->", allUsers);
   console.log("Verified Users:", verifiedUsers.length, "-->", verifiedUsers);
+  console.log("All Courses:", allCourses.length, "-->", allCourses);
 
 
   // const handleUserDeleted = (deletedUserId) => {
@@ -702,7 +742,14 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     },
   ];
 
-
+  const handleKeyDown = (event) => {
+    console.log(event.key); // Access event.key directly within the function
+    if (event.key === "Enter") {
+      // Capitalize the first letter of each word
+      const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
+      setCity(formattedValue);
+    }
+  };
 
 
 
@@ -785,60 +832,49 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
       {/* City */}
 
-<Input
-                style={{height:"32px", width:"115px"}}
-                className="placeholder-gray-300 text-md bg-white"
-                type="text"
-                placeholder="City"
-                label=""
-                value={city || undefined}
-                onChange={(event) => {
-
-                    const newValue = event.target.value;
-
-                    // Capitalize the first letter of each word
-                    const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
-
-                    // Update the state with the formatted name
-                    setCity(formattedValue)
-                }} />
+      <Input
+      style={{ height: "32px", width: "115px" }}
+      className="placeholder-gray-300 text-md bg-white"
+      type="text"
+      placeholder="City"
+      label=""
+      value={city || undefined}
+      onChange={(event) => event.target.value} // Update state for visual feedback
+      onKeyDown={handleKeyDown}
+    />
                 
 
       {/* Course */}
       <Select
-        showSearch
-        style={{ width: 120 }}
-        value={course || undefined}
-        placeholder="Course"
-        optionFilterProp="children"
-        onChange={(value) => setCourse(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Web and App Development">Web & App Development</Select.Option>
-        <Select.Option value="Graphic Designing">Graphic Designing</Select.Option>
-        <Select.Option value="Businees Management">Businees Management</Select.Option>
-        <Select.Option value="Digital Marketing">Digital Marketing</Select.Option>
-      </Select>
+            showSearch
+            style={{ width: 120 }}
+            value={course || undefined}
+            placeholder="Course"
+            optionFilterProp="children"
+            onChange={(value) => setCourse(value)}
+            filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+        >
+            {allCourses.map((course) => (
+                    <Select.Option key={course._id} value={course.course}>
+                        {course.course}
+                    </Select.Option>
+                ))}
+        </Select>
 
       {/* Batch */}
-      <Select
-        showSearch
-        style={{ width: 120 }}
-        value={batch || undefined}
-        placeholder="Batch"
-        optionFilterProp="children"
-        onChange={(value) => setBatch(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="1">1</Select.Option>
-        <Select.Option value="2">2</Select.Option>
-        <Select.Option value="3">3</Select.Option>
-        <Select.Option value="4">4</Select.Option>
-      </Select>
+      <Input
+                style={{height:"32px", width:"115px"}}
+                className="placeholder-gray-300 text-md bg-white"
+                type="number"
+                placeholder="Batch"
+                label=""
+                value={batch || undefined}
+                onChange={(event) => {setBatch(event.target.value)}}
+                 />
+
+      
 
       {/* Status */}
       <Select

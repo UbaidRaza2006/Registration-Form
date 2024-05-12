@@ -36,7 +36,7 @@ const EditDrawerApp = ({ userData }) => {
   const [fatherName, setFatherName] = useState("");
   const [email, setEmail] = useState("");
   const [course, setCourse] = useState("");
-  const [batch, setBatch] = useState("");
+  const [batch, setBatch] = useState(null);
   const [status, setStatus] = useState("");
   const [city, setCity] = useState("");
   const [cnic, setCnic] = useState("");
@@ -131,6 +131,27 @@ const EditDrawerApp = ({ userData }) => {
 
     }
 
+    if (email.includes('@') && email.includes('.com') && !email.includes(' ')) {
+
+      if(cnic.length === 15){
+
+        if(phone.length === 12){
+
+        //  let formattedBatch= batch.replace(/^0+/, '');
+        let formattedBatch = Number(batch).toString().replace(/^0+/, '');
+      
+
+
+          if(formattedBatch && formattedBatch >= 1){
+
+                        if (formattedBatch.includes('.')) {
+                          formattedBatch = Math.floor(parseFloat(formattedBatch));
+                        }
+            
+            if(dateOfBirth){
+
+            
+
     
     const formattedAddress = address.trim().replace(/\s+/g, ' ');
     const formattedQualification = qualification.trim().replace(/\s+/g, ' ');
@@ -139,7 +160,24 @@ const EditDrawerApp = ({ userData }) => {
     const formattedFullName = fullName.trim().replace(/\s+/g, ' ');
     const formattedFatherName = fatherName.trim().replace(/\s+/g, ' ');
     const formattedGender = gender.trim().replace(/\s+/g, ' ');
-    const formattedBatch = batch.trim().replace(/\s+/g, ' ');
+
+
+                  if(formattedFullName.length>0){
+
+                    if(formattedFatherName.length>0){
+
+                      if(formattedCity.length>0){
+
+                        if(formattedAddress.length>0){
+
+                          if(formattedQualification.length>0){
+
+
+
+
+                      
+                  
+
 
 
 
@@ -152,7 +190,10 @@ const EditDrawerApp = ({ userData }) => {
       }
     })
     data = await data.json()
-    // console.log("info-->",data);
+
+
+
+    // main yaha se he
     if (data.success) {
       alert("User has been Updated!..")
       // setOpen(false);
@@ -160,6 +201,149 @@ const EditDrawerApp = ({ userData }) => {
     else {
       console.log(data);
     }
+    // main yahann tk he
+
+
+  }
+  else {
+
+
+    const qualificationInput = document.getElementById('qualificationInput');
+    if (qualificationInput) {
+        qualificationInput.focus();
+        alert('Please fill the Qualification field');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const addressInput = document.getElementById('addressInput');
+    if (addressInput) {
+        addressInput.focus();
+        alert('Please fill the Address field');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const cityInput = document.getElementById('cityInput');
+    if (cityInput) {
+        cityInput.focus();
+        alert('Please fill the City field');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const fnameInput = document.getElementById('fnameInput');
+    if (fnameInput) {
+        fnameInput.focus();
+        alert('Please fill the Father Name field');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const nameInput = document.getElementById('nameInput');
+    if (nameInput) {
+        nameInput.focus();
+        alert('Please fill the Name field');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const dateInput = document.getElementById('dateInput');
+    if (dateInput) {
+        dateInput.focus();
+        alert('Please select a D/O/B');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+  else {
+
+
+    const batchInput = document.getElementById('batchInput');
+    if (batchInput) {
+        batchInput.focus();
+        alert('The batch shoul be atleast 1');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+  
+  }
+  }
+else {
+
+
+  const phoneInput = document.getElementById('phoneInput');
+  if (phoneInput) {
+      phoneInput.focus();
+      alert('Please enter your complete Phone #');
+      return;
+  }
+  // Optionally, you can show an error message or handle the validation failure in another way
+  console.log("id error");
+
+}
+      }
+  else {
+
+
+    const cnicInput = document.getElementById('cnicInput');
+    if (cnicInput) {
+        cnicInput.focus();
+        alert('Please enter your complete Cnic');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+
+}
+  }
+  else {
+
+
+    const emailInput = document.getElementById('emailInput');
+    if (emailInput) {
+        emailInput.focus();
+        alert('Please enter a valid email address.');
+        return;
+    }
+    // Optionally, you can show an error message or handle the validation failure in another way
+    console.log("id error");
+
+}
   }
 
 
@@ -479,6 +663,7 @@ const getBase64PaymentImage = async (imageUrl) => {
 
             <InputComponent
               type="text"
+              id="nameInput"
               placeholder="Full Name"
               label="Full Name"
               value={fullName}
@@ -495,6 +680,7 @@ const getBase64PaymentImage = async (imageUrl) => {
             />
             <InputComponent
               type="text"
+              id="fnameInput"
               placeholder="Father Name"
               label="Father Name"
 
@@ -571,6 +757,7 @@ const getBase64PaymentImage = async (imageUrl) => {
             />
             <InputComponent
               type="text"
+              id="cityInput"
               placeholder="City"
               label="City"
               value={city}
@@ -585,6 +772,7 @@ const getBase64PaymentImage = async (imageUrl) => {
               }}
             />
             <InputComponent
+              id="dateInput"
               type="date"
               placeholder="Date Of Birth"
               label="D/O/B"
@@ -598,6 +786,7 @@ const getBase64PaymentImage = async (imageUrl) => {
 
             <SelectComponent
               label="Gender"
+              id="genderInput"
               options={[
                 { id: "male", label: "Male" },
                 { id: "female", label: "Female" },
@@ -615,6 +804,7 @@ const getBase64PaymentImage = async (imageUrl) => {
 
             <SelectComponent
               label="Course"
+              id="courseInput"
               options={courseOptions}
               value={course}
               onChange={(event) => {
@@ -623,8 +813,9 @@ const getBase64PaymentImage = async (imageUrl) => {
             />
 
             <InputComponent
+            id="batchInput"
               label="Batch"
-              type={"number"}
+              type="number"
               // options={batchOptions}
               value={batch}
               onChange={(event) => {
@@ -636,22 +827,32 @@ const getBase64PaymentImage = async (imageUrl) => {
             <div style={{ marginTop: "20px" }}>
 
               <InputComponent
+              id="qualificationInput"
                 type="text"
                 placeholder="Qualification"
                 label="Edit Qualification"
                 value={qualification}
                 onChange={(event) => {
-                  setQualification(event.target.value)
+                  const newValue = event.target.value;
+
+                // Capitalize the first letter of each word
+                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                  setQualification(formattedValue)
                 }}
               /></div>
             <div style={{ marginTop: "20px" }}>
               <InputComponent
+              id="addressInput"
                 type="text"
                 placeholder="Address"
                 label="Edit Address"
                 value={address}
                 onChange={(event) => {
-                  setAddress(event.target.value)
+                  const newValue = event.target.value;
+
+                // Capitalize the first letter of each word
+                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                  setAddress(formattedValue)
                 }}
               />
             </div>
@@ -676,135 +877,7 @@ const getBase64PaymentImage = async (imageUrl) => {
         </div>
 
 
-        {/* <Form layout="vertical" hideRequiredMark>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="name" 
-                label="Name"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter user name',
-                  },
-                ]}
-              >
-                <Input placeholder="Please enter user name" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="url"
-                label="Url"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter url',
-                  },
-                ]}
-              >
-                <Input
-                  style={{
-                    width: '100%',
-                  }}
-                  addonBefore="http://"
-                  addonAfter=".com"
-                  placeholder="Please enter url"
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="owner"
-                label="Owner"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select an owner',
-                  },
-                ]}
-              >
-                <Select placeholder="Please select an owner">
-                  <Option value="xiao">Xiaoxiao Fu</Option>
-                  <Option value="mao">Maomao Zhou</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="type"
-                label="Type"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please choose the type',
-                  },
-                ]}
-              >
-                <Select placeholder="Please choose the type">
-                  <Option value="private">Private</Option>
-                  <Option value="public">Public</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="approver"
-                label="Approver"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please choose the approver',
-                  },
-                ]}
-              >
-                <Select placeholder="Please choose the approver">
-                  <Option value="jack">Jack Ma</Option>
-                  <Option value="tom">Tom Liu</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="dateTime"
-                label="DateTime"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please choose the dateTime',
-                  },
-                ]}
-              >
-                <DatePicker.RangePicker
-                  style={{
-                    width: '100%',
-                  }}
-                  getPopupContainer={(trigger) => trigger.parentElement}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'please enter url description',
-                  },
-                ]}
-              >
-                <Input.TextArea rows={4} placeholder="please enter url description" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form> */}
+      
       </Drawer>
     </>
   );

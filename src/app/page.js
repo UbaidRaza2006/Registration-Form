@@ -180,44 +180,248 @@ export default function MainPage() {
     async function handleRegister() {
         if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')) {
 
-            console.log("formData-->", formData);
-            const res = await registerUser(formData);
+            if(formData.cnic.length === 15){
+      
+              if(formData.phone.length === 12){
+      
+              //  let formattedBatch= batch.replace(/^0+/, '');
+              let formattedBatch = Number(formData.batch).toString().replace(/^0+/, '');
+            
+      
+      
+                if(formattedBatch && formattedBatch >= 1){
+      
+                              if (formattedBatch.includes('.')) {
+                                formattedBatch = Math.floor(parseFloat(formattedBatch));
+                              }
+                  
+                  if(formData.dateOfBirth){
+      
+                  
+      
+          
+          const formattedAddress = formData.address.trim().replace(/\s+/g, ' ');
+          const formattedQualification = formData.qualification.trim().replace(/\s+/g, ' ');
+          const formattedCity = formData.city.trim().replace(/\s+/g, ' ');
+          const formattedFullName = formData.fullName.trim().replace(/\s+/g, ' ');
+          const formattedFatherName = formData.fatherName.trim().replace(/\s+/g, ' ');
+      
+      
+                        if(formattedFullName.length>0){
+      
+                          if(formattedFatherName.length>0){
+      
+                            if(formattedCity.length>0){
+      
+                              if(formattedAddress.length>0){
+      
+                                if(formattedQualification.length>0){
 
-            // setResData(res.user)
-            console.log("res-->", res);
+                                    if(formData.imageUrl){
 
-            if (res.success) {
+      
+      
+      
+      
+                            
+                        
 
-                setShowModal(true);
-                setCurrentUser(res.user)
+            // ye main code hein ayha se
 
-            }
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                fullName: formattedFullName,
+                fatherName: formattedFatherName,
+                batch: formattedBatch,
+                city: formattedCity,
+                qualification: formattedQualification,
+                address: formattedAddress,
+            }));
+        
+           finalRegistration()
+
+            
+
+            // ye main code he yahan tk
 
 
-
-
-
-            setButtonClicked(true);
-
-            // Set a timeout to reset the button state after a certain duration
-            setTimeout(() => {
-                setButtonClicked(false);
-            }, 300);
+            
+        }
+        else{
+            alert("Provide Your Image")
+        }
         }
         else {
-
-
-            const emailInput = document.getElementById('emailInput');
-            if (emailInput) {
-                emailInput.focus();
-                alert('Please enter a valid email address.');
-                return;
+      
+      
+          const qualificationInput = document.getElementById('qualificationInput');
+          if (qualificationInput) {
+              qualificationInput.focus();
+              alert('Please fill the Qualification field');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+          const addressInput = document.getElementById('addressInput');
+          if (addressInput) {
+              addressInput.focus();
+              alert('Please fill the Address field');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+          const cityInput = document.getElementById('cityInput');
+          if (cityInput) {
+              cityInput.focus();
+              alert('Please fill the City field');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+          const fnameInput = document.getElementById('fnameInput');
+          if (fnameInput) {
+              fnameInput.focus();
+              alert('Please fill the Father Name field');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+          const nameInput = document.getElementById('nameInput');
+          if (nameInput) {
+              nameInput.focus();
+              alert('Please fill the Name field');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+          const dateInput = document.getElementById('dateInput');
+          if (dateInput) {
+              dateInput.focus();
+              alert('Please select a D/O/B');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+        
+        }
+        }
+        else {
+      
+      
+        //   const batchInput = document.getElementById('batchInput');
+        //   if (batchInput) {
+        //       batchInput.focus();
+              alert('There might be some error, Try again!');
+        //       return;
+        //   }
+        //   // Optionally, you can show an error message or handle the validation failure in another way
+        //   console.log("id error");
+        
+        }
+        }
+      else {
+      
+      
+        const phoneInput = document.getElementById('phoneInput');
+        if (phoneInput) {
+            phoneInput.focus();
+            alert('Please enter your complete Phone #');
+            return;
+        }
+        // Optionally, you can show an error message or handle the validation failure in another way
+        console.log("id error");
+      
+      }
             }
-            // Optionally, you can show an error message or handle the validation failure in another way
-            console.log("id error");
+        else {
+      
+      
+          const cnicInput = document.getElementById('cnicInput');
+          if (cnicInput) {
+              cnicInput.focus();
+              alert('Please enter your complete Cnic');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+      
+      }
+        }
+        else {
+      
+      
+          const emailInput = document.getElementById('emailInput');
+          if (emailInput) {
+              emailInput.focus();
+              alert('Please enter a valid email address.');
+              return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+      
+      }
+        }
+
+
+        const finalRegistration = async () => {
+
+            console.log("formData-->", formData);
+        const res = await registerUser(formData);
+
+        // setResData(res.user)
+        console.log("res-->", res);
+
+        if (res.success) {
+
+            setShowModal(true);
+            setCurrentUser(res.user)
 
         }
-    }
+
+
+
+
+
+        setButtonClicked(true);
+
+        // Set a timeout to reset the button state after a certain duration
+        setTimeout(() => {
+            setButtonClicked(false);
+        }, 300);
+
+
+
+        } 
 
 
     const registerUser = async (formData) => {
@@ -257,15 +461,7 @@ export default function MainPage() {
             }));
         }
     }, [allCourses]);
-    // useEffect(() => {
-    //     // Check if allCourses has data and the course field is not already set in formData
-    //     if (allCourses.length > 0 && !formData.course) {
-    //       setFormData({
-    //         ...formData,
-    //         course: allCourses[0].course // Set course to the _id of the first course
-    //       });
-    //     }
-    //   }, [allCourses, formData.course]);
+
 
     const gettingAdmin = async () => {
         console.log("gettingAdmin")
@@ -384,6 +580,7 @@ export default function MainPage() {
 
                     <InputComponent
                         type="text"
+                        id="nameInput"
                         placeholder="Full Name"
                         label="Full Name"
                         value={formData.fullName}
@@ -402,6 +599,7 @@ export default function MainPage() {
                         }} />
                     <InputComponent
                         type="text"
+                        id="fnameInput"
                         placeholder="Father Name"
                         label="Father Name"
 
@@ -464,6 +662,7 @@ export default function MainPage() {
                         }} />
                     <InputComponent
                         type="text"
+                        id="cityInput"
                         placeholder="City"
                         label="City"
                         value={formData.city}
@@ -481,6 +680,7 @@ export default function MainPage() {
                         }} />
                     <InputComponent
                         type="date"
+                        id="dateInput"
                         placeholder="Date Of Birth"
                         label="Date Of Birth"
 
@@ -497,6 +697,7 @@ export default function MainPage() {
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6'>
                     <SelectComponent
                         label="Select Gender"
+                        id="genderInput"
                         options={[
                             { id: "Male", label: "Male" },
                             { id: "Female", label: "Female" },
@@ -512,6 +713,7 @@ export default function MainPage() {
 
                     <SelectComponent
                         label="Select Course"
+                        id="courseInput"
                         options={allCourses
                             .filter((course) => course.admission === 'Opened')
                             .map((course) => ({ value: course.course, label: course.course }))}
@@ -533,24 +735,34 @@ export default function MainPage() {
                 <div className="w-full mt-[35px] lg:mt-[15px] mx:mt-[15px] md:mt-[15px] mr-0 mb-0 ml-0 space-y-6">
                     <InputComponent
                         type="text"
+                        id="qualificationInput"
                         placeholder="Qualification"
                         label="Qualification"
                         value={formData.qualification}
                         onChange={(event) => {
+                            const newValue = event.target.value;
+
+                // Capitalize the first letter of each word
+                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                             setFormData({
                                 ...formData,
-                                qualification: event.target.value
+                                qualification: formattedValue
                             });
                         }} />
                     <InputComponent
                         type="text"
+                        id="addressInput"
                         placeholder="Address"
                         label="Address"
                         value={formData.address}
                         onChange={(event) => {
+                            const newValue = event.target.value;
+
+                // Capitalize the first letter of each word
+                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                             setFormData({
                                 ...formData,
-                                address: event.target.value
+                                address: formattedValue
                             });
                         }} />
 
@@ -596,7 +808,7 @@ export default function MainPage() {
                 <button
                     onClick={handleRegister}
                     className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
-                    disabled={!isFormValid()}
+                    // disabled={!isFormValid()}
                 >Register</button>
 
             </div>
