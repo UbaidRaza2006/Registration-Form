@@ -5,6 +5,7 @@ import { Router } from "@mui/icons-material";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { Bounce, toast } from "react-toastify";
 
 export default function DeleteIconComponent({id}){
   const router = useRouter();
@@ -19,7 +20,17 @@ let response = await fetch(`/api/students/${id}`,{
 })
 response= await response.json()
 if(response.success){
-  alert("Student Removed!..");
+  toast.success('Student Removed!', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Bounce,
+    });
   // router.replace("/registration")
 
 }

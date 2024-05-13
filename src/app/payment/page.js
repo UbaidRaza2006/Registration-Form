@@ -15,6 +15,7 @@ import img from "../../../public/images/paymentBg5.avif"
 
 import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 import Notification from "../../components/Notification";
+import { Bounce, toast } from "react-toastify";
 
 // const cloudinary = require('cloudinary').v2;
 // import { v2 as cloudinary } from "cloudinary";
@@ -163,13 +164,21 @@ const [fullName, setFullName] = useState('');
         // console.log(fullName,fatherName,course,batch)
 
   }
-  else if(userData.message == "Student not found in the database"){
-    alert("Student not found with this Roll No !")
+  else if(userData.success === false){
+    toast.error(userData.message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
 
   }
-  else{
-    alert("An error occured !")
-  }
+  
  
 
   }else{
@@ -182,11 +191,31 @@ const [fullName, setFullName] = useState('');
 const updateUser = async (userId) => {
   try {
     if(check){
-      setNotification({ message: 'Payment is Already Done!', success: true });
-      alert("Your payment is already done!")
+      // setNotification({ message: 'Payment is Already Done!', success: true });
+      toast.info('Your Payment is already done!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
     else if(rollNumber.length !== 5 && fullName == ""){
-      alert("Enter a correct 5 digit Roll No !")
+      toast.error('Enter a correct 5 digit Roll Number!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
     else if(userId && paymentImg !== "Not-Done" && check == false){
       // setPayment("done")
@@ -203,7 +232,18 @@ const updateUser = async (userId) => {
 
     if (dataToEdit.success) {
       // alert("Your Payment process has been done!..");
-      setNotification({ message: 'Payment successful!', success: true });
+      // setNotification({ message: 'Payment successful!', success: true });
+      toast.success('Payment Successful!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       setFullName("")
       setFatherName("")
       setCourse("")
@@ -212,17 +252,49 @@ const updateUser = async (userId) => {
       setImageee("")
       setRollNumber("")
       setCheck(false)
-    } else {
-      setNotification({ message: 'Payment update failed!', success: false });
+    } else if(dataToEdit.success === false) {
+      toast.error(dataToEdit.error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      // setNotification({ message: 'Payment update failed!', success: false });
       console.log(dataToEdit.error);
     }
   }
   else if(paymentImg== "not-done"){
-    alert("Provide Your Payment Pic!")
+    toast.error('Provide your Payment pic!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
   }
   
   } catch (error) {
     console.error("An error occurred while updating user:", error);
+    toast.error('Error, Try again later!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
   }
 };
 
@@ -440,7 +512,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
 
          
 
-         {notification && <Notification message={notification.message} success={notification.success} />}
+         {/* {notification && <Notification message={notification.message} success={notification.success} />} */}
 
       </div>
     </div>

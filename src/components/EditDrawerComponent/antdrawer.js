@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import NextImage from "next/image"; // Alias one of the imports
 
 import { Image } from 'cloudinary-react';
+import { Bounce, toast } from 'react-toastify';
 
 
 // const cloudinary = require('cloudinary').v2;
@@ -195,11 +196,32 @@ const EditDrawerApp = ({ userData }) => {
 
                         // main yaha se he
                         if (data.success) {
-                          alert("User has been Updated!..")
+                          toast.success('User Updated!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                            });
                           // setOpen(false);
                         }
                         else {
                           console.log(data);
+                          toast.error(data.error, {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                            });
                         }
                         // main yahann tk he
 
@@ -210,8 +232,18 @@ const EditDrawerApp = ({ userData }) => {
 
                         const qualificationInput = document.getElementById('qualificationInput');
                         if (qualificationInput) {
-                          qualificationInput.focus();
-                          alert('Please fill the Qualification field');
+                          toast.error('Fill Qualification!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                            });
+                            qualificationInput.focus();
                           return;
                         }
                         // Optionally, you can show an error message or handle the validation failure in another way
@@ -224,9 +256,19 @@ const EditDrawerApp = ({ userData }) => {
 
                       const addressInput = document.getElementById('addressInput');
                       if (addressInput) {
-                        addressInput.focus();
-                        alert('Please fill the Address field');
-                        return;
+                        toast.error('Fill the Address!', {
+                          position: "top-right",
+                          autoClose: 5000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "light",
+                          transition: Bounce,
+                          });
+                          addressInput.focus();
+                          return;
                       }
                       // Optionally, you can show an error message or handle the validation failure in another way
                       console.log("id error");
@@ -238,8 +280,18 @@ const EditDrawerApp = ({ userData }) => {
 
                     const cityInput = document.getElementById('cityInput');
                     if (cityInput) {
+                      toast.error('Fill the City!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                        });
                       cityInput.focus();
-                      alert('Please fill the City field');
                       return;
                     }
                     // Optionally, you can show an error message or handle the validation failure in another way
@@ -252,8 +304,19 @@ const EditDrawerApp = ({ userData }) => {
 
                   const fnameInput = document.getElementById('fnameInput');
                   if (fnameInput) {
+                    toast.error('Fill the Father Name!', {
+                      position: "top-right",
+                      autoClose: 5000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                      theme: "light",
+                      transition: Bounce,
+                      });
                     fnameInput.focus();
-                    alert('Please fill the Father Name field');
+                    
                     return;
                   }
                   // Optionally, you can show an error message or handle the validation failure in another way
@@ -266,8 +329,19 @@ const EditDrawerApp = ({ userData }) => {
 
                 const nameInput = document.getElementById('nameInput');
                 if (nameInput) {
+                  toast.error('Fill the Name!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                    });
                   nameInput.focus();
-                  alert('Please fill the Name field');
+                  
                   return;
                 }
                 // Optionally, you can show an error message or handle the validation failure in another way
@@ -280,8 +354,19 @@ const EditDrawerApp = ({ userData }) => {
 
               const dateInput = document.getElementById('dateInput');
               if (dateInput) {
+                toast.error('Select D/O/B', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                  });
                 dateInput.focus();
-                alert('Please select a D/O/B');
+                
                 return;
               }
               // Optionally, you can show an error message or handle the validation failure in another way
@@ -294,8 +379,18 @@ const EditDrawerApp = ({ userData }) => {
 
             const batchInput = document.getElementById('batchInput');
             if (batchInput) {
+              toast.error('The Batch should be atleast 1!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
               batchInput.focus();
-              alert('The batch shoul be atleast 1');
               return;
             }
             // Optionally, you can show an error message or handle the validation failure in another way
@@ -308,8 +403,18 @@ const EditDrawerApp = ({ userData }) => {
 
           const phoneInput = document.getElementById('phoneInput');
           if (phoneInput) {
+            toast.error('Enter Complete Phone # !', {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
             phoneInput.focus();
-            alert('Please enter your complete Phone #');
             return;
           }
           // Optionally, you can show an error message or handle the validation failure in another way
@@ -322,8 +427,18 @@ const EditDrawerApp = ({ userData }) => {
 
         const cnicInput = document.getElementById('cnicInput');
         if (cnicInput) {
+          toast.error('Enter Complete Cnic', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
           cnicInput.focus();
-          alert('Please enter your complete Cnic');
           return;
         }
         // Optionally, you can show an error message or handle the validation failure in another way
@@ -337,7 +452,17 @@ const EditDrawerApp = ({ userData }) => {
       const emailInput = document.getElementById('emailInput');
       if (emailInput) {
         emailInput.focus();
-        alert('Please enter a valid email address.');
+        toast.error('Enter a Valid Email Address!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         return;
       }
       // Optionally, you can show an error message or handle the validation failure in another way

@@ -15,6 +15,7 @@ import { findUserByCNIC, getAllUsers, getUserWithCnic } from "../../services/reg
 // import IdCard from "../../components/IdCard";
 import dynamic from "next/dynamic";
 import IdCard from "../../components/IdCard";
+import { Bounce, toast } from "react-toastify";
 
 function DownloadIdCard() {
 
@@ -100,13 +101,32 @@ function DownloadIdCard() {
           const users = Array.isArray(data) ? data : [data];
 
           setUsersWithCnic(users);
-        } else if (userData.message === "Student not found in the database") {
-          alert("Student not found with this Roll No !");
-        } else {
-          alert("An error occurred !");
-        }
+        } else if (userData.success === false) {
+          toast.error(userData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
+        } 
       } catch (error) {
         console.error("Error fetching user data:", error);
+        toast.error('Error, Try again later!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     }
     else{

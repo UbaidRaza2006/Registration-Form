@@ -2,6 +2,7 @@ import ReactModal from 'react-modal';
 import { useEffect, useState } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { usePassword } from '../../context';
+import { Bounce, toast } from 'react-toastify';
 
 const AdmissionModal = ({ isOpen, onClose, user }) => {
   const [isAdmission, setIsAdmission] = useState("Wait..");
@@ -32,12 +33,34 @@ const admissionOfCourse = async (courseId, newStatus) => {
     console.log(data, `/api/courses/${courseId}`)
     console.log("info-->",data);
     if (data.success) {
-      alert(`Admission Status of course: ${data.result.course} has been Updated!.. into  ${data.result.admission}`)
+      // alert(`Admission Status of course: ${data.result.course} has been Updated!.. into  ${data.result.admission}`)
       setCoursesToLoad(true)
+      toast.success(`Admissions are ${data.result.admission}`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       onClose()
     }
     else {
       console.log(data);
+      toast.error('Try again!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      })
     }
     // }
     // else{
@@ -46,6 +69,17 @@ const admissionOfCourse = async (courseId, newStatus) => {
   }
   catch (error) {
     console.log("error-->", error)
+    toast.error(error, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    })
   }
 }
 

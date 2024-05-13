@@ -13,6 +13,8 @@ import SideNavbarComponent from "../../components/SideNavbarComponent"
 import VerificationButton from "../../components/VerificationButton";
 import { usePassword } from "../../context";
 import InputComponent from "../../components/InputComponent";
+import { Bounce, toast } from "react-toastify";
+import { useRadioGroup } from "@mui/material";
 const { Search } = Input;
 
 const { Option } = Select;
@@ -242,15 +244,37 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       setPaymentDone(payment)
       setAllUsers(users);
       setVerifiedUsers(verified);
-    } else if (userData.message === "No students found!") {
+    } else if (userData.success === false) {
       setAllUsers([]);
       setVerifiedUsers([]);
+      toast.error(userData.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       // Consider a more informative message for the user here (e.g., "No students match your filter criteria")
     } else {
       alert("An error occurred!"); // Handle other potential errors more gracefully
     }
   } catch (error) {
     console.error("Error fetching user data:", error);
+    toast.error(error, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
     // Handle network errors or other issues more gracefully (e.g., display an error message to the user)
   } 
   // finally {
@@ -282,15 +306,47 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
-          alert("Student not found with this Roll No !");
+          toast.error('No students found!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
           setAllUsers([])
           // setAlternateUsers(allUsers)
           setVerifiedUsers([]);
         } else {
-          alert("An error occurred !");
+        
+          toast.error(userData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     }
   };
@@ -317,15 +373,46 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
         } else if (userData.message === "No students found!") {
-          alert("Student not found with this Roll No !");
+          toast.error(userData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
           setAllUsers([]);
           setVerifiedUsers([])
           // setAlternateUsers(allUsers)
         } else {
-          alert("An error occurred !");
+          toast.error(userData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.log(error)
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     }
   };
@@ -354,14 +441,45 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
         } else if( queryData.message === "No students found!") {
-          alert("Student not found with this Roll No and Cnic !");
+          toast.error(queryData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
           setAllUsers([]);
           setVerifiedUsers([])
         } else {
-          alert("An error occurred !");
+          toast.error(queryData.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     }
   };
@@ -449,15 +567,46 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       }
       else if(data.message === "No students found!"){
         console.log("No students found!")
-        alert("No students found!")
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
       else{
-        alert("error occured fro api!")
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         console.log("error occured fro api!")
       }
     } catch (error) {
 
       console.log("Error fetching users:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 
@@ -469,10 +618,36 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
       const data = await res.json();
+      if(data.success){
       setAdmin(data.data[0])
+      }
+      else if (data.success === false){
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
       
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching admin:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 

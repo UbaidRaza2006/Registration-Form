@@ -13,6 +13,7 @@ import { Button } from '@mui/material';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IdCardModal from "../components/IdCardComponent";
+import { Bounce, toast } from "react-toastify";
 
 
 
@@ -249,7 +250,18 @@ export default function MainPage() {
                                                 }
                                                 else {
                                                     console.log(formData.imageUrl)
-                                                    alert("Provide Your Image")
+                                                    toast.error('Provide Your Image!', {
+                                                        position: "top-right",
+                                                        autoClose: 5000,
+                                                        hideProgressBar: false,
+                                                        closeOnClick: true,
+                                                        pauseOnHover: true,
+                                                        draggable: true,
+                                                        progress: undefined,
+                                                        theme: "light",
+                                                        transition: Bounce,
+                                                        });
+                                                    
                                                 }
                                             }
                                             else {
@@ -258,7 +270,17 @@ export default function MainPage() {
                                                 const qualificationInput = document.getElementById('qualificationInput');
                                                 if (qualificationInput) {
                                                     console.log(formattedQualification)
-                                                    alert('Please fill the Qualification field');
+                                                    toast.error('Provide Your Qualification!', {
+                                                        position: "top-right",
+                                                        autoClose: 5000,
+                                                        hideProgressBar: false,
+                                                        closeOnClick: true,
+                                                        pauseOnHover: true,
+                                                        draggable: true,
+                                                        progress: undefined,
+                                                        theme: "light",
+                                                        transition: Bounce,
+                                                        });
                                                     qualificationInput.focus();
                                                     return;
                                                 }
@@ -273,7 +295,17 @@ export default function MainPage() {
                                             const addressInput = document.getElementById('addressInput');
                                             if (addressInput) {
                                                 console.log(formattedAddress)
-                                               alert('Please fill the Address field');
+                                                toast.error('Fill the Address field!', {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: true,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                    theme: "light",
+                                                    transition: Bounce,
+                                                    });
                                                addressInput.focus();
                                                 return;
                                             }
@@ -288,7 +320,17 @@ export default function MainPage() {
                                         const cityInput = document.getElementById('cityInput');
                                         if (cityInput) {
                                             console.log(formattedCity)
-                                            alert('Please fill the City field');
+                                            toast.error('Give Your City Name!', {
+                                                position: "top-right",
+                                                autoClose: 5000,
+                                                hideProgressBar: false,
+                                                closeOnClick: true,
+                                                pauseOnHover: true,
+                                                draggable: true,
+                                                progress: undefined,
+                                                theme: "light",
+                                                transition: Bounce,
+                                                });
                                             cityInput.focus();
                                             return;
                                         }
@@ -303,7 +345,17 @@ export default function MainPage() {
                                     const fnameInput = document.getElementById('fnameInput');
                                     if (fnameInput) {
                                         console.log(formattedFatherName)
-                                        alert('Please fill the Father Name field');
+                                        toast.error('Give your Father Name in the field!', {
+                                            position: "top-right",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                            theme: "light",
+                                            transition: Bounce,
+                                            });
                                         fnameInput.focus();
                                         return;
                                     }
@@ -317,8 +369,18 @@ export default function MainPage() {
 
                                 const nameInput = document.getElementById('nameInput');
                                 if (nameInput) {
-                                    console.log(formattedName)
-                                    alert('Please fill the Name field');
+                                    console.log(formattedFullName)
+                                    toast.error('Give youe Name in the field!', {
+                                        position: "top-right",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "light",
+                                        transition: Bounce,
+                                        });
                                     nameInput.focus();
                                     return;
                                 }
@@ -333,7 +395,17 @@ export default function MainPage() {
                             const dateInput = document.getElementById('dateInput');
                             if (dateInput) {
                                 console.log(formData.dateOfBirth)
-                                alert('Please select a D/O/B');
+                                toast.error('Select D/O/B!', {
+                                    position: "top-right",
+                                    autoClose: 5000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: "light",
+                                    transition: Bounce,
+                                    });
                                 dateInput.focus();
                                 return;
                             }
@@ -349,7 +421,17 @@ export default function MainPage() {
                         //   if (batchInput) {
                         //       batchInput.focus();
                         console.log(formData.batch)
-                        alert('There might be some error, Try again!');
+                        toast.error('There might be some Error, Try again!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                            });
                         //       return;
                         //   }
                         //   // Optionally, you can show an error message or handle the validation failure in another way
@@ -363,7 +445,17 @@ export default function MainPage() {
                     const phoneInput = document.getElementById('phoneInput');
                     if (phoneInput) {
                         console.log(formData.phone)
-                        alert('Please enter your complete Phone #');
+                        toast.error('Enter complete Phone #!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                            transition: Bounce,
+                            });
                         phoneInput.focus();
                         return;
                     }
@@ -378,7 +470,17 @@ export default function MainPage() {
                 const cnicInput = document.getElementById('cnicInput');
                 if (cnicInput) {
                     console.log(formData.cnic)
-                    alert('Please enter your complete Cnic');
+                    toast.error('Enter complete Cnic!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                        });
                     cnicInput.focus();
                     return;
                 }
@@ -393,7 +495,17 @@ export default function MainPage() {
             const emailInput = document.getElementById('emailInput');
             if (emailInput) {
                 console.log(formData.email)
-                alert('Please enter a valid email address.');
+                toast.error('Enter a valid Email address!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                    });
                 emailInput.focus();
                 return;
             }
@@ -414,14 +526,41 @@ export default function MainPage() {
 
         if (res.success) {
 
+            toast.success('Registered Successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
             setShowModal(true);
             setCurrentUser(res.user)
-            setFormData(initialFormData)
-            setImage(null)
-            settingCourseAndBatch()
+            // setFormData(initialFormData)
+            // setImage(null)
+            // settingCourseAndBatch()
 
         }
+        else if(res.success === false){
 
+            toast.error(res.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
+        
+
+        }
+           
 
 
 
@@ -456,6 +595,17 @@ export default function MainPage() {
         }
         catch (e) {
             console.log('error', e);
+            toast.error('There is an Internal Error!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
         }
     }
 
@@ -463,6 +613,7 @@ export default function MainPage() {
     useEffect(() => {
         gettingAdmin();
         gettingCourses();
+        // toast("This is awesome!")
     }, []);
 
     useEffect(() => {

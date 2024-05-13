@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useRef } from "react";
+import { Bounce, toast } from "react-toastify";
 
 function IdCard({ user }) {
   const idCardRef = useRef(null);
@@ -38,11 +39,32 @@ function IdCard({ user }) {
       pdf.save(`Student:${user.rollNo}.pdf`);
 
       setIsGenerating(false);
-      setDownloaded(true);
+      toast.success('Downloaded Successfully!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       onClose()
     } catch (e) {
       console.error("Error generating PDF:", e);
       setIsGenerating(false);
+      toast.error('Error, Try again later!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 

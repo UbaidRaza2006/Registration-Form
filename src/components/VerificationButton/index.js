@@ -94,6 +94,7 @@
 
 
 import React, { useState, useEffect } from 'react';
+import { Bounce, toast } from 'react-toastify';
 
 const VerificationButton = ({ id, userStatus }) => {
   const [buttonText, setButtonText] = useState("Pending");
@@ -128,17 +129,49 @@ const VerificationButton = ({ id, userStatus }) => {
       const data = await response.json();
       if (data.success) {
         // setStatus(newStatus);
-        alert("User has been Updated !")
+        toast.success(data.result.status, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         console.log(data.result);
 // setButtonText(newStatus === 'verified' ? 'Verified' : 'Un-verified');
 // setButtonColor(newStatus === 'verified' ? 'green' : 'red');
         // Optionally, you can perform any additional actions upon successful status update
       } else {
         console.error('Error updating user status:', data.error);
+        toast.error(data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         // Handle error if status update fails
       }
     } catch (error) {
       console.error('Error updating user status:', error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       // Handle error if fetch request fails
     }
   };

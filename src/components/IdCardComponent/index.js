@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import ReactModal from "react-modal";
+import { Bounce, toast } from "react-toastify";
 
 const IdCardModal = ({ isOpen, onClose, user }) => {
     const idCardRef = useRef(null);
@@ -65,10 +66,33 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
   
         setIsGenerating(false);
         setDownloaded(true);
+        toast.success('Downloaded Successfully!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         onClose()
       } catch (e) {
         console.error("Error generating PDF:", e);
         setIsGenerating(false);
+        setDownloaded(true);
+        toast.error('Error, Go to Download Page!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     };
   

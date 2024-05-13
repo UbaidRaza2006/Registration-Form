@@ -5,6 +5,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Modal from 'react-modal';
 import "../SideNavbarComponent/index.css"
 import { usePassword } from '../../context';
+import { Bounce, toast } from 'react-toastify';
 
 
 
@@ -35,7 +36,18 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       console.log(data, `/api/courses/${courseId}`)
       // console.log("info-->",data);
       if (data.success) {
-        alert(`New Batch No.${data.result.batch} has been Launched!}`)
+        // alert(`New Batch No.${data.result.batch} has been Launched!}`)
+        toast.success(`Batch ${data.result.batch} has been launched!`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        })
         setIsAdding(false)
         setCoursesToLoad(true)
         onClose();
@@ -44,6 +56,17 @@ const editBatchOfTheCourse = async (batch, courseId) => {
       }
       else {
         console.log(data);
+        toast.error('Try again', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        })
       }
     }
     else {
@@ -52,6 +75,17 @@ const editBatchOfTheCourse = async (batch, courseId) => {
   }
   catch (error) {
     console.log("error-->", error)
+    toast.error(error, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    })
   }
 }
 

@@ -36,7 +36,7 @@ export async function GET(req) {
               return NextResponse.json({
                   success: false,
                   status: 204,
-                  message: "Issue in fetching Admin!",
+                  message: "Issue in fetching Courses!",
               }, {
                   headers: {
                       "Cache-Control": "no-cache",

@@ -39,6 +39,7 @@ import DeleteModal from '../CourseDelete';
 import img from "../../../public/images/—Pngtree—line building dubai city silhouette_5978784.png"
 import img1 from "../../../public/images/images1.png"
 import InputComponent from '../InputComponent';
+import { Bounce, toast } from 'react-toastify';
 const { Sider } = Layout;
 
 
@@ -208,7 +209,17 @@ const handlePassword = () => {
       // alert(`Password changed into "${inputPassword}" `)
     }
     else {
-      alert("Type Again!")
+      toast.error('Type again!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
   // setPassword(inputPassword);
@@ -230,7 +241,17 @@ const handlePassword = () => {
         console.log(data, `/api/admins/${adminId}`)
         // console.log("info-->",data);
         if (data.success) {
-          alert(`Passowrd has been Updated!.. into  ${data.result.adminPassword}`)
+          toast.success(`New Password: ${data.result.adminPassword}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
           gettingAdmin()
           handleCancel(1)
           setInputCondition("verify")
@@ -238,6 +259,17 @@ const handlePassword = () => {
         }
         else {
           console.log(data);
+          toast.error(data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
         }
       }
       else {
@@ -246,6 +278,17 @@ const handlePassword = () => {
     }
     catch (error) {
       console.log("error-->", error)
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
 
@@ -265,11 +308,32 @@ const handlePassword = () => {
         console.log(data, `/api/admins/${adminId}`)
         // console.log("info-->",data);
         if (data.success) {
-          alert(`Message has been sent.....  ${data.result.textAdmission}`)
+          toast.success(`Message sent.....  ${data.result.textAdmission}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
           setMessage("")
         }
         else {
           console.log(data);
+          toast.error(data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+            });
         }
       }
       else {
@@ -278,6 +342,17 @@ const handlePassword = () => {
     }
     catch (error) {
       console.log("error-->", error)
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
 
@@ -296,13 +371,35 @@ const handlePassword = () => {
       console.log(data, `/api/admins/${adminId}`)
       // console.log("info-->",data);
       if (data.success) {
-        alert(`Admission Status has been Updated!.. into  ${data.result.admissions}`)
+        toast.success(`Admissions are.. ${data.result.admissions}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+        
         setAllowAdmission(data.result.admissions)
         // setInputCondition("verify")
         // setOpen(false);
       }
       else {
         console.log(data);
+        toast.error(data.error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
       // }
       // else{
@@ -311,6 +408,17 @@ const handlePassword = () => {
     }
     catch (error) {
       console.log("error-->", error)
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
 
@@ -445,10 +553,36 @@ const handlePassword = () => {
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
       const data = await res.json();
+      if(data.success){
       setAdmin(data.data[0])
+      }
+      else{
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
 
     } catch (error) {
       console.error("Error fetching users:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 
@@ -480,10 +614,32 @@ const handlePassword = () => {
         setAllCourses(courses);
         setCoursesToLoad(false)
       } else {
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         setAllCourses([]);
       }
     } catch (error) {
       console.error("Error fetching courses:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 
@@ -501,9 +657,31 @@ const handlePassword = () => {
       }
       else{
         console.log(data)
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
       }
     } catch (error) {
       console.error("Error fetching cities:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 
@@ -539,16 +717,48 @@ const handlePassword = () => {
               
               const data = await response.json()
               if(data.success){
-                alert("Course Added ",data.course.course)
+                toast.success('Course Added!', {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                  });
                 console.log("data-->",data)
               }
               else{
                 console.log("data-->",data)
+                toast.error(data.message, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+                  });
               }
               
           } 
           catch (e) {
               console.log('error', e);
+              toast.error(e, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
           }
       }
 
@@ -580,8 +790,32 @@ const handlePassword = () => {
           try {
             const newSearchedCities = await searchingCities(uniqueCities, searchTerm);
             setSearchedCities(newSearchedCities);
+            if(newSearchedCities.length===0){
+              toast.error("City not Found!", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
+            }
           } catch (error) {
             console.error('Error performing search:', error);
+            toast.error(error, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+              });
             // Handle errors appropriately (e.g., display an error message)
           } finally {
             setIsLoading(false); // Set loading state to false regardless of success or error

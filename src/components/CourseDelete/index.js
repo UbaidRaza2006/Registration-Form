@@ -5,6 +5,7 @@ import "../SideNavbarComponent/index.css"
 import { usePassword } from '../../context';
 import { useState } from 'react';
 import ReactModal from 'react-modal';
+import { Bounce, toast } from 'react-toastify';
 
 
 
@@ -28,7 +29,17 @@ try{
   })
   response= await response.json()
   if(response.success){
-    alert("Course Deleted!..");
+    toast.success('Course Deleted..!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    })
     setCoursesToLoad(true)
     onClose()
     setIsAdding(false)
@@ -37,10 +48,32 @@ try{
   }
   else{
     console.log(response)
+    toast.error(response.error, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    })
   }
 }
   catch(e){
     console.log("error-->",e)
+    toast.error(e, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    })
   }
   }
 
