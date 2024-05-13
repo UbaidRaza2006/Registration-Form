@@ -2,12 +2,13 @@ import { Button, Modal } from "antd";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactModal from "react-modal";
 
 const IdCardModal = ({ isOpen, onClose, user }) => {
     const idCardRef = useRef(null);
     const [isGenerating, setIsGenerating] = useState(false);
+    const [downloaded, setDownloaded] = useState(false);
 
     const customStyles = {
         overlay: {
@@ -30,9 +31,15 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
         }
     };
 
+    useEffect(()=>{
+      if(isOpen)
+      setDownloaded(false)
+    },[isOpen])
+
   
     const handleDownload = async () => {
       setIsGenerating(true);
+
   
       const inputData = idCardRef.current;
   
@@ -57,6 +64,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
         pdf.save(`Student:${user.rollNo}.pdf`);
   
         setIsGenerating(false);
+        setDownloaded(true);
+        onClose()
       } catch (e) {
         console.error("Error generating PDF:", e);
         setIsGenerating(false);
@@ -65,14 +74,9 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
   
 
   return (
-   <ReactModal // Create a Modal component
-    //   isOpen={isOpen} // Set the modal's open state based on the prop
-    //   onRequestClose={onClose} // Function to call when the modal is closed
-    //   contentLabel="ID Card Modal" // Label for accessibility
-    //   className="id-card-modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white h-[500px] w-[800px] shadow-md rounded-md z-30" // Modal styling
-    //   overlayClassName="id-card-overlay fixed inset-0 bg-black bg-opacity-50 z-20" // Modal overlay styling
+   <ReactModal className="id-card-overlay fixed inset-0 bg-black bg-opacity-50 z-20" // Modal overlay styling
     isOpen={isOpen}
-        onRequestClose={onClose}
+        onRequestClose={downloaded? onClose : null}
         style={customStyles}
         // className="id-card-modal fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white h-[500px] w-[800px] shadow-md rounded-md z-30" // Modal styling
         contentLabel="Custom Modal"

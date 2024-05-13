@@ -17,18 +17,18 @@ import { Image } from 'cloudinary-react';
 // import { v2 as cloudinary } from "cloudinary";
 
 if (typeof window === 'undefined') {
-    const { v2: cloudinary } = require('cloudinary');
-cloudinary.config({
+  const { v2: cloudinary } = require('cloudinary');
+  cloudinary.config({
     cloud_name: "dbcpfhk6n",
     api_key: "588376267435949",
-    api_secret:"ax1LWxiCFgecD5A2ve7Rfm4kBoA"
-});
+    api_secret: "ax1LWxiCFgecD5A2ve7Rfm4kBoA"
+  });
 }
 
 
 const { Option } = Select;
 const EditDrawerApp = ({ userData }) => {
-  
+
   const [open, setOpen] = useState(false);
   const [viewData, setViewData] = useState({})
 
@@ -50,14 +50,14 @@ const EditDrawerApp = ({ userData }) => {
   const [address, setAddress] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const [studentImage,setStudentImage]= useState("")
-  const [paymentImage,setPaymentImage]= useState("")
+  const [studentImage, setStudentImage] = useState("")
+  const [paymentImage, setPaymentImage] = useState("")
 
   const [verified, setVerified] = useState(true); // Initial state is verified
   const [buttonText, setButtonText] = useState("Pending");
   const [buttonColor, setButtonColor] = useState("Blue");
 
-  
+
   // useEffect(() => {
   //   getUserData(userData._id)
   // }, [userData]);
@@ -93,21 +93,21 @@ const EditDrawerApp = ({ userData }) => {
 
       setStudentImage(result.imageUrl);
       setPaymentImage(result.paymentImg);
-  // useEffect(() => {
-    
-  //   if (userData.status == "verified") {
-  //     setButtonColor("green");
-  //     setButtonText("Verified");
-  //   } else {
-  //     setButtonColor("red");
-  //     setButtonText("Un-verified");
-  //   }
-  // }, []);
-      if(result.status === "Verified"){
+      // useEffect(() => {
+
+      //   if (userData.status == "verified") {
+      //     setButtonColor("green");
+      //     setButtonText("Verified");
+      //   } else {
+      //     setButtonColor("red");
+      //     setButtonText("Un-verified");
+      //   }
+      // }, []);
+      if (result.status === "Verified") {
         setButtonColor("green")
         setButtonText("Verified")
       }
-      else{
+      else {
         setButtonColor("red")
         setButtonText("Un-verified")
       }
@@ -133,217 +133,217 @@ const EditDrawerApp = ({ userData }) => {
 
     if (email.includes('@') && email.includes('.com') && !email.includes(' ')) {
 
-      if(cnic.length === 15){
+      if (cnic.length === 15) {
 
-        if(phone.length === 12){
+        if (phone.length === 12) {
 
-        //  let formattedBatch= batch.replace(/^0+/, '');
-        let formattedBatch = Number(batch).toString().replace(/^0+/, '');
-      
+          //  let formattedBatch= batch.replace(/^0+/, '');
+          let formattedBatch = Number(batch).toString().replace(/^0+/, '');
 
 
-          if(formattedBatch && formattedBatch >= 1){
 
-                        if (formattedBatch.includes('.')) {
-                          formattedBatch = Math.floor(parseFloat(formattedBatch));
+          if (formattedBatch && formattedBatch >= 1) {
+
+            if (formattedBatch.includes('.')) {
+              formattedBatch = Math.floor(parseFloat(formattedBatch));
+            }
+
+            if (dateOfBirth) {
+
+
+
+
+              const formattedAddress = address.trim().replace(/\s+/g, ' ');
+              const formattedQualification = qualification.trim().replace(/\s+/g, ' ');
+              const formattedCity = city.trim().replace(/\s+/g, ' ');
+              const formattedCourse = course.trim().replace(/\s+/g, ' ');
+              const formattedFullName = fullName.trim().replace(/\s+/g, ' ');
+              const formattedFatherName = fatherName.trim().replace(/\s+/g, ' ');
+              const formattedGender = gender.trim().replace(/\s+/g, ' ');
+
+
+              if (formattedFullName.length > 0) {
+
+                if (formattedFatherName.length > 0) {
+
+                  if (formattedCity.length > 0) {
+
+                    if (formattedAddress.length > 0) {
+
+                      if (formattedQualification.length > 0) {
+
+
+
+
+
+
+
+
+
+
+
+
+                        let data = await fetch(`/api/students/${userId}`, {
+                          method: "PUT",
+                          body: JSON.stringify({ _id: userId, address: formattedAddress, batch: formattedBatch, city: formattedCity, cnic, course: formattedCourse, dateOfBirth, email, fatherName: formattedFatherName, fullName: formattedFullName, gender: formattedGender, imageUrl, payment, paymentImg, phone, qualification: formattedQualification, rollNo, status }), headers: {
+                            "Content-Type": "application/json"
+                          }
+                        })
+                        data = await data.json()
+
+
+
+                        // main yaha se he
+                        if (data.success) {
+                          alert("User has been Updated!..")
+                          // setOpen(false);
                         }
-            
-            if(dateOfBirth){
-
-            
-
-    
-    const formattedAddress = address.trim().replace(/\s+/g, ' ');
-    const formattedQualification = qualification.trim().replace(/\s+/g, ' ');
-    const formattedCity = city.trim().replace(/\s+/g, ' ');
-    const formattedCourse = course.trim().replace(/\s+/g, ' ');
-    const formattedFullName = fullName.trim().replace(/\s+/g, ' ');
-    const formattedFatherName = fatherName.trim().replace(/\s+/g, ' ');
-    const formattedGender = gender.trim().replace(/\s+/g, ' ');
+                        else {
+                          console.log(data);
+                        }
+                        // main yahann tk he
 
 
-                  if(formattedFullName.length>0){
-
-                    if(formattedFatherName.length>0){
-
-                      if(formattedCity.length>0){
-
-                        if(formattedAddress.length>0){
-
-                          if(formattedQualification.length>0){
+                      }
+                      else {
 
 
+                        const qualificationInput = document.getElementById('qualificationInput');
+                        if (qualificationInput) {
+                          qualificationInput.focus();
+                          alert('Please fill the Qualification field');
+                          return;
+                        }
+                        // Optionally, you can show an error message or handle the validation failure in another way
+                        console.log("id error");
+
+                      }
+                    }
+                    else {
 
 
-                      
-                  
+                      const addressInput = document.getElementById('addressInput');
+                      if (addressInput) {
+                        addressInput.focus();
+                        alert('Please fill the Address field');
+                        return;
+                      }
+                      // Optionally, you can show an error message or handle the validation failure in another way
+                      console.log("id error");
+
+                    }
+                  }
+                  else {
 
 
+                    const cityInput = document.getElementById('cityInput');
+                    if (cityInput) {
+                      cityInput.focus();
+                      alert('Please fill the City field');
+                      return;
+                    }
+                    // Optionally, you can show an error message or handle the validation failure in another way
+                    console.log("id error");
+
+                  }
+                }
+                else {
 
 
+                  const fnameInput = document.getElementById('fnameInput');
+                  if (fnameInput) {
+                    fnameInput.focus();
+                    alert('Please fill the Father Name field');
+                    return;
+                  }
+                  // Optionally, you can show an error message or handle the validation failure in another way
+                  console.log("id error");
+
+                }
+              }
+              else {
 
 
-    let data = await fetch(`/api/students/${userId}`, {
-      method: "PUT",
-      body: JSON.stringify({ _id: userId, address:formattedAddress, batch:formattedBatch, city:formattedCity, cnic, course:formattedCourse, dateOfBirth, email, fatherName:formattedFatherName, fullName:formattedFullName, gender:formattedGender, imageUrl, payment,paymentImg, phone, qualification:formattedQualification, rollNo, status }), headers: {
-        "Content-Type": "application/json"
+                const nameInput = document.getElementById('nameInput');
+                if (nameInput) {
+                  nameInput.focus();
+                  alert('Please fill the Name field');
+                  return;
+                }
+                // Optionally, you can show an error message or handle the validation failure in another way
+                console.log("id error");
+
+              }
+            }
+            else {
+
+
+              const dateInput = document.getElementById('dateInput');
+              if (dateInput) {
+                dateInput.focus();
+                alert('Please select a D/O/B');
+                return;
+              }
+              // Optionally, you can show an error message or handle the validation failure in another way
+              console.log("id error");
+
+            }
+          }
+          else {
+
+
+            const batchInput = document.getElementById('batchInput');
+            if (batchInput) {
+              batchInput.focus();
+              alert('The batch shoul be atleast 1');
+              return;
+            }
+            // Optionally, you can show an error message or handle the validation failure in another way
+            console.log("id error");
+
+          }
+        }
+        else {
+
+
+          const phoneInput = document.getElementById('phoneInput');
+          if (phoneInput) {
+            phoneInput.focus();
+            alert('Please enter your complete Phone #');
+            return;
+          }
+          // Optionally, you can show an error message or handle the validation failure in another way
+          console.log("id error");
+
+        }
       }
-    })
-    data = await data.json()
+      else {
 
 
+        const cnicInput = document.getElementById('cnicInput');
+        if (cnicInput) {
+          cnicInput.focus();
+          alert('Please enter your complete Cnic');
+          return;
+        }
+        // Optionally, you can show an error message or handle the validation failure in another way
+        console.log("id error");
 
-    // main yaha se he
-    if (data.success) {
-      alert("User has been Updated!..")
-      // setOpen(false);
+      }
     }
     else {
-      console.log(data);
-    }
-    // main yahann tk he
 
 
-  }
-  else {
-
-
-    const qualificationInput = document.getElementById('qualificationInput');
-    if (qualificationInput) {
-        qualificationInput.focus();
-        alert('Please fill the Qualification field');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const addressInput = document.getElementById('addressInput');
-    if (addressInput) {
-        addressInput.focus();
-        alert('Please fill the Address field');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const cityInput = document.getElementById('cityInput');
-    if (cityInput) {
-        cityInput.focus();
-        alert('Please fill the City field');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const fnameInput = document.getElementById('fnameInput');
-    if (fnameInput) {
-        fnameInput.focus();
-        alert('Please fill the Father Name field');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const nameInput = document.getElementById('nameInput');
-    if (nameInput) {
-        nameInput.focus();
-        alert('Please fill the Name field');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const dateInput = document.getElementById('dateInput');
-    if (dateInput) {
-        dateInput.focus();
-        alert('Please select a D/O/B');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-  else {
-
-
-    const batchInput = document.getElementById('batchInput');
-    if (batchInput) {
-        batchInput.focus();
-        alert('The batch shoul be atleast 1');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-  
-  }
-  }
-else {
-
-
-  const phoneInput = document.getElementById('phoneInput');
-  if (phoneInput) {
-      phoneInput.focus();
-      alert('Please enter your complete Phone #');
-      return;
-  }
-  // Optionally, you can show an error message or handle the validation failure in another way
-  console.log("id error");
-
-}
-      }
-  else {
-
-
-    const cnicInput = document.getElementById('cnicInput');
-    if (cnicInput) {
-        cnicInput.focus();
-        alert('Please enter your complete Cnic');
-        return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
-
-}
-  }
-  else {
-
-
-    const emailInput = document.getElementById('emailInput');
-    if (emailInput) {
+      const emailInput = document.getElementById('emailInput');
+      if (emailInput) {
         emailInput.focus();
         alert('Please enter a valid email address.');
         return;
-    }
-    // Optionally, you can show an error message or handle the validation failure in another way
-    console.log("id error");
+      }
+      // Optionally, you can show an error message or handle the validation failure in another way
+      console.log("id error");
 
-}
+    }
   }
 
 
@@ -397,71 +397,71 @@ else {
     formData.append('upload_preset', 'Rizwan_Tayyab');
 
     try {
-        const response = await fetch(
-            'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
-            {
-                method: 'POST',
-                body: formData,
-            }
-        );
-        const data = await response.json();
-        console.log("Data.response hon->>>", data.secure_url);
-
-        // Set the image URL received from Cloudinary
-        // setStudentImage(data.secure_url);
-
-        // Convert the image to base64
-        const base64Image = await getBase64Image(data.secure_url);
-        console.log("Base64 image:", base64Image);
-
-        // Update the form data with the base64 representation of the image
-
-            if(data.secure_url){
-
-              setImageUrl(base64Image)
-              setStudentImage(base64Image)
-
-            }
-
-    } catch (error) {
-        console.error('Error uploading image to Cloudinary:', error);
-    }
-};
-
-// Function to convert an image URL to base64
-const getBase64Image = async (imageUrl) => {
-    try {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
-    } catch (error) {
-        console.error('Error fetching image for base64 conversion:', error);
-        return null;
-    }
-};
-
-
-// Image Function for payment
-
-
-const handlePaymentImage = async (e) => {
-  const file = e.target.files[0];
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', 'Rizwan_Tayyab');
-
-  try {
       const response = await fetch(
-          'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
-          {
-              method: 'POST',
-              body: formData,
-          }
+        'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+      const data = await response.json();
+      console.log("Data.response hon->>>", data.secure_url);
+
+      // Set the image URL received from Cloudinary
+      // setStudentImage(data.secure_url);
+
+      // Convert the image to base64
+      const base64Image = await getBase64Image(data.secure_url);
+      console.log("Base64 image:", base64Image);
+
+      // Update the form data with the base64 representation of the image
+
+      if (data.secure_url) {
+
+        setImageUrl(base64Image)
+        setStudentImage(base64Image)
+
+      }
+
+    } catch (error) {
+      console.error('Error uploading image to Cloudinary:', error);
+    }
+  };
+
+  // Function to convert an image URL to base64
+  const getBase64Image = async (imageUrl) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error('Error fetching image for base64 conversion:', error);
+      return null;
+    }
+  };
+
+
+  // Image Function for payment
+
+
+  const handlePaymentImage = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'Rizwan_Tayyab');
+
+    try {
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
       );
       const data = await response.json();
       console.log("Data.response hon->>>", data.secure_url);
@@ -474,35 +474,35 @@ const handlePaymentImage = async (e) => {
       console.log("Base64 image:", base64Image);
 
       // Update the form data with the base64 representation of the image
-      if(data.secure_url){
-        
+      if (data.secure_url) {
+
         setPaymentImg(base64Image)
         setPaymentImage(base64Image)
         setPayment("done")
 
       }
 
-  } catch (error) {
+    } catch (error) {
       console.error('Error uploading image to Cloudinary:', error);
-  }
-};
+    }
+  };
 
-// Function to convert an image URL to base64
-const getBase64PaymentImage = async (imageUrl) => {
-  try {
+  // Function to convert an image URL to base64
+  const getBase64PaymentImage = async (imageUrl) => {
+    try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();
       return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
       });
-  } catch (error) {
+    } catch (error) {
       console.error('Error fetching image for base64 conversion:', error);
       return null;
-  }
-};
+    }
+  };
 
 
 
@@ -557,17 +557,17 @@ const getBase64PaymentImage = async (imageUrl) => {
 
 
 
-            <div className='display-inline flex felx-col'>
+          <div className='display-inline flex felx-col'>
 
             <div className="image-uploader" onClick={() => document.getElementById('student-image-upload').click()}>
-  <input id="student-image-upload" type="file" onChange={handleStudentImage} style={{ display: 'none' }} />
-  {studentImage ? (
-    <div className="uploaded-image" style={{ backgroundImage: `url(${studentImage})` }}></div>
-  ) : (
-    <p className="upload-text">Upload Image</p>
-  )}
+              <input id="student-image-upload" type="file" onChange={handleStudentImage} style={{ display: 'none' }} />
+              {studentImage ? (
+                <div className="uploaded-image" style={{ backgroundImage: `url(${studentImage})` }}></div>
+              ) : (
+                <p className="upload-text">Upload Image</p>
+              )}
 
-  <style jsx>{`
+              <style jsx>{`
     .image-uploader {
       width: 160px;
       height: 140px;
@@ -608,21 +608,21 @@ const getBase64PaymentImage = async (imageUrl) => {
       cursor: pointer;
     }
   `}</style>
-</div>
+            </div>
 
 
-    <div className="image-uploader" onClick={() => document.getElementById('payment-image-upload').click()}>
-      <input id="payment-image-upload" type="file"  onChange={handlePaymentImage} style={{ display: 'none' }} />
-      {/* {image ? (
+            <div className="image-uploader" onClick={() => document.getElementById('payment-image-upload').click()}>
+              <input id="payment-image-upload" type="file" onChange={handlePaymentImage} style={{ display: 'none' }} />
+              {/* {image ? (
         <img src={image} alt="ID Card" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '5px' }} /> */}
-      {/* ) : (
+              {/* ) : (
         <p className="upload-text">Upload</p>
       )} */}
 
-{paymentImage && paymentImage !== "Not-Done" && <NextImage  src={paymentImage} style={{ width: '320px', height: '140px' }}               width={600} height={400}
-/>}
+              {paymentImage && paymentImage !== "Not-Done" && <NextImage src={paymentImage} style={{ width: '320px', height: '140px' }} width={600} height={400}
+              />}
 
-       <style jsx>{`
+              <style jsx>{`
     .image-uploader {
       width: 320px;
       height: 140px; /* Reduced height */
@@ -649,9 +649,9 @@ const getBase64PaymentImage = async (imageUrl) => {
       cursor: pointer;
     }
   `}</style>
-    </div>
+            </div>
 
-    </div>
+          </div>
 
 
 
@@ -668,14 +668,14 @@ const getBase64PaymentImage = async (imageUrl) => {
               label="Full Name"
               value={fullName}
               onChange={(event) => {
+                const newFullName = event.target.value;
 
-                const newName = event.target.value;
+                // Combine steps for efficiency
+                const formattedFullName = newFullName
+                  .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                  .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                // Capitalize the first letter of each word
-                const formattedName = newName.replace(/\b\w/g, (char) => char.toUpperCase());
-
-                // Update the state with the formatted name
-                setFullName(formattedName);
+                setFullName(formattedFullName)
               }}
             />
             <InputComponent
@@ -688,10 +688,11 @@ const getBase64PaymentImage = async (imageUrl) => {
               onChange={(event) => {
                 const newFatherName = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedFatherName = newFatherName.replace(/\b\w/g, (char) => char.toUpperCase());
+                // Combine steps for efficiency
+                const formattedFatherName = newFatherName
+                  .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                  .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                // Update the state with the formatted name
                 setFatherName(formattedFatherName)
               }}
             />
@@ -764,10 +765,11 @@ const getBase64PaymentImage = async (imageUrl) => {
               onChange={(event) => {
                 const newCity = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedCity = newCity.replace(/\b\w/g, (char) => char.toUpperCase());
+                // Combine steps for efficiency
+                const formattedCity = newCity
+                  .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                  .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                // Update the state with the formatted name
                 setCity(formattedCity)
               }}
             />
@@ -813,7 +815,7 @@ const getBase64PaymentImage = async (imageUrl) => {
             />
 
             <InputComponent
-            id="batchInput"
+              id="batchInput"
               label="Batch"
               type="number"
               // options={batchOptions}
@@ -827,7 +829,7 @@ const getBase64PaymentImage = async (imageUrl) => {
             <div style={{ marginTop: "20px" }}>
 
               <InputComponent
-              id="qualificationInput"
+                id="qualificationInput"
                 type="text"
                 placeholder="Qualification"
                 label="Edit Qualification"
@@ -835,14 +837,14 @@ const getBase64PaymentImage = async (imageUrl) => {
                 onChange={(event) => {
                   const newValue = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                  // Capitalize the first letter of each word
+                  const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                   setQualification(formattedValue)
                 }}
               /></div>
             <div style={{ marginTop: "20px" }}>
               <InputComponent
-              id="addressInput"
+                id="addressInput"
                 type="text"
                 placeholder="Address"
                 label="Edit Address"
@@ -850,8 +852,8 @@ const getBase64PaymentImage = async (imageUrl) => {
                 onChange={(event) => {
                   const newValue = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                  // Capitalize the first letter of each word
+                  const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                   setAddress(formattedValue)
                 }}
               />
@@ -859,11 +861,11 @@ const getBase64PaymentImage = async (imageUrl) => {
 
 
             <button
-      style={{ backgroundColor: buttonColor, color: 'white', padding: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
-      onClick={handleButtonClick}
-    >
-      {buttonText}
-    </button>
+              style={{ backgroundColor: buttonColor, color: 'white', padding: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
+              onClick={handleButtonClick}
+            >
+              {buttonText}
+            </button>
 
 
 
@@ -877,7 +879,7 @@ const getBase64PaymentImage = async (imageUrl) => {
         </div>
 
 
-      
+
       </Drawer>
     </>
   );

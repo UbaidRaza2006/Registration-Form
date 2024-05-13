@@ -180,222 +180,233 @@ export default function MainPage() {
     async function handleRegister() {
         if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')) {
 
-            if(formData.cnic.length === 15){
-      
-              if(formData.phone.length === 12){
-      
-              //  let formattedBatch= batch.replace(/^0+/, '');
-              let formattedBatch = Number(formData.batch).toString().replace(/^0+/, '');
-            
-      
-      
-                if(formattedBatch && formattedBatch >= 1){
-      
-                              if (formattedBatch.includes('.')) {
-                                formattedBatch = Math.floor(parseFloat(formattedBatch));
-                              }
-                  
-                  if(formData.dateOfBirth){
-      
-                  
-      
-          
-          const formattedAddress = formData.address.trim().replace(/\s+/g, ' ');
-          const formattedQualification = formData.qualification.trim().replace(/\s+/g, ' ');
-          const formattedCity = formData.city.trim().replace(/\s+/g, ' ');
-          const formattedFullName = formData.fullName.trim().replace(/\s+/g, ' ');
-          const formattedFatherName = formData.fatherName.trim().replace(/\s+/g, ' ');
-      
-      
-                        if(formattedFullName.length>0){
-      
-                          if(formattedFatherName.length>0){
-      
-                            if(formattedCity.length>0){
-      
-                              if(formattedAddress.length>0){
-      
-                                if(formattedQualification.length>0){
+            if (formData.cnic.length === 15) {
 
-                                    if(formData.imageUrl){
+                if (formData.phone.length === 12) {
 
-      
-      
-      
-      
-                            
-                        
-
-            // ye main code hein ayha se
-
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                fullName: formattedFullName,
-                fatherName: formattedFatherName,
-                batch: formattedBatch,
-                city: formattedCity,
-                qualification: formattedQualification,
-                address: formattedAddress,
-            }));
-        
-           finalRegistration()
-
-            
-
-            // ye main code he yahan tk
+                    //  let formattedBatch= batch.replace(/^0+/, '');
+                    let formattedBatch = Number(formData.batch).toString().replace(/^0+/, '');
 
 
-            
-        }
-        else{
-            alert("Provide Your Image")
-        }
-        }
-        else {
-      
-      
-          const qualificationInput = document.getElementById('qualificationInput');
-          if (qualificationInput) {
-              qualificationInput.focus();
-              alert('Please fill the Qualification field');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-          const addressInput = document.getElementById('addressInput');
-          if (addressInput) {
-              addressInput.focus();
-              alert('Please fill the Address field');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-          const cityInput = document.getElementById('cityInput');
-          if (cityInput) {
-              cityInput.focus();
-              alert('Please fill the City field');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-          const fnameInput = document.getElementById('fnameInput');
-          if (fnameInput) {
-              fnameInput.focus();
-              alert('Please fill the Father Name field');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-          const nameInput = document.getElementById('nameInput');
-          if (nameInput) {
-              nameInput.focus();
-              alert('Please fill the Name field');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-          const dateInput = document.getElementById('dateInput');
-          if (dateInput) {
-              dateInput.focus();
-              alert('Please select a D/O/B');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-        
-        }
-        }
-        else {
-      
-      
-        //   const batchInput = document.getElementById('batchInput');
-        //   if (batchInput) {
-        //       batchInput.focus();
-              alert('There might be some error, Try again!');
-        //       return;
-        //   }
-        //   // Optionally, you can show an error message or handle the validation failure in another way
-        //   console.log("id error");
-        
-        }
-        }
-      else {
-      
-      
-        const phoneInput = document.getElementById('phoneInput');
-        if (phoneInput) {
-            phoneInput.focus();
-            alert('Please enter your complete Phone #');
-            return;
-        }
-        // Optionally, you can show an error message or handle the validation failure in another way
-        console.log("id error");
-      
-      }
+
+                    if (formattedBatch && formattedBatch >= 1) {
+
+                        if (formattedBatch.includes('.')) {
+                            formattedBatch = Math.floor(parseFloat(formattedBatch));
+                        }
+
+                        if (formData.dateOfBirth) {
+
+
+
+
+                            const formattedAddress = formData.address.trim().replace(/\s+/g, ' ');
+                            const formattedQualification = formData.qualification.trim().replace(/\s+/g, ' ');
+                            const formattedCity = formData.city.trim().replace(/\s+/g, ' ');
+                            const formattedFullName = formData.fullName.trim().replace(/\s+/g, ' ');
+                            const formattedFatherName = formData.fatherName.trim().replace(/\s+/g, ' ');
+
+
+                            if (formattedFullName.length > 0) {
+
+                                if (formattedFatherName.length > 0) {
+
+                                    if (formattedCity.length > 0) {
+
+                                        if (formattedAddress.length > 0) {
+
+                                            if (formattedQualification.length > 0) {
+
+                                                if (formData.imageUrl) {
+
+
+
+
+
+
+
+
+                                                    // ye main code hein ayha se
+
+                                                    setFormData(prevFormData => ({
+                                                        ...prevFormData,
+                                                        fullName: formattedFullName,
+                                                        fatherName: formattedFatherName,
+                                                        batch: formattedBatch,
+                                                        city: formattedCity,
+                                                        qualification: formattedQualification,
+                                                        address: formattedAddress,
+                                                    }));
+
+                                                    finalRegistration()
+
+
+
+                                                    // ye main code he yahan tk
+
+
+
+                                                }
+                                                else {
+                                                    console.log(formData.imageUrl)
+                                                    alert("Provide Your Image")
+                                                }
+                                            }
+                                            else {
+
+
+                                                const qualificationInput = document.getElementById('qualificationInput');
+                                                if (qualificationInput) {
+                                                    console.log(formattedQualification)
+                                                    alert('Please fill the Qualification field');
+                                                    qualificationInput.focus();
+                                                    return;
+                                                }
+                                                // Optionally, you can show an error message or handle the validation failure in another way
+                                                console.log("id error");
+
+                                            }
+                                        }
+                                        else {
+
+
+                                            const addressInput = document.getElementById('addressInput');
+                                            if (addressInput) {
+                                                console.log(formattedAddress)
+                                               alert('Please fill the Address field');
+                                               addressInput.focus();
+                                                return;
+                                            }
+                                            // Optionally, you can show an error message or handle the validation failure in another way
+                                            console.log("id error");
+
+                                        }
+                                    }
+                                    else {
+
+
+                                        const cityInput = document.getElementById('cityInput');
+                                        if (cityInput) {
+                                            console.log(formattedCity)
+                                            alert('Please fill the City field');
+                                            cityInput.focus();
+                                            return;
+                                        }
+                                        // Optionally, you can show an error message or handle the validation failure in another way
+                                        console.log("id error");
+
+                                    }
+                                }
+                                else {
+
+
+                                    const fnameInput = document.getElementById('fnameInput');
+                                    if (fnameInput) {
+                                        console.log(formattedFatherName)
+                                        alert('Please fill the Father Name field');
+                                        fnameInput.focus();
+                                        return;
+                                    }
+                                    // Optionally, you can show an error message or handle the validation failure in another way
+                                    console.log("id error");
+
+                                }
+                            }
+                            else {
+
+
+                                const nameInput = document.getElementById('nameInput');
+                                if (nameInput) {
+                                    console.log(formattedName)
+                                    alert('Please fill the Name field');
+                                    nameInput.focus();
+                                    return;
+                                }
+                                // Optionally, you can show an error message or handle the validation failure in another way
+                                console.log("id error");
+
+                            }
+                        }
+                        else {
+
+
+                            const dateInput = document.getElementById('dateInput');
+                            if (dateInput) {
+                                console.log(formData.dateOfBirth)
+                                alert('Please select a D/O/B');
+                                dateInput.focus();
+                                return;
+                            }
+                            // Optionally, you can show an error message or handle the validation failure in another way
+                            console.log("id error");
+
+                        }
+                    }
+                    else {
+
+
+                        //   const batchInput = document.getElementById('batchInput');
+                        //   if (batchInput) {
+                        //       batchInput.focus();
+                        console.log(formData.batch)
+                        alert('There might be some error, Try again!');
+                        //       return;
+                        //   }
+                        //   // Optionally, you can show an error message or handle the validation failure in another way
+                        //   console.log("id error");
+
+                    }
+                }
+                else {
+
+
+                    const phoneInput = document.getElementById('phoneInput');
+                    if (phoneInput) {
+                        console.log(formData.phone)
+                        alert('Please enter your complete Phone #');
+                        phoneInput.focus();
+                        return;
+                    }
+                    // Optionally, you can show an error message or handle the validation failure in another way
+                    console.log("id error");
+
+                }
             }
-        else {
-      
-      
-          const cnicInput = document.getElementById('cnicInput');
-          if (cnicInput) {
-              cnicInput.focus();
-              alert('Please enter your complete Cnic');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-      
-      }
+            else {
+
+
+                const cnicInput = document.getElementById('cnicInput');
+                if (cnicInput) {
+                    console.log(formData.cnic)
+                    alert('Please enter your complete Cnic');
+                    cnicInput.focus();
+                    return;
+                }
+                // Optionally, you can show an error message or handle the validation failure in another way
+                console.log("id error");
+
+            }
         }
         else {
-      
-      
-          const emailInput = document.getElementById('emailInput');
-          if (emailInput) {
-              emailInput.focus();
-              alert('Please enter a valid email address.');
-              return;
-          }
-          // Optionally, you can show an error message or handle the validation failure in another way
-          console.log("id error");
-      
-      }
+
+
+            const emailInput = document.getElementById('emailInput');
+            if (emailInput) {
+                console.log(formData.email)
+                alert('Please enter a valid email address.');
+                emailInput.focus();
+                return;
+            }
+            // Optionally, you can show an error message or handle the validation failure in another way
+            console.log("id error");
+
         }
+    }
 
 
-        const finalRegistration = async () => {
+    const finalRegistration = async () => {
 
-            console.log("formData-->", formData);
+        console.log("formData-->", formData);
         const res = await registerUser(formData);
 
         // setResData(res.user)
@@ -405,6 +416,9 @@ export default function MainPage() {
 
             setShowModal(true);
             setCurrentUser(res.user)
+            setFormData(initialFormData)
+            setImage(null)
+            settingCourseAndBatch()
 
         }
 
@@ -421,7 +435,7 @@ export default function MainPage() {
 
 
 
-        } 
+    }
 
 
     const registerUser = async (formData) => {
@@ -452,15 +466,21 @@ export default function MainPage() {
     }, []);
 
     useEffect(() => {
-        if (allCourses.length > 0) {
-            const courseUpdate =  allCourses.filter((course) => course.admission === 'Opened')
+        settingCourseAndBatch()
+    }, [allCourses]);
+
+    const settingCourseAndBatch = () => {
+
+    if (allCourses.length > 0) {
+            const courseUpdate = allCourses.filter((course) => course.admission === 'Opened')
             setFormData(prevFormData => ({
                 ...prevFormData,
                 course: courseUpdate[0].course,
                 batch: courseUpdate[0].batch// Or use whatever field you need from allCourses
             }));
         }
-    }, [allCourses]);
+
+        }
 
 
     const gettingAdmin = async () => {
@@ -585,13 +605,13 @@ export default function MainPage() {
                         label="Full Name"
                         value={formData.fullName}
                         onChange={(event) => {
-
                             const newName = event.target.value;
 
-                            // Capitalize the first letter of each word
-                            const formattedName = newName.replace(/\b\w/g, (char) => char.toUpperCase());
+                            // Combine steps for efficiency
+                            const formattedName = newName
+                                .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                            // Update the state with the formatted name
                             setFormData({
                                 ...formData,
                                 fullName: formattedName
@@ -607,15 +627,16 @@ export default function MainPage() {
                         onChange={(event) => {
                             const newFatherName = event.target.value;
 
-                            // Capitalize the first letter of each word
-                            const formattedFatherName = newFatherName.replace(/\b\w/g, (char) => char.toUpperCase());
+                            // Combine steps for efficiency
+                            const formattedFatherName = newFatherName
+                                .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                            // Update the state with the formatted name
                             setFormData({
                                 ...formData,
                                 fatherName: formattedFatherName
                             });
-                        }} />
+                        }}  />
                     <InputComponent
                         id="emailInput"
                         type="text"
@@ -669,15 +690,16 @@ export default function MainPage() {
                         onChange={(event) => {
                             const newCity = event.target.value;
 
-                            // Capitalize the first letter of each word
-                            const formattedCity = newCity.replace(/\b\w/g, (char) => char.toUpperCase());
+                            // Combine steps for efficiency
+                            const formattedCity = newCity
+                                .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
 
-                            // Update the state with the formatted name
                             setFormData({
                                 ...formData,
                                 city: formattedCity
                             });
-                        }} />
+                        }}  />
                     <InputComponent
                         type="date"
                         id="dateInput"
@@ -742,8 +764,8 @@ export default function MainPage() {
                         onChange={(event) => {
                             const newValue = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                            // Capitalize the first letter of each word
+                            const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                             setFormData({
                                 ...formData,
                                 qualification: formattedValue
@@ -758,8 +780,8 @@ export default function MainPage() {
                         onChange={(event) => {
                             const newValue = event.target.value;
 
-                // Capitalize the first letter of each word
-                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
+                            // Capitalize the first letter of each word
+                            const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
                             setFormData({
                                 ...formData,
                                 address: formattedValue
@@ -808,7 +830,7 @@ export default function MainPage() {
                 <button
                     onClick={handleRegister}
                     className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
-                    // disabled={!isFormValid()}
+                // disabled={!isFormValid()}
                 >Register</button>
 
             </div>

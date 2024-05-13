@@ -14,6 +14,7 @@ function IdCard({ user }) {
   const handleDownload = async () => {
     setIsGenerating(true);
 
+
     const inputData = idCardRef.current;
 
     try {
@@ -37,6 +38,8 @@ function IdCard({ user }) {
       pdf.save(`Student:${user.rollNo}.pdf`);
 
       setIsGenerating(false);
+      setDownloaded(true);
+      onClose()
     } catch (e) {
       console.error("Error generating PDF:", e);
       setIsGenerating(false);
