@@ -531,6 +531,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
             cache: "no-cache", // Set cache control policy to 'no-cache'
           });
           const data = await res.json();
+          console.log("reload ka data", data)
   
           // Convert single object to an array of length 1
           const users = Array.isArray(data.data) ? data.data : [data.data];

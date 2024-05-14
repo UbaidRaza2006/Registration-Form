@@ -171,11 +171,11 @@ function SideNavbarComponent() {
     };
   }, [allCourses])
 
-  useEffect(() => {
-    if(api){
-      gettingCities()
-    };
-  }, [api])
+  // useEffect(() => {
+  //   if(api){
+  //     gettingCities()
+  //   };
+  // }, [api])
 
   
 // isModalVisible1
@@ -1113,6 +1113,7 @@ const handlePassword = () => {
         contentLabel="Custom Modal"
       >
         <div className="flex flex-col w-full h-full">  {/* Full modal width and height */}
+        <ReloadOutlined onClick={() => gettingCities()} className='absolute left-2 top-2 text-gray-500 cursor-pointer' />
         <CloseOutlined onClick={() => handleCancel(7)} className='absolute right-2 top-2 text-gray-500 cursor-pointer' />
           <div className="flex-grow overflow-hidden"> {/* Upper section with content, hidden overflow */}
             <h1 className="text-3xl font-bold text-center mb-2">Students From Everywhere</h1>
