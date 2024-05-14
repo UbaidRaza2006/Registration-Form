@@ -60,6 +60,7 @@ export async function GET(req) {
           }));
 
           if (students.length > 0) {
+            console.log("encodedStudents-->",encodedStudents)
               return NextResponse.json({
                   success: true,
                   data: encodedStudents,
