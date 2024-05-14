@@ -487,9 +487,23 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   useEffect(() => {
     // /api/students
     gettingAdmin();
-    gettingUsers();
-    gettingCourses();
   }, []);
+  useEffect(() => {
+    console.log("admin", admin)
+    if (admin) {
+      gettingUsers()
+    }
+
+  }, [admin])
+
+  useEffect(() => {
+    console.log("coursesToLoad-->", coursesToLoad)
+
+    if (coursesToLoad) {
+      console.log("gettingCourses()")
+      gettingCourses();
+    }
+  }, [coursesToLoad])
 
   useEffect(() => {
     if(sideNavbarCity.length > 0){
@@ -540,75 +554,77 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   }, [api]); // api ko dependency list mein include kiya hai
 
   const gettingUsers = async () => {
-    console.log("gettingUsers")
+    console.log("gettingUsers");
     try {
-      console.log("try chal raha he")
-      const res = await fetch(`/api/students`, {
-        method: "GET",
-        cache: "no-cache", // Set cache control policy to 'no-cache'
-      });
-      const data = await res.json();
-      console.log(data)
-      if(data.success){
-      
-      // Convert single object to an array of length 1
-      const users = Array.isArray(data.data) ? data.data : [data.data];
-      const verified = users.filter(user => user.status === "verified");
+        console.log("try chal raha he");
+        const res = await fetch(`/api/students`, {
+            method: "GET",
+        });
 
-          setVerifiedUsers(verified)
-          setAlternateVerified(verified)
-      
-      // Set all users into state
-      setAllUsers(users);
-      setAlternateUsers(users)
-           setCoursesToLoad(true)
-      // console.log("coursesToLoad-->",coursesToLoad)
-      // checkingVerifiedUsers(users);
-      }
-      else if(data.message === "No students found!"){
-        console.log("No students found!")
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-          });
-      }
-      else{
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-          });
-        console.log("error occured fro api!")
-      }
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error("Error response text:", errorText);
+            throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
+        }
+
+        const data = await res.json();
+        console.log(data);
+
+        if (data.success) {
+            const users = Array.isArray(data.data) ? data.data : [data.data];
+            const verified = users.filter(user => user.status === "verified");
+
+            setVerifiedUsers(verified);
+            setAlternateVerified(verified);
+
+            setAllUsers(users);
+            setAlternateUsers(users);
+            setCoursesToLoad(true);
+        } else if (data.message === "No students found!") {
+            console.log("No students found!");
+            toast.error(data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        } else {
+            toast.error(data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            console.log("Error occurred from API!");
+        }
     } catch (error) {
-
-      console.log("Error fetching users:", error);
-      toast.error(error, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+        console.error("Error fetching users:", error);
+        toast.error(error.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
         });
     }
-  };
+};
+
+
+
 
   const gettingAdmin = async () => {
     console.log("gettingAdmin")

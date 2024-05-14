@@ -50,7 +50,6 @@ function IdCard({ user }) {
         theme: "light",
         transition: Bounce,
         });
-      onClose()
     } catch (e) {
       console.error("Error generating PDF:", e);
       setIsGenerating(false);
