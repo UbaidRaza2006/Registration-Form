@@ -71,6 +71,17 @@ const EditDrawerApp = ({ userData }) => {
     console.log(data);
     if (data.success) {
       let result = data.result
+
+      const decodedUser = {
+        ...result,
+        address: decodeURIComponent(result.address),
+        qualification: decodeURIComponent(result.qualification),
+      };
+
+      // const verified = decodedUser.filter(user => user.status === "verified");
+
+
+
       // setViewData(result)
       // console.log(viewData);
       setFullName(result.fullName);
@@ -84,8 +95,8 @@ const EditDrawerApp = ({ userData }) => {
       setPhone(result.phone);
       setDateOfBirth(result.dateOfBirth);
       setGender(result.gender);
-      setQualification(result.qualification);
-      setAddress(result.address);
+      setQualification(decodedUser.qualification);
+      setAddress(decodedUser.address);
       setImageUrl(result.imageUrl);
       setRollNo(result.rollNo);
       setPayment(result.payment);

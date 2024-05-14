@@ -13,8 +13,14 @@ export async function GET(request, content) {
             const  studentId = content.params.studentid
             const record = {_id:studentId}
             const result = await Register.findById(record)
+
+            const encodedResult = {
+                ...result._doc,
+                address: encodeURIComponent(result.address),
+                qualification: encodeURIComponent(result.qualification),
+              }
             
-            return NextResponse.json({result,success:true})
+            return NextResponse.json({result:encodedResult,success:true})
         } catch (error) {
             console.log("Error finding user by CNIC:", error);
             return NextResponse.json({success:false})
@@ -32,7 +38,15 @@ export async function GET(request, content) {
             const payload = await request.json();
             const result = await Register.findOneAndUpdate(filter,payload,{new:true})
             
-            return NextResponse.json({result,success:true})
+            const encodedResult = {
+                ...result._doc,
+                address: encodeURIComponent(result.address),
+                qualification: encodeURIComponent(result.qualification),
+              }
+
+
+
+            return NextResponse.json({result:encodedResult,success:true})
         } catch (error) {
             console.log("Error finding user by CNIC:", error);
             return NextResponse.json({success:false, error:error.message})
@@ -48,8 +62,14 @@ export async function GET(request, content) {
             const  studentId = content.params.studentid
             const record = {_id:studentId}
             const result = await Register.deleteOne(record)
+
+            const encodedResult = {
+                ...result._doc,
+                address: encodeURIComponent(result.address),
+                qualification: encodeURIComponent(result.qualification),
+              }
             
-            return NextResponse.json({result,success:true})
+            return NextResponse.json({result:encodedResult,success:true})
         } catch (error) {
             console.log("Error finding user by CNIC:", error);
             return NextResponse.json({success:false})

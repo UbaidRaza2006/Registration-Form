@@ -122,31 +122,37 @@ const [fullName, setFullName] = useState('');
     userData = await userData.json()
       console.log(userData)
       if (userData.success) {
-        let data = userData.data
+        let data = userData.data[0]
         console.log("data-->",data);
         // setUser(userData.data)
         // console.log(user);
     
     // agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
     
-    setFullName(userData.data[0].fullName);
-    setFatherName(userData.data[0].fatherName);
-    setEmail(userData.data[0].email);
-    setCourse(userData.data[0].course);
-        setBatch(userData.data[0].batch);
-        setStatus(userData.data[0].status);
-        setCity(userData.data[0].city);
-        setCnic(userData.data[0].cnic);
-        setPhone(userData.data[0].phone);
-        setDateOfBirth(userData.data[0].dateOfBirth);
-        setGender(userData.data[0].gender);
-        setQualification(userData.data[0].qualification);
-        setAddress(userData.data[0].address);
-        setImageUrl(userData.data[0].imageUrl);
-        setRollNo(userData.data[0].rollNo);
-        setPayment(userData.data[0].payment);
-        setPaymentImg(userData.data[0].paymentImg);
-        setIdForUser(userData.data[0]._id)
+    const decodedUser = {
+      ...data,
+      address: decodeURIComponent(data.address),
+      qualification: decodeURIComponent(data.qualification),
+    };
+
+    setFullName(decodedUser.fullName);
+    setFatherName(decodedUser.fatherName);
+    setEmail(decodedUser.email);
+    setCourse(decodedUser.course);
+        setBatch(decodedUser.batch);
+        setStatus(decodedUser.status);
+        setCity(decodedUser.city);
+        setCnic(decodedUser.cnic);
+        setPhone(decodedUser.phone);
+        setDateOfBirth(decodedUser.dateOfBirth);
+        setGender(decodedUser.gender);
+        setQualification(decodedUser.qualification);
+        setAddress(decodedUser.address);
+        setImageUrl(decodedUser.imageUrl);
+        setRollNo(decodedUser.rollNo);
+        setPayment(decodedUser.payment);
+        setPaymentImg(decodedUser.paymentImg);
+        setIdForUser(decodedUser._id)
     
     
         setImageee(userData.data.paymentImg);

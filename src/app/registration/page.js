@@ -234,7 +234,13 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
 
       // Convert single object to an array of length 1
       const users = Array.isArray(data) ? data : [data];
-      const verified = users.filter(user => user.status === "verified");
+      const decodedUsers = users.map(user => ({
+        ...user,
+        address: decodeURIComponent(user.address),
+        qualification: decodeURIComponent(user.qualification),
+      }));
+
+      const verified = decodedUsers.filter(user => user.status === "verified");
 
       setStatusDone(status)
       setBatchDone(batch)
@@ -242,7 +248,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       setCityDone(city)
       setCourseDone(course)
       setPaymentDone(payment)
-      setAllUsers(users);
+      setAllUsers(decodedUsers);
       setVerifiedUsers(verified);
     } else if (userData.success === false) {
       setAllUsers([]);
@@ -298,10 +304,16 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
-          const verified = users.filter(user => user.status === "verified");
+          const decodedUsers = users.map(user => ({
+            ...user,
+            address: decodeURIComponent(user.address),
+            qualification: decodeURIComponent(user.qualification),
+          }));
+    
+          const verified = decodedUsers.filter(user => user.status === "verified");
 
           setRollNumberDone(rollNumber)
-          setAllUsers(users);
+          setAllUsers(decodedUsers);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -365,10 +377,16 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
-          const verified = users.filter(user => user.status === "verified");
+          const decodedUsers = users.map(user => ({
+            ...user,
+            address: decodeURIComponent(user.address),
+            qualification: decodeURIComponent(user.qualification),
+          }));
+    
+          const verified = decodedUsers.filter(user => user.status === "verified");
 
           setCnicNumberDone(cnicNumber)
-          setAllUsers(users);
+          setAllUsers(decodedUsers);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -432,11 +450,17 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
-          const verified = users.filter(user => user.status === "verified");
+          const decodedUsers = users.map(user => ({
+            ...user,
+            address: decodeURIComponent(user.address),
+            qualification: decodeURIComponent(user.qualification),
+          }));
+    
+          const verified = decodedUsers.filter(user => user.status === "verified");
 
           setRollNumberDone(rollNumber)
           setCnicNumberDone(cnicNumber)
-          setAllUsers(users);
+          setAllUsers(decodedUsers);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -535,14 +559,23 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   
           // Convert single object to an array of length 1
           const users = Array.isArray(data.data) ? data.data : [data.data];
-          const verified = users.filter((user) => user.status === "verified");
+
+          const decodedUsers = users.map(user => ({
+            ...user,
+            address: decodeURIComponent(user.address),
+            qualification: decodeURIComponent(user.qualification),
+          }));
+    
+          const verified = decodedUsers.filter(user => user.status === "verified");
+
+          
   
           setVerifiedUsers(verified);
           setAlternateVerified(verified);
   
           // Set all users into state
-          setAllUsers(users);
-          setAlternateUsers(users);
+          setAllUsers(decodedUsers);
+          setAlternateUsers(decodedUsers);
           // checkingVerifiedUsers(users);
         } catch (error) {
           console.error("Error fetching users:", error);
@@ -557,72 +590,78 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   const gettingUsers = async () => {
     console.log("gettingUsers");
     try {
-        console.log("try chal raha he");
-        const res = await fetch(`/api/students`, {
-            method: "GET",
+      console.log("try chal raha he");
+      const res = await fetch(`/api/students`, {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success) {
+        // Convert single object to an array of length 1
+        const users = Array.isArray(data.data) ? data.data : [data.data];
+  
+        // Decode address and qualification fields
+        const decodedUsers = users.map(user => ({
+          ...user,
+          address: decodeURIComponent(user.address),
+          qualification: decodeURIComponent(user.qualification),
+        }));
+  
+        const verified = decodedUsers.filter(user => user.status === "verified");
+  
+        setVerifiedUsers(verified);
+        setAlternateVerified(verified);
+  
+        // Set all users into state
+        setAllUsers(decodedUsers);
+        setAlternateUsers(decodedUsers);
+        setCoursesToLoad(true);
+        // console.log("coursesToLoad-->",coursesToLoad)
+        // checkingVerifiedUsers(users);
+      } else if (data.message === "No students found!") {
+        console.log("No students found!");
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
         });
-
-        if (!res.ok) {
-            const errorText = await res.text();
-            console.error("Error response text:", errorText);
-            throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
-        }
-
-        const data = await res.json();
-        console.log(data);
-
-        if (data.success) {
-            const users = Array.isArray(data.data) ? data.data : [data.data];
-            const verified = users.filter(user => user.status === "verified");
-
-            setVerifiedUsers(verified);
-            setAlternateVerified(verified);
-
-            setAllUsers(users);
-            setAlternateUsers(users);
-            setCoursesToLoad(true);
-        } else if (data.message === "No students found!") {
-            console.log("No students found!");
-            toast.error(data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
-        } else {
-            toast.error(data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
-            console.log("Error occurred from API!");
-        }
+      } else {
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        console.log("error occured fro api!");
+      }
     } catch (error) {
-        console.error("Error fetching users:", error);
-        toast.error(error.message, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-        });
+      console.log("Error fetching users:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
-};
+  };
+  
 
 
 

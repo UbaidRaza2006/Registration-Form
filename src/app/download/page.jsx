@@ -100,7 +100,14 @@ function DownloadIdCard() {
 
           const users = Array.isArray(data) ? data : [data];
 
-          setUsersWithCnic(users);
+          const decodedUsers = users.map(user => ({
+            ...user,
+            address: decodeURIComponent(user.address),
+            qualification: decodeURIComponent(user.qualification),
+          }));
+    
+
+          setUsersWithCnic(decodedUsers);
         } else if (userData.success === false) {
           toast.error(userData.message, {
             position: "top-right",
