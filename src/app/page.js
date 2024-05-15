@@ -539,9 +539,9 @@ export default function MainPage() {
                 });
             setShowModal(true);
             setCurrentUser(res.user)
-            setFormData(initialFormData)
-            setImage(null)
-            settingCourseAndBatch()
+            // setFormData(initialFormData)
+            // setImage(null)
+            // settingCourseAndBatch()
 
         }
         else if(res.success === false){
