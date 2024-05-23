@@ -35,6 +35,10 @@ export default function AdminPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     checkLocalStorage(); // Check local storage on component mount
     const intervalId = setInterval(checkLocalStorage, 60000); // Check local storage every minute
@@ -190,7 +194,7 @@ useEffect(() => {
 
 
   
-const [isLoading, setIsLoading] = useState(false);
+
 
 const getUsersFromFilter = async (status, batch, gender, city, course, payment) => {
   // setIsLoading(true); // Set loading state to true
@@ -515,7 +519,8 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   useEffect(() => {
     console.log("admin", admin)
     if (admin) {
-      gettingUsers()
+      // gettingUsers(page)
+      setHasMore(true)
     }
 
   }, [admin])
@@ -587,68 +592,84 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
     fetchData();
   }, [api]); // api ko dependency list mein include kiya hai
 
-  const gettingUsers = async () => {
-    console.log("gettingUsers");
-    try {
-      console.log("try chal raha he");
-      const res = await fetch(`/api/students`, {
-        method: "GET",
-        cache: "no-cache", // Set cache control policy to 'no-cache'
-      });
-      const data = await res.json();
-      // console.log(data);
-      if (data.success) {
-        // Convert single object to an array of length 1
-        const users = Array.isArray(data.data) ? data.data : [data.data];
-  
-        // Decode address and qualification fields
-        const decodedUsers = users.map(user => ({
-          ...user,
-          address: decodeURIComponent(user.address),
-          qualification: decodeURIComponent(user.qualification),
-        }));
-  
-        const verified = decodedUsers.filter(user => user.status === "verified");
-  
-        setVerifiedUsers(verified);
-        setAlternateVerified(verified);
-  
-        // Set all users into state
-        setAllUsers(decodedUsers);
-        setAlternateUsers(decodedUsers);
-        setCoursesToLoad(true);
-        // console.log("coursesToLoad-->",coursesToLoad)
-        // checkingVerifiedUsers(users);
-      } else if (data.message === "No students found!") {
-        console.log("No students found!");
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-      } else {
-        toast.error(data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        console.log("error occured fro api!");
-      }
-    } catch (error) {
-      console.log("Error fetching users:", error);
-      toast.error(error, {
+  useEffect(() => {
+    console.log("hasMore----",hasMore,"---page---",page,"---allUsers---",allUsers)
+    if (hasMore) {
+      gettingUsers(page);
+    }
+    else if(!hasMore){
+      settingVerified()
+    }
+  }, [page,hasMore]);
+
+  // const fetchUsers = async (page) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch(`/api/users?page=${page}`);
+  //     const data = await response.json();
+  //     if (data.length === 0) {
+  //       setHasMore(false);
+  //     } else {
+  //       setUsers((prevUsers) => [...prevUsers, ...data]);
+  //       setPage((prevPage) => prevPage + 1);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching users:', error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+ const gettingUsers = async () => {
+  console.log("gettingUsers");
+  setIsLoading(true);
+  try {
+    console.log("try chal raha he");
+    const res = await fetch(`/api/students?page=${page}`, {
+      method: "GET",
+      cache: "no-cache", // Set cache control policy to 'no-cache'
+    });
+    const data = await res.json();
+    console.log("allUsers ka data-->",data)
+
+    if (data.success) {
+      // Convert single object to an array of length 1
+      const users = Array.isArray(data.data) ? data.data : [data.data];
+
+      // Decode address and qualification fields
+      const decodedUsers = users.map(user => ({
+        rollNo:user.rollNo,
+        batch:user.batch,
+        fullName: decodeURIComponent(user.fullName),
+        fatherName: decodeURIComponent(user.fatherName),
+        email: decodeURIComponent(user.email),
+        course: decodeURIComponent(user.course),
+        payment: decodeURIComponent(user.payment),
+        paymentImg: decodeURIComponent(user.paymentImg),
+        status: decodeURIComponent(user.status),
+        city: decodeURIComponent(user.city),
+        cnic: decodeURIComponent(user.cnic),
+        phone: decodeURIComponent(user.phone),
+        dateOfBirth: decodeURIComponent(user.dateOfBirth),
+        gender: decodeURIComponent(user.gender),
+        qualification: decodeURIComponent(user.qualification),
+        address: decodeURIComponent(user.address),
+        imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
+      }));
+
+      // const verified = decodedUsers.filter(user => user.status === "verified");
+
+      // Update state with new users
+      setAllUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
+      // setVerifiedUsers((prevUsers) => [...prevUsers, ...verified]);
+      // setAlternateVerified((prevUsers) => [...prevUsers, ...verified]);
+      // setAlternateUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
+
+      // Check if more users are available to fetch
+      if (data.more === false) {
+        setHasMore(false);
+      setCoursesToLoad(true);
+      toast.info(`Fetching Students Done ${data.totalUsers}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -659,10 +680,65 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
         theme: "light",
         transition: Bounce,
       });
+      }
+      else if(data.more === true){
+      setHasMore(true)
+        setPage((prevPage) => prevPage + 1);
+      }
+      
+
+      // proper fetch karna he no students found kiu likha ata he or is k ialawah wo jo 2 se kum ho agar to sethasmore ko false lr raha he us ka bhi masla he k agar 2 hi hui le gth or wo akhri they to , or is k ilawah dtaa slow he kahin or functions to nhi chal rahay saath saath or is k ilawah kia admin ko fetch karnay ki zarurat he? or is k ilawah verified set krnay hein ahi se , or is k ilawah baaki fetch mein bhi pagination lagani he agar refreesh mein pagination se kaam nhi hota to phir alag route banaa paray ga
+
+      
+
+    } else if (data.message === "No students found!") {
+      setHasMore(false);
+      console.log("No students found!");
+      toast.error(data.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } else {
+      handleAPIError(data.message);
     }
-  };
-  
-// ye ese hi he sirf time pass commit kia he
+  } catch (error) {
+    handleAPIError(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const handleAPIError = (message) => {
+  console.error("Error fetching users:", message);
+  toast.error(message, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Bounce,
+  });
+};
+
+  const settingVerified = () => {
+
+    console.log("verifed set kr raha hu..",allUsers)
+    const verified = allUsers.filter(user => user.status === "Verified");
+
+    setAlternateUsers(allUsers)
+    setVerifiedUsers(verified);
+      setAlternateVerified(verified);
+  }
 
 
 

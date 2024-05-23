@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IdCardModal from "../components/IdCardComponent";
 import { Bounce, toast } from "react-toastify";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 
 
@@ -69,9 +72,10 @@ export default function MainPage() {
         formData.append('file', file);
         formData.append('upload_preset', 'Rizwan_Tayyab');
 
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
         try {
             const response = await fetch(
-                'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
+                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
                 {
                     method: 'POST',
                     body: formData,
@@ -100,6 +104,17 @@ export default function MainPage() {
 
         } catch (error) {
             console.error('Error uploading image to Cloudinary:', error);
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
         }
     };
 
@@ -612,9 +627,16 @@ export default function MainPage() {
 
     useEffect(() => {
         gettingAdmin();
-        gettingCourses();
         // toast("This is awesome!")
     }, []);
+
+    useEffect(() => {
+        if(admin)
+        gettingCourses();
+        // toast("This is awesome!")
+    }, [admin]);
+
+
 
     useEffect(() => {
         settingCourseAndBatch()
@@ -642,13 +664,40 @@ export default function MainPage() {
                 cache: "no-cache", // Set cache control policy to 'no-cache'
             });
             const data = await res.json();
-            console.log(data.data[0])
+            console.log(data)
+            if(data.success){
             setAdmin(data.data[0])
             setAllowAdmission(data.data[0].admissions)
             setMessage(data.data[0].textAdmission)
+            }
+            else{
+                toast.error('Ntetwork Error, Try again later!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                    }); 
+            }
 
         } catch (error) {
             console.error("Error fetching users:", error);
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
+            
         }
     };
 
@@ -669,9 +718,31 @@ export default function MainPage() {
             } else {
                 setAllCourses([]);
                 console.log(data)
+                toast.error('Error in Courses!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                    });
             }
         } catch (error) {
             console.error("Error fetching courses:", error);
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+                });
         }
     };
 

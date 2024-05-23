@@ -15,10 +15,24 @@ export async function GET(request, content) {
             const result = await Register.findById(record)
 
             const encodedResult = {
-                ...result._doc,
-                address: encodeURIComponent(result.address),
-                qualification: encodeURIComponent(result.qualification),
-              }
+              ...result,
+              fullName: encodeURIComponent(result.fullName),
+              fatherName: encodeURIComponent(result.fatherName),
+              email: encodeURIComponent(result.email),
+              course: encodeURIComponent(result.course),
+              payment: encodeURIComponent(result.payment),
+              paymentImg: encodeURIComponent(result.paymentImg),
+              status: encodeURIComponent(result.status),
+              city: encodeURIComponent(result.city),
+              cnic: encodeURIComponent(result.cnic),
+              phone: encodeURIComponent(result.phone),
+              dateOfBirth: encodeURIComponent(result.dateOfBirth),
+              gender: encodeURIComponent(result.gender),
+              qualification: encodeURIComponent(result.qualification),
+              address: encodeURIComponent(result.address),
+              imageUrl: encodeURIComponent(result.imageUrl)
+          };
+
             
             return NextResponse.json({result:encodedResult,success:true})
         } catch (error) {
@@ -39,11 +53,23 @@ export async function GET(request, content) {
             const result = await Register.findOneAndUpdate(filter,payload,{new:true})
             
             const encodedResult = {
-                ...result._doc,
-                address: encodeURIComponent(result.address),
-                qualification: encodeURIComponent(result.qualification),
-              }
-
+              ...result,
+              fullName: encodeURIComponent(result.fullName),
+              fatherName: encodeURIComponent(result.fatherName),
+              email: encodeURIComponent(result.email),
+              course: encodeURIComponent(result.course),
+              payment: encodeURIComponent(result.payment),
+              paymentImg: encodeURIComponent(result.paymentImg),
+              status: encodeURIComponent(result.status),
+              city: encodeURIComponent(result.city),
+              cnic: encodeURIComponent(result.cnic),
+              phone: encodeURIComponent(result.phone),
+              dateOfBirth: encodeURIComponent(result.dateOfBirth),
+              gender: encodeURIComponent(result.gender),
+              qualification: encodeURIComponent(result.qualification),
+              address: encodeURIComponent(result.address),
+              imageUrl: encodeURIComponent(result.imageUrl)
+          };
 
 
             return NextResponse.json({result:encodedResult,success:true})
@@ -64,10 +90,23 @@ export async function GET(request, content) {
             const result = await Register.deleteOne(record)
 
             const encodedResult = {
-                ...result._doc,
-                address: encodeURIComponent(result.address),
-                qualification: encodeURIComponent(result.qualification),
-              }
+              ...result,
+              fullName: encodeURIComponent(result.fullName),
+              fatherName: encodeURIComponent(result.fatherName),
+              email: encodeURIComponent(result.email),
+              course: encodeURIComponent(result.course),
+              payment: encodeURIComponent(result.payment),
+              paymentImg: encodeURIComponent(result.paymentImg),
+              status: encodeURIComponent(result.status),
+              city: encodeURIComponent(result.city),
+              cnic: encodeURIComponent(result.cnic),
+              phone: encodeURIComponent(result.phone),
+              dateOfBirth: encodeURIComponent(result.dateOfBirth),
+              gender: encodeURIComponent(result.gender),
+              qualification: encodeURIComponent(result.qualification),
+              address: encodeURIComponent(result.address),
+              imageUrl: encodeURIComponent(result.imageUrl)
+          };
             
             return NextResponse.json({result:encodedResult,success:true})
         } catch (error) {
