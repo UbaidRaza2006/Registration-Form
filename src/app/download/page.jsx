@@ -101,9 +101,24 @@ function DownloadIdCard() {
           const users = Array.isArray(data) ? data : [data];
 
           const decodedUsers = users.map(user => ({
-            ...user,
-            address: decodeURIComponent(user.address),
+            rollNo:user.rollNo,
+            batch:user.batch,
+            _id:user._id,
+            fullName: decodeURIComponent(user.fullName),
+            fatherName: decodeURIComponent(user.fatherName),
+            email: decodeURIComponent(user.email),
+            course: decodeURIComponent(user.course),
+            payment: decodeURIComponent(user.payment),
+            paymentImg: decodeURIComponent(user.paymentImg),
+            status: decodeURIComponent(user.status),
+            city: decodeURIComponent(user.city),
+            cnic: decodeURIComponent(user.cnic),
+            phone: decodeURIComponent(user.phone),
+            dateOfBirth: decodeURIComponent(user.dateOfBirth),
+            gender: decodeURIComponent(user.gender),
             qualification: decodeURIComponent(user.qualification),
+            address: decodeURIComponent(user.address),
+            imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
     
 

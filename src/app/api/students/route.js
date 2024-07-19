@@ -40,6 +40,7 @@ export async function GET(req) {
             const encodedStudents = students.map(student => ({
                 rollNo:student.rollNo,
                 batch:student.batch,
+                _id:student._id,
                 fullName: encodeURIComponent(student.fullName),
                 fatherName: encodeURIComponent(student.fatherName),
                 email: encodeURIComponent(student.email),
@@ -89,7 +90,9 @@ export async function GET(req) {
           const students = await Register.find(filter1).sort({_id: -1});
 
           const encodedStudents = students.map(student => ({
-            ...student,
+            rollNo:student.rollNo,
+                batch:student.batch,
+                _id:student._id,
             fullName: encodeURIComponent(student.fullName),
             fatherName: encodeURIComponent(student.fatherName),
             email: encodeURIComponent(student.email),
@@ -144,7 +147,9 @@ export async function GET(req) {
           if (students.length > 0) {
 
             const encodedStudents = students.map(student => ({
-                ...student,
+                rollNo:student.rollNo,
+                batch:student.batch,
+                _id:student._id,
                 fullName: encodeURIComponent(student.fullName),
                 fatherName: encodeURIComponent(student.fatherName),
                 email: encodeURIComponent(student.email),

@@ -16,6 +16,9 @@ export async function GET(request, content) {
 
             const encodedResult = {
               ...result,
+              rollNo:result.rollNo,
+              batch:result.batch,
+              _id:result._id,
               fullName: encodeURIComponent(result.fullName),
               fatherName: encodeURIComponent(result.fatherName),
               email: encodeURIComponent(result.email),
@@ -30,7 +33,7 @@ export async function GET(request, content) {
               gender: encodeURIComponent(result.gender),
               qualification: encodeURIComponent(result.qualification),
               address: encodeURIComponent(result.address),
-              imageUrl: encodeURIComponent(result.imageUrl)
+              imageUrl: encodeURIComponent(result.imageUrl),
           };
 
             
@@ -54,6 +57,9 @@ export async function GET(request, content) {
             
             const encodedResult = {
               ...result,
+              rollNo:result.rollNo,
+              batch:result.batch,
+              _id:result._id,
               fullName: encodeURIComponent(result.fullName),
               fatherName: encodeURIComponent(result.fatherName),
               email: encodeURIComponent(result.email),

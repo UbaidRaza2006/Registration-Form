@@ -58,7 +58,7 @@ export default function MainPage() {
     const { allowAdmission, setAllowAdmission } = usePassword();
 
     const [admin, setAdmin] = useState(null);
-    const [message, setMessage] = useState("");
+        const [message, setMessage] = useState("");
     const [isFormDisabled, setIsFormDisabled] = useState(false);
     const [currentUser, setCurrentUser] = useState(null)
 

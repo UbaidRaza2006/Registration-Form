@@ -130,9 +130,24 @@ const [fullName, setFullName] = useState('');
     // agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
     
     const decodedUser = {
-      ...data,
-      address: decodeURIComponent(data.address),
+      rollNo:data.rollNo,
+      batch:data.batch,
+      _id:data._id,
+      fullName: decodeURIComponent(data.fullName),
+      fatherName: decodeURIComponent(data.fatherName),
+      email: decodeURIComponent(data.email),
+      course: decodeURIComponent(data.course),
+      payment: decodeURIComponent(data.payment),
+      paymentImg: decodeURIComponent(data.paymentImg),
+      status: decodeURIComponent(data.status),
+      city: decodeURIComponent(data.city),
+      cnic: decodeURIComponent(data.cnic),
+      phone: decodeURIComponent(data.phone),
+      dateOfBirth: decodeURIComponent(data.dateOfBirth),
+      gender: decodeURIComponent(data.gender),
       qualification: decodeURIComponent(data.qualification),
+      address: decodeURIComponent(data.address),
+      imageUrl: decodeURIComponent(data.imageUrl) // Decoding the image URL
     };
 
     setFullName(decodedUser.fullName);
@@ -155,7 +170,7 @@ const [fullName, setFullName] = useState('');
         setIdForUser(decodedUser._id)
     
     
-        setImageee(userData.data.paymentImg);
+        setImageee(decodedUser.paymentImg);
 
 
         if(userData.data[0].payment == "Done"){

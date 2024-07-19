@@ -59,9 +59,9 @@ const EditDrawerApp = ({ userData }) => {
   const [buttonColor, setButtonColor] = useState("Blue");
 
 
-  // useEffect(() => {
-  //   getUserData(userData._id)
-  // }, [userData]);
+  useEffect(() => {
+    getUserData(userData._id)
+  }, [userData]);
 
 
   const getUserData = async (userId) => {
@@ -70,12 +70,27 @@ const EditDrawerApp = ({ userData }) => {
     data = await data.json()
     console.log(data);
     if (data.success) {
-      let result = data.result
+      let user = data.result
 
-      const decodedUser = {
-        ...result,
-        address: decodeURIComponent(result.address),
-        qualification: decodeURIComponent(result.qualification),
+      const result = {
+        rollNo:user.rollNo,
+        batch:user.batch,
+        _id:user._id,
+        fullName: decodeURIComponent(user.fullName),
+        fatherName: decodeURIComponent(user.fatherName),
+        email: decodeURIComponent(user.email),
+        course: decodeURIComponent(user.course),
+        payment: decodeURIComponent(user.payment),
+        paymentImg: decodeURIComponent(user.paymentImg),
+        status: decodeURIComponent(user.status),
+        city: decodeURIComponent(user.city),
+        cnic: decodeURIComponent(user.cnic),
+        phone: decodeURIComponent(user.phone),
+        dateOfBirth: decodeURIComponent(user.dateOfBirth),
+        gender: decodeURIComponent(user.gender),
+        qualification: decodeURIComponent(user.qualification),
+        address: decodeURIComponent(user.address),
+        imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
       };
 
       // const verified = decodedUser.filter(user => user.status === "verified");
@@ -95,8 +110,8 @@ const EditDrawerApp = ({ userData }) => {
       setPhone(result.phone);
       setDateOfBirth(result.dateOfBirth);
       setGender(result.gender);
-      setQualification(decodedUser.qualification);
-      setAddress(decodedUser.address);
+      setQualification(result.qualification);
+      setAddress(result.address);
       setImageUrl(result.imageUrl);
       setRollNo(result.rollNo);
       setPayment(result.payment);

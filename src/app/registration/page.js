@@ -239,9 +239,24 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       // Convert single object to an array of length 1
       const users = Array.isArray(data) ? data : [data];
       const decodedUsers = users.map(user => ({
-        ...user,
-        address: decodeURIComponent(user.address),
+        rollNo:user.rollNo,
+        batch:user.batch,
+        _id:user._id,
+        fullName: decodeURIComponent(user.fullName),
+        fatherName: decodeURIComponent(user.fatherName),
+        email: decodeURIComponent(user.email),
+        course: decodeURIComponent(user.course),
+        payment: decodeURIComponent(user.payment),
+        paymentImg: decodeURIComponent(user.paymentImg),
+        status: decodeURIComponent(user.status),
+        city: decodeURIComponent(user.city),
+        cnic: decodeURIComponent(user.cnic),
+        phone: decodeURIComponent(user.phone),
+        dateOfBirth: decodeURIComponent(user.dateOfBirth),
+        gender: decodeURIComponent(user.gender),
         qualification: decodeURIComponent(user.qualification),
+        address: decodeURIComponent(user.address),
+        imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
       }));
 
       const verified = decodedUsers.filter(user => user.status === "verified");
@@ -309,15 +324,30 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-            ...user,
-            address: decodeURIComponent(user.address),
+            rollNo:user.rollNo,
+            batch:user.batch,
+            _id:user._id,
+            fullName: decodeURIComponent(user.fullName),
+            fatherName: decodeURIComponent(user.fatherName),
+            email: decodeURIComponent(user.email),
+            course: decodeURIComponent(user.course),
+            payment: decodeURIComponent(user.payment),
+            paymentImg: decodeURIComponent(user.paymentImg),
+            status: decodeURIComponent(user.status),
+            city: decodeURIComponent(user.city),
+            cnic: decodeURIComponent(user.cnic),
+            phone: decodeURIComponent(user.phone),
+            dateOfBirth: decodeURIComponent(user.dateOfBirth),
+            gender: decodeURIComponent(user.gender),
             qualification: decodeURIComponent(user.qualification),
+            address: decodeURIComponent(user.address),
+            imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
     
-          const verified = decodedUsers.filter(user => user.status === "verified");
+          const verified = decodedUsers[0].status === "verified";
 
           setRollNumberDone(rollNumber)
-          setAllUsers(decodedUsers);
+          setAllUsers(decodedUsers[0]);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -382,9 +412,24 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-            ...user,
-            address: decodeURIComponent(user.address),
+            rollNo:user.rollNo,
+            batch:user.batch,
+            _id:user._id,
+            fullName: decodeURIComponent(user.fullName),
+            fatherName: decodeURIComponent(user.fatherName),
+            email: decodeURIComponent(user.email),
+            course: decodeURIComponent(user.course),
+            payment: decodeURIComponent(user.payment),
+            paymentImg: decodeURIComponent(user.paymentImg),
+            status: decodeURIComponent(user.status),
+            city: decodeURIComponent(user.city),
+            cnic: decodeURIComponent(user.cnic),
+            phone: decodeURIComponent(user.phone),
+            dateOfBirth: decodeURIComponent(user.dateOfBirth),
+            gender: decodeURIComponent(user.gender),
             qualification: decodeURIComponent(user.qualification),
+            address: decodeURIComponent(user.address),
+            imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
     
           const verified = decodedUsers.filter(user => user.status === "verified");
@@ -455,16 +500,38 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-            ...user,
-            address: decodeURIComponent(user.address),
+            rollNo:user.rollNo,
+            batch:user.batch,
+            _id:user._id,
+            fullName: decodeURIComponent(user.fullName),
+            fatherName: decodeURIComponent(user.fatherName),
+            email: decodeURIComponent(user.email),
+            course: decodeURIComponent(user.course),
+            payment: decodeURIComponent(user.payment),
+            paymentImg: decodeURIComponent(user.paymentImg),
+            status: decodeURIComponent(user.status),
+            city: decodeURIComponent(user.city),
+            cnic: decodeURIComponent(user.cnic),
+            phone: decodeURIComponent(user.phone),
+            dateOfBirth: decodeURIComponent(user.dateOfBirth),
+            gender: decodeURIComponent(user.gender),
             qualification: decodeURIComponent(user.qualification),
+            address: decodeURIComponent(user.address),
+            imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
     
-          const verified = decodedUsers.filter(user => user.status === "verified");
+          // const verified = decodedUsers.filter(user => user.status === "verified");
+          const verified1 = decodedUsers[0].status === "verified";
+          const verified = Array.isArray(verified1) ? verified1 : [verified1];
+          const theUser = decodedUsers[0]
+          const finalUser = Array.isArray(theUser) ? theUser : [theUser];
+
+
+
 
           setRollNumberDone(rollNumber)
           setCnicNumberDone(cnicNumber)
-          setAllUsers(decodedUsers);
+          setAllUsers(finalUser);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -550,52 +617,57 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   // }, [allUsers,admin]);
   
   useEffect(() => {
-    const fetchData = async () => {
-      if (api === true) {
-        console.log("Reload hoja bhai");
+    // const fetchData = async () => {
+    //   if (api === true) {
+    //     console.log("Reload hoja bhai");
   
-        try {
-          const res = await fetch("/api/students", {
-            method: "GET",
-            cache: "no-cache", // Set cache control policy to 'no-cache'
-          });
-          const data = await res.json();
-          console.log("reload ka data", data)
+    //     try {
+    //       const res = await fetch("/api/students", {
+    //         method: "GET",
+    //         cache: "no-cache", // Set cache control policy to 'no-cache'
+    //       });
+    //       const data = await res.json();
+    //       console.log("reload ka data", data)
   
-          // Convert single object to an array of length 1
-          const users = Array.isArray(data.data) ? data.data : [data.data];
+    //       // Convert single object to an array of length 1
+    //       const users = Array.isArray(data.data) ? data.data : [data.data];
 
-          const decodedUsers = users.map(user => ({
-            ...user,
-            address: decodeURIComponent(user.address),
-            qualification: decodeURIComponent(user.qualification),
-          }));
+    //       const decodedUsers = users.map(user => ({
+    //         ...user,
+    //         address: decodeURIComponent(user.address),
+    //         qualification: decodeURIComponent(user.qualification),
+    //       }));
     
-          const verified = decodedUsers.filter(user => user.status === "verified");
+    //       const verified = decodedUsers.filter(user => user.status === "verified");
 
           
   
-          setVerifiedUsers(verified);
-          setAlternateVerified(verified);
+    //       setVerifiedUsers(verified);
+    //       setAlternateVerified(verified);
   
-          // Set all users into state
-          setAllUsers(decodedUsers);
-          setAlternateUsers(decodedUsers);
-          // checkingVerifiedUsers(users);
-        } catch (error) {
-          console.error("Error fetching users:", error);
-        }
-        setApi(false);
-      }
-    };
+    //       // Set all users into state
+    //       setAllUsers(decodedUsers);
+    //       setAlternateUsers(decodedUsers);
+    //       // checkingVerifiedUsers(users);
+    //     } catch (error) {
+    //       console.error("Error fetching users:", error);
+    //     }
+    //     setApi(false);
+    //   }
+    // };
   
-    fetchData();
+    // fetchData();
+    if(api){
+    setAllUsers([])
+    setVerifiedUsers([])
+    setHasMore(true)
+    }
   }, [api]); // api ko dependency list mein include kiya hai
 
   useEffect(() => {
     console.log("hasMore----",hasMore,"---page---",page,"---allUsers---",allUsers)
     if (hasMore) {
-      gettingUsers(page);
+      gettingUsers(page,api);
     }
     else if(!hasMore){
       settingVerified()
@@ -620,7 +692,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
   //   }
   // };
 
- const gettingUsers = async () => {
+ const gettingUsers = async (page,api) => {
   console.log("gettingUsers");
   setIsLoading(true);
   try {
@@ -640,6 +712,7 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       const decodedUsers = users.map(user => ({
         rollNo:user.rollNo,
         batch:user.batch,
+        _id:user._id,
         fullName: decodeURIComponent(user.fullName),
         fatherName: decodeURIComponent(user.fatherName),
         email: decodeURIComponent(user.email),
@@ -668,7 +741,13 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       // Check if more users are available to fetch
       if (data.more === false) {
         setHasMore(false);
-      setCoursesToLoad(true);
+        setPage(1)
+        if(api){
+          setApi(false)
+        }
+        else{
+          setCoursesToLoad(true);
+        }
       toast.info(`Fetching Students Done ${data.totalUsers}`, {
         position: "top-right",
         autoClose: 5000,
