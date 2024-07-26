@@ -15,6 +15,10 @@ import Image from "next/image";
 import IdCardModal from "../components/IdCardComponent";
 import { Bounce, toast } from "react-toastify";
 import dotenv from 'dotenv'
+import ImageUpload from "../components/Abc";
+
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { Flex, message, Upload } from 'antd';
 
 dotenv.config()
 
@@ -61,6 +65,40 @@ export default function MainPage() {
         const [message, setMessage] = useState("");
     const [isFormDisabled, setIsFormDisabled] = useState(false);
     const [currentUser, setCurrentUser] = useState(null)
+
+    // const [loading1, setLoading1] = useState(false);
+    // const [imageUrl, setImageUrl] = useState();
+    // const   handleChange = (info) => {
+    //   if (info.file.status === 'uploading') {
+    //     setLoading1(true);
+    //     return;
+    //   }
+    //   if (info.file.status === 'done') {
+    //     // Get this url from response in real world.
+    //     getBase64(info.file.originFileObj, (url) => {
+    //       setLoading1(false);
+    //       setImageUrl(url);
+    //     });
+    //   }
+    // };
+    // const uploadButton = (
+    //   <button
+    //     style={{
+    //       border: 0,
+    //       background: 'none',
+    //     }}
+    //     type="button"
+    //   >
+    //     {loading1 ? <LoadingOutlined /> : <PlusOutlined />}
+    //     <div
+    //       style={{
+    //         marginTop: 8,
+    //       }}
+    //     >
+    //       Upload
+    //     </div>
+    //   </button>
+    // );
 
 
 
@@ -1060,6 +1098,56 @@ export default function MainPage() {
             <div>
                 <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} />
             </div>
+
+
+    <ImageUpload/>
+
+
+
+{/* 
+            <Upload
+        name="avatar"
+        listType="picture-card"
+        className="avatar-uploader"
+        showUploadList={false}
+        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        // beforeUpload={beforeUpload}
+        onChange={handleChange}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="avatar"
+            style={{
+              width: '100%',
+            }}
+          />
+        ) : (
+          uploadButton
+        )}
+            </Upload>
+      <Upload
+        name="avatar"
+        listType="picture-circle"
+        className="avatar-uploader"
+        showUploadList={false}
+        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+        // beforeUpload={beforeUpload}
+        onChange={handleChange}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="avatar"
+            style={{
+              width: '100%',
+            }}
+          />
+        ) : (
+          uploadButton
+        )}
+      </Upload> */}
+
         </div>
 
     )

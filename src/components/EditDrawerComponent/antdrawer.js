@@ -704,7 +704,7 @@ const EditDrawerApp = ({ userData }) => {
 
 
 
-        <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className="mx-auto w-full  flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative">
+        {/* <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className="mx-auto w-full  flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative"> */}
 
 
 
@@ -1027,7 +1027,7 @@ const EditDrawerApp = ({ userData }) => {
 
 
 
-        </div>
+        {/* </div> */}
 
 
 
