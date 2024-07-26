@@ -16,8 +16,12 @@ const ImageUpload = () => {
     }
   };
 
+  const triggerFileInput = () => {
+    document.getElementById('file-upload').click();
+  };
+
   return (
-    <div className="image-upload-container">
+    <div className="image-upload-container" onClick={triggerFileInput}>
       {!image ? (
         <label htmlFor="file-upload">Upload Image</label>
       ) : (
@@ -27,8 +31,8 @@ const ImageUpload = () => {
         id="file-upload"
         type="file"
         accept="image/*"
-        onChange={handleImageUpload}
         style={{ display: 'none' }}
+        onChange={handleImageUpload}
       />
       <style jsx>{`
         .image-upload-container {
