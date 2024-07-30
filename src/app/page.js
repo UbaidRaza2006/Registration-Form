@@ -979,11 +979,11 @@ const registerUser = async (formData) => {
 
                 {/* Checking Github */}
 
-                <Button
+                <button
                     onClick={handleRegister}
                     className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
                 // disabled={!isFormValid()}
-                >Register</Button>
+                >Register</button>
 
             </div>
 
