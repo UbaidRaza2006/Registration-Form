@@ -126,16 +126,16 @@ export default function MainPage() {
             if (data.secure_url) {
                 setImage(data.secure_url);
             }
-            // Convert the image to base64
-            const base64Image = await getBase64Image(data.secure_url);
-            console.log("Base64 image:", base64Image);
+            // // Convert the image to base64
+            // const base64Image = await getBase64Image(data.secure_url);
+            // console.log("Base64 image:", base64Image);
 
             // Update the form data with the base64 representation of the image
 
             if (data.secure_url) {
                 setFormData(prevFormData => ({
                     ...prevFormData,
-                    imageUrl: base64Image,
+                    imageUrl: data.secure_url,
                 }));
             }
 
@@ -156,29 +156,34 @@ export default function MainPage() {
         }
     };
 
-    // Function to convert an image URL to base64
-    const getBase64Image = async (imageUrl) => {
-        // Check if window is defined (i.e., we're in the browser environment)
-        if (typeof window !== 'undefined') {
-            try {
-                const response = await fetch(imageUrl);
-                const blob = await response.blob();
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-            } catch (error) {
-                console.error('Error fetching image for base64 conversion:', error);
-                return null;
-            }
-        } else {
-            // Handle the case where window is not defined (e.g., in a server-side context)
-            console.warn('getBase64Image function is being executed in a non-browser context.');
-            return null;
-        }
-    };
+    // // Function to convert an image URL to base64
+
+    // const getBase64Image = async (imageUrl) => {
+    //     // Check if window is defined (i.e., we're in the browser environment)
+    //     if (typeof window !== 'undefined') {
+    //         try {
+    //             const response = await fetch(imageUrl);
+    //             const blob = await response.blob();
+    //             return new Promise((resolve, reject) => {
+    //                 const reader = new FileReader();
+    //                 reader.onload = () => resolve(reader.result);
+    //                 reader.onerror = reject;
+    //                 reader.readAsDataURL(blob);
+    //             });
+    //         } catch (error) {
+    //             console.error('Error fetching image for base64 conversion:', error);
+    //             return null;
+    //         }
+    //     } else {
+    //         // Handle the case where window is not defined (e.g., in a server-side context)
+    //         console.warn('getBase64Image function is being executed in a non-browser context.');
+    //         return null;
+    //     }
+    // };
+
+    const triggerFileInput = () => {
+        document.getElementById('file-upload').click();
+      };
 
 
 
@@ -229,126 +234,59 @@ export default function MainPage() {
     }
 
 
+// Register button Functions
+   
+   
+  async function handleRegister() {
+    if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')) {
 
-    // cnic and phone
-    async function handleRegister() {
-        if (formData.email.includes('@') && formData.email.includes('.com') && !formData.email.includes(' ')) {
+        if (formData.cnic.length === 15) {
 
-            if (formData.cnic.length === 15) {
+            if (formData.phone.length === 12) {
 
-                if (formData.phone.length === 12) {
+                let formattedBatch = Number(formData.batch).toString().replace(/^0+/, '');
 
-                    //  let formattedBatch= batch.replace(/^0+/, '');
-                    let formattedBatch = Number(formData.batch).toString().replace(/^0+/, '');
+                if (formattedBatch && formattedBatch >= 1) {
 
+                    if (formattedBatch.includes('.')) {
+                        formattedBatch = Math.floor(parseFloat(formattedBatch));
+                    }
 
+                    if (formData.dateOfBirth) {
 
-                    if (formattedBatch && formattedBatch >= 1) {
+                        const formattedAddress = formData.address.trim().replace(/\s+/g, ' ');
+                        const formattedQualification = formData.qualification.trim().replace(/\s+/g, ' ');
+                        const formattedCity = formData.city.trim().replace(/\s+/g, ' ');
+                        const formattedFullName = formData.fullName.trim().replace(/\s+/g, ' ');
+                        const formattedFatherName = formData.fatherName.trim().replace(/\s+/g, ' ');
 
-                        if (formattedBatch.includes('.')) {
-                            formattedBatch = Math.floor(parseFloat(formattedBatch));
-                        }
+                        if (formattedFullName.length > 0) {
 
-                        if (formData.dateOfBirth) {
+                            if (formattedFatherName.length > 0) {
 
+                                if (formattedCity.length > 0) {
 
+                                    if (formattedAddress.length > 0) {
 
+                                        if (formattedQualification.length > 0) {
 
-                            const formattedAddress = formData.address.trim().replace(/\s+/g, ' ');
-                            const formattedQualification = formData.qualification.trim().replace(/\s+/g, ' ');
-                            const formattedCity = formData.city.trim().replace(/\s+/g, ' ');
-                            const formattedFullName = formData.fullName.trim().replace(/\s+/g, ' ');
-                            const formattedFatherName = formData.fatherName.trim().replace(/\s+/g, ' ');
+                                            if (formData.imageUrl) {
 
+                                                const updatedFormData = {
+                                                    ...formData,
+                                                    fullName: formattedFullName,
+                                                    fatherName: formattedFatherName,
+                                                    batch: formattedBatch,
+                                                    city: formattedCity,
+                                                    qualification: formattedQualification,
+                                                    address: formattedAddress,
+                                                };
 
-                            if (formattedFullName.length > 0) {
+                                                setFormData(updatedFormData);
+                                                await finalRegistration(updatedFormData);
 
-                                if (formattedFatherName.length > 0) {
-
-                                    if (formattedCity.length > 0) {
-
-                                        if (formattedAddress.length > 0) {
-
-                                            if (formattedQualification.length > 0) {
-
-                                                if (formData.imageUrl) {
-
-
-
-
-
-
-
-
-                                                    // ye main code hein ayha se
-
-                                                    setFormData(prevFormData => ({
-                                                        ...prevFormData,
-                                                        fullName: formattedFullName,
-                                                        fatherName: formattedFatherName,
-                                                        batch: formattedBatch,
-                                                        city: formattedCity,
-                                                        qualification: formattedQualification,
-                                                        address: formattedAddress,
-                                                    }));
-
-                                                    finalRegistration()
-
-
-
-                                                    // ye main code he yahan tk
-
-
-
-                                                }
-                                                else {
-                                                    console.log(formData.imageUrl)
-                                                    toast.error('Provide Your Image!', {
-                                                        position: "top-right",
-                                                        autoClose: 5000,
-                                                        hideProgressBar: false,
-                                                        closeOnClick: true,
-                                                        pauseOnHover: true,
-                                                        draggable: true,
-                                                        progress: undefined,
-                                                        theme: "light",
-                                                        transition: Bounce,
-                                                        });
-                                                    
-                                                }
-                                            }
-                                            else {
-
-
-                                                const qualificationInput = document.getElementById('qualificationInput');
-                                                if (qualificationInput) {
-                                                    console.log(formattedQualification)
-                                                    toast.error('Provide Your Qualification!', {
-                                                        position: "top-right",
-                                                        autoClose: 5000,
-                                                        hideProgressBar: false,
-                                                        closeOnClick: true,
-                                                        pauseOnHover: true,
-                                                        draggable: true,
-                                                        progress: undefined,
-                                                        theme: "light",
-                                                        transition: Bounce,
-                                                        });
-                                                    qualificationInput.focus();
-                                                    return;
-                                                }
-                                                // Optionally, you can show an error message or handle the validation failure in another way
-                                                console.log("id error");
-
-                                            }
-                                        }
-                                        else {
-
-
-                                            const addressInput = document.getElementById('addressInput');
-                                            if (addressInput) {
-                                                console.log(formattedAddress)
-                                                toast.error('Fill the Address field!', {
+                                            } else {
+                                                toast.error('Provide Your Image!', {
                                                     position: "top-right",
                                                     autoClose: 5000,
                                                     hideProgressBar: false,
@@ -358,22 +296,31 @@ export default function MainPage() {
                                                     progress: undefined,
                                                     theme: "light",
                                                     transition: Bounce,
-                                                    });
-                                               addressInput.focus();
+                                                });
+
+                                            }
+                                        } else {
+                                            const qualificationInput = document.getElementById('qualificationInput');
+                                            if (qualificationInput) {
+                                                toast.error('Provide Your Qualification!', {
+                                                    position: "top-right",
+                                                    autoClose: 5000,
+                                                    hideProgressBar: false,
+                                                    closeOnClick: true,
+                                                    pauseOnHover: true,
+                                                    draggable: true,
+                                                    progress: undefined,
+                                                    theme: "light",
+                                                    transition: Bounce,
+                                                });
+                                                qualificationInput.focus();
                                                 return;
                                             }
-                                            // Optionally, you can show an error message or handle the validation failure in another way
-                                            console.log("id error");
-
                                         }
-                                    }
-                                    else {
-
-
-                                        const cityInput = document.getElementById('cityInput');
-                                        if (cityInput) {
-                                            console.log(formattedCity)
-                                            toast.error('Give Your City Name!', {
+                                    } else {
+                                        const addressInput = document.getElementById('addressInput');
+                                        if (addressInput) {
+                                            toast.error('Fill the Address field!', {
                                                 position: "top-right",
                                                 autoClose: 5000,
                                                 hideProgressBar: false,
@@ -383,22 +330,15 @@ export default function MainPage() {
                                                 progress: undefined,
                                                 theme: "light",
                                                 transition: Bounce,
-                                                });
-                                            cityInput.focus();
+                                            });
+                                            addressInput.focus();
                                             return;
                                         }
-                                        // Optionally, you can show an error message or handle the validation failure in another way
-                                        console.log("id error");
-
                                     }
-                                }
-                                else {
-
-
-                                    const fnameInput = document.getElementById('fnameInput');
-                                    if (fnameInput) {
-                                        console.log(formattedFatherName)
-                                        toast.error('Give your Father Name in the field!', {
+                                } else {
+                                    const cityInput = document.getElementById('cityInput');
+                                    if (cityInput) {
+                                        toast.error('Give Your City Name!', {
                                             position: "top-right",
                                             autoClose: 5000,
                                             hideProgressBar: false,
@@ -408,22 +348,15 @@ export default function MainPage() {
                                             progress: undefined,
                                             theme: "light",
                                             transition: Bounce,
-                                            });
-                                        fnameInput.focus();
+                                        });
+                                        cityInput.focus();
                                         return;
                                     }
-                                    // Optionally, you can show an error message or handle the validation failure in another way
-                                    console.log("id error");
-
                                 }
-                            }
-                            else {
-
-
-                                const nameInput = document.getElementById('nameInput');
-                                if (nameInput) {
-                                    console.log(formattedFullName)
-                                    toast.error('Give youe Name in the field!', {
+                            } else {
+                                const fnameInput = document.getElementById('fnameInput');
+                                if (fnameInput) {
+                                    toast.error('Give your Father Name in the field!', {
                                         position: "top-right",
                                         autoClose: 5000,
                                         hideProgressBar: false,
@@ -433,22 +366,15 @@ export default function MainPage() {
                                         progress: undefined,
                                         theme: "light",
                                         transition: Bounce,
-                                        });
-                                    nameInput.focus();
+                                    });
+                                    fnameInput.focus();
                                     return;
                                 }
-                                // Optionally, you can show an error message or handle the validation failure in another way
-                                console.log("id error");
-
                             }
-                        }
-                        else {
-
-
-                            const dateInput = document.getElementById('dateInput');
-                            if (dateInput) {
-                                console.log(formData.dateOfBirth)
-                                toast.error('Select D/O/B!', {
+                        } else {
+                            const nameInput = document.getElementById('nameInput');
+                            if (nameInput) {
+                                toast.error('Give your Name in the field!', {
                                     position: "top-right",
                                     autoClose: 5000,
                                     hideProgressBar: false,
@@ -458,72 +384,31 @@ export default function MainPage() {
                                     progress: undefined,
                                     theme: "light",
                                     transition: Bounce,
-                                    });
-                                dateInput.focus();
+                                });
+                                nameInput.focus();
                                 return;
                             }
-                            // Optionally, you can show an error message or handle the validation failure in another way
-                            console.log("id error");
-
+                        }
+                    } else {
+                        const dateInput = document.getElementById('dateInput');
+                        if (dateInput) {
+                            toast.error('Select D/O/B!', {
+                                position: "top-right",
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: "light",
+                                transition: Bounce,
+                            });
+                            dateInput.focus();
+                            return;
                         }
                     }
-                    else {
-
-
-                        //   const batchInput = document.getElementById('batchInput');
-                        //   if (batchInput) {
-                        //       batchInput.focus();
-                        console.log(formData.batch)
-                        toast.error('There might be some Error, Try again!', {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                            transition: Bounce,
-                            });
-                        //       return;
-                        //   }
-                        //   // Optionally, you can show an error message or handle the validation failure in another way
-                        //   console.log("id error");
-
-                    }
-                }
-                else {
-
-
-                    const phoneInput = document.getElementById('phoneInput');
-                    if (phoneInput) {
-                        console.log(formData.phone)
-                        toast.error('Enter complete Phone #!', {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "light",
-                            transition: Bounce,
-                            });
-                        phoneInput.focus();
-                        return;
-                    }
-                    // Optionally, you can show an error message or handle the validation failure in another way
-                    console.log("id error");
-
-                }
-            }
-            else {
-
-
-                const cnicInput = document.getElementById('cnicInput');
-                if (cnicInput) {
-                    console.log(formData.cnic)
-                    toast.error('Enter complete Cnic!', {
+                } else {
+                    toast.error('There might be some Error, Try again!', {
                         position: "top-right",
                         autoClose: 5000,
                         hideProgressBar: false,
@@ -533,22 +418,30 @@ export default function MainPage() {
                         progress: undefined,
                         theme: "light",
                         transition: Bounce,
-                        });
-                    cnicInput.focus();
+                    });
+                }
+            } else {
+                const phoneInput = document.getElementById('phoneInput');
+                if (phoneInput) {
+                    toast.error('Enter complete Phone #!', {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                    });
+                    phoneInput.focus();
                     return;
                 }
-                // Optionally, you can show an error message or handle the validation failure in another way
-                console.log("id error");
-
             }
-        }
-        else {
-
-
-            const emailInput = document.getElementById('emailInput');
-            if (emailInput) {
-                console.log(formData.email)
-                toast.error('Enter a valid Email address!', {
+        } else {
+            const cnicInput = document.getElementById('cnicInput');
+            if (cnicInput) {
+                toast.error('Enter complete Cnic!', {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -558,28 +451,15 @@ export default function MainPage() {
                     progress: undefined,
                     theme: "light",
                     transition: Bounce,
-                    });
-                emailInput.focus();
+                });
+                cnicInput.focus();
                 return;
             }
-            // Optionally, you can show an error message or handle the validation failure in another way
-            console.log("id error");
-
         }
-    }
-
-
-    const finalRegistration = async () => {
-
-        console.log("formData-->", formData);
-        const res = await registerUser(formData);
-
-        // setResData(res.user)
-        console.log("res-->", res);
-
-        if (res.success) {
-
-            toast.success('Registered Successfully!', {
+    } else {
+        const emailInput = document.getElementById('emailInput');
+        if (emailInput) {
+            toast.error('Enter a valid Email address!', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -589,78 +469,87 @@ export default function MainPage() {
                 progress: undefined,
                 theme: "light",
                 transition: Bounce,
-                });
-            setShowModal(true);
-            setCurrentUser(res.user)
-            // setFormData(initialFormData)
-            // setImage(null)
-            // settingCourseAndBatch()
-
-        }
-        else if(res.success === false){
-
-            toast.error(res.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-                });
-        
-
-        }
-           
-
-
-
-
-        setButtonClicked(true);
-
-        // Set a timeout to reset the button state after a certain duration
-        setTimeout(() => {
-            setButtonClicked(false);
-        }, 300);
-
-
-
-    }
-
-
-    const registerUser = async (formData) => {
-        try {
-            const response = await fetch("/api/registartion",
-                {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json',
-                    },
-
-                    body: JSON.stringify(formData)
-                });
-
-            const data = await response.json()
-            return data;
-
-        }
-        catch (e) {
-            console.log('error', e);
-            toast.error('There is an Internal Error!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-                });
+            });
+            emailInput.focus();
+            return;
         }
     }
+}
+
+const finalRegistration = async (formData) => {
+    console.log("formData-->", formData);
+    const res = await registerUser(formData);
+
+    console.log("res-->", res);
+
+    if (res.success) {
+        toast.success('Registered Successfully!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+        setShowModal(true);
+        setCurrentUser(res.user);
+
+    } else if (res.success === false) {
+        toast.error(res.message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+    }
+
+    setButtonClicked(true);
+
+    setTimeout(() => {
+        setButtonClicked(false);
+    }, 300);
+}
+
+const registerUser = async (formData) => {
+    try {
+        const response = await fetch("/api/registartion", {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+        return data;
+
+    } catch (e) {
+        console.log('error', e);
+        toast.error('There is an Internal Error!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+    }
+}
+
+
+// Register button Functions........
+
 
 
     useEffect(() => {
@@ -1051,47 +940,50 @@ export default function MainPage() {
                 </div>
 
 
-                <div className="image-uploader" onClick={() => document.getElementById('image-upload').click()}>
-                    <input id="image-upload" type="file" onChange={handleImageUpload} style={{ display: 'none' }} />
+                
 
-                    {image && <Image cloudName="dbcpfhk6n" src={image} alt="image" style={{ width: '100px', height: '150px' }} width={600} height={400} />}
+                <div className="image-upload-container mt-4 bg-gray-200 shadow-md shadow-gray-400" onClick={triggerFileInput}>
+      {!image ? (
+        <label className="text-gray-600" htmlFor="file-upload">Upload <PlusOutlined/> </label>
+      ) : (
+        <img src={image} alt="Uploaded image" className="uploaded-image" />
+      )}
+      <input
+        id="file-upload"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageUpload}
+      />
+      <style jsx>{`
+        .image-upload-container {
+          width: 130px;
+          height: 150px;
+          border: 2px dashed #aaa;
+          border-radius: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .uploaded-image {
+          width: 100%;
+          height: 100%;
+          border-radius: 12px;
+          object-fit: cover; /* This line is important */
+        }
+      `}</style>
+    </div>
 
-                    <style jsx>{`
-    .image-uploader {
-      width: 120px;
-      height: 120px; /* Reduced height */
-      background-color: #f2f2f2;
-      border: 2px dashed #ccc;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-    .upload-text {
-      margin: 0;
-      color: #555;
-    }
-    input[type='file'] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 120px;
-      height: 120px;
-      opacity: 0;
-      cursor: pointer;
-    }
-  `}</style>
-                </div>
+
 
                 {/* Checking Github */}
 
-                <button
+                <Button
                     onClick={handleRegister}
-                    className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
+                    className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-[#155261] text-white font-semibold uppercase rounded-md`}
                 // disabled={!isFormValid()}
-                >Register</button>
+                >Register</Button>
 
             </div>
 
@@ -1100,7 +992,7 @@ export default function MainPage() {
             </div>
 
 
-    <ImageUpload/>
+    {/* <ImageUpload/> */}
 
 
 
