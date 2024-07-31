@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Joi from 'joi';
 import connectToDb from '../../../database';
 import Register from '../../../models/registration';
+import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 
 const RegistrationSchema = Joi.object({
@@ -27,6 +28,8 @@ const RegistrationSchema = Joi.object({
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         await connectToDb();
 
@@ -50,7 +53,7 @@ export async function POST(req) {
             imageUrl
         } = extractData;
 
-        const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 });
+        const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 }).session(session);
         const lastRollNo = lastRegisteredUser ? parseInt(lastRegisteredUser.rollNo) : 0;
         const nextRollNo = lastRollNo + 1;
         const generatedRollNo = nextRollNo.toString().padStart(5, '0');
@@ -76,13 +79,15 @@ export async function POST(req) {
         });
 
         if (error) {
+            await session.abortTransaction();
+            session.endSession();
             return NextResponse.json({
                 success: false,
                 message: error.details[0].message,
             });
         }
 
-        const newlyRegisteredUser = await Register.create({
+        const newlyRegisteredUser = await Register.create([{
             fullName,
             fatherName,
             email,
@@ -100,13 +105,15 @@ export async function POST(req) {
             address,
             imageUrl,
             rollNo: generatedRollNo
-        });
+        }], { session });
+
+        await session.commitTransaction();
+        session.endSession();
 
         if (newlyRegisteredUser) {
-            console.log(newlyRegisteredUser);
             return NextResponse.json({
                 success: true,
-                user: newlyRegisteredUser,
+                user: newlyRegisteredUser[0],
                 message: 'Registered Successfully!',
             });
         } else {
@@ -117,6 +124,8 @@ export async function POST(req) {
         }
 
     } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
         console.log('Error in adding new user-->', error);
 
         return NextResponse.json({
