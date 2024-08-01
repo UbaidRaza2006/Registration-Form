@@ -1,14 +1,24 @@
 #bg{
-    background-color: #18819b;
+    background-color: white;
+}
+#abc{
+    margin-top: 20px;
+
 }
 
 #button1{
-    border:1px solid white;
+    /* background-color: #1f596b; */
+    /* border:1px dashed white; */
     margin-right: 1%;
+    width: 200px;
+    border: none;
 }
 #button2{
-    border:1px solid white;
+    /* background-color: #1f596b; */
+    /* border:1px dashed white; */
     margin-right: -1%;
+    width: 200px;
+    border: none;
 }
 
 #payment{

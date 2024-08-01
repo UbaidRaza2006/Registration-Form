@@ -10,7 +10,7 @@ const SelectComponent = ({ label, options, value, onChange, style }) => {
       <select
         value={value}
         onChange={onChange}
-        className="appearance-none border  focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+        className="appearance-none border  focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit"
       >
         {options.map((option) => (
           <option key={option.id} value={option.id}>

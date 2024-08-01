@@ -17,7 +17,8 @@ export default function Navbar(){
 const router = useRouter()
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    // className="" id= "abc"
+    <Box sx={{ flexGrow: 1 }} >
     <AppBar position="static" id='bg'>
       <Toolbar className='w-[100%]'>
         {/* <IconButton
@@ -35,26 +36,36 @@ const router = useRouter()
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          <p className='font-bold text-2xl sm:text-4xl md:text-4xl lg:text-4xl xl:text-4xl'>Course Registration Form</p>
+          <p className='font-bold text-[#1f596b] text-2xl sm:text-4xl md:text-3xl lg:text-4xl xl:text-4xl'>Course Registration Form</p>
         </Typography>
-        <Button
-          color="inherit"
+        <button
+          // color="inherit"
           id='button1'
           onClick={()=>{router.push("/download")}}
-          className='h-12 w-[14%] md:w-[20%] border border-white-900 rounded-md justify-between items-center text-center'
-          sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+          className='btn h-12 hidden md:inline \ bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
+          // sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
           <p className='font-bold '>Download ID Card</p>
-        </Button>
-        <Button
-          color="inherit"
+        </button>
+        <button
+          // color="inherit"
           id='button2'
           onClick={()=>{router.push("/payment")}}
-          className='h-12 w-[14%] md:w-[20%] border border-white-900 justify-between items-center rounded-md text-center'
-          sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+          className='btn hidden md:inline h-12  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
+          // sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
           <p className='font-bold'>Payment Verify</p>
-        </Button>
+        </button>
+
+{/* <button className="btn h-12 w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] mt-4 text-white text-lg h-12 rounded-lg mx-auto block px-12 tracking-wider"
+          onClick={()=>{router.push("/payment")}}
+                    // onClick={handleRegister}
+                // disabled={!isFormValid()}
+> Register
+      </button> */}
+
+
+
       </Toolbar>
     </AppBar>
   </Box>

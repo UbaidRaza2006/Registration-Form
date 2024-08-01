@@ -696,38 +696,39 @@ const registerUser = async (formData) => {
 
 
     return (
-        <div className="mr-0 mb-0 ml-0 relative">
+        <div className="mr-0 mb-0 ml-0 relative bg-[#d4f6f9]">  {/* Parent div with background color */}
 
+  <div className="bg-[#d4f6f9] pt-6">  {/* Additional div to apply padding-top */}
+    <Navbar/>
+  </div>
 
-            <Navbar />
-
-            <div style={{ boxShadow: '1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)' }} className="w-full bg-white text-[#248ba5] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl  h-6">Service-Education-Registration
-            </div>
+  <div style={{ boxShadow: '1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)' }} className="w-full text-white bg-[#1f596b] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl h-6">
+    Service-Education-Registration
+  </div>
 
             <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[300px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
 
             /></div>
 
             <div className="bg-none flex items-center justify-center rounded-xl space-x-0 mt-4 mb-4">
-                <Button color="inherit"
-                    id='button1'
-                    onClick={() => { router.push("/download") }}
-                    className='h-12 w-[14%] md:w-[20%] border border-white-900   justify-between items-center text-center'
-                    sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
-                >
-                    <p className='font-bold '>Download ID Card</p>
-                </Button>
-
-
-                <Button
-                    color="inherit"
-                    id='button2'
-                    onClick={() => { router.push("/payment") }}
-                    className='h-12 w-[14%] md:w-[20%] border border-white-900 bg-[#248ba5]  justify-between items-center  text-center'
-                    sx={{ display: { xs: 'inline', sm: 'inline', md: 'none', lg: 'none', xl: 'none' } }}
-                >
-                    <p className='font-bold '>Payment Verify</p>
-                </Button>
+            <button
+        //   color="inherit"
+          id='button1'
+          onClick={()=>{router.push("/download")}}
+          className='btn h-12 inline md:hidden w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
+        //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+        >
+          <p className='font-bold '>Download ID Card</p>
+        </button>
+        <button
+        //   color="inherit"
+          id='button2'
+          onClick={()=>{router.push("/payment")}}
+          className='btn h-12 inline md:hidden w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
+        //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+        >
+          <p className='font-bold'>Payment Verify</p>
+        </button>
 
             </div>
 
@@ -741,7 +742,7 @@ const registerUser = async (formData) => {
 
 
 
-            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1, pointerEvents: isFormDisabled ? 'none' : 'auto' }} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1, pointerEvents: isFormDisabled ? 'none' : 'auto' }} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-[#eefcfd] shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
             >
                 <div className="w-full mr-0 mb-0 ml-0 space-y-4 lg:space-y-1 md:space-y-1 mx:space-y-1
                 lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6
@@ -942,7 +943,7 @@ const registerUser = async (formData) => {
 
                 
 
-                <div className="image-upload-container mt-4 bg-gray-200 shadow-md shadow-gray-400" onClick={triggerFileInput}>
+                <div className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400" onClick={triggerFileInput}>
       {!image ? (
         <label className="text-gray-600" htmlFor="file-upload">Upload <PlusOutlined/> </label>
       ) : (
@@ -979,11 +980,18 @@ const registerUser = async (formData) => {
 
                 {/* Checking Github */}
 
-                <button
+                {/* <button
                     onClick={handleRegister}
-                    className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#155261]' : '[#248ba5]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
+                    className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#1f596b]' : '[#1f596b]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
                 // disabled={!isFormValid()}
-                >Register</button>
+                >Register</button> */}
+
+<button className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
+                    onClick={handleRegister}
+                // disabled={!isFormValid()}
+> Register
+      </button>
+
 
             </div>
 
