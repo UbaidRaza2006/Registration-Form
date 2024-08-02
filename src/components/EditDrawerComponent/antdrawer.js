@@ -12,6 +12,9 @@ import NextImage from "next/image"; // Alias one of the imports
 
 import { Image } from 'cloudinary-react';
 import { Bounce, toast } from 'react-toastify';
+import dotenv from 'dotenv'
+
+  dotenv.config()
 
 
 // const cloudinary = require('cloudinary').v2;
@@ -547,30 +550,31 @@ const EditDrawerApp = ({ userData }) => {
     formData.append('file', file);
     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-    try {
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
       const data = await response.json();
       console.log("Data.response hon->>>", data.secure_url);
 
-      // Set the image URL received from Cloudinary
-      // setStudentImage(data.secure_url);
+      // // Set the image URL received from Cloudinary
+      // // setStudentImage(data.secure_url);
 
-      // Convert the image to base64
-      const base64Image = await getBase64Image(data.secure_url);
-      console.log("Base64 image:", base64Image);
+      // // Convert the image to base64
+      // const base64Image = await getBase64Image(data.secure_url);
+      // console.log("Base64 image:", base64Image);
 
       // Update the form data with the base64 representation of the image
 
       if (data.secure_url) {
 
-        setImageUrl(base64Image)
-        setStudentImage(base64Image)
+        setImageUrl(data.secure_url)
+        setStudentImage(data.secure_url)
 
       }
 
@@ -579,22 +583,22 @@ const EditDrawerApp = ({ userData }) => {
     }
   };
 
-  // Function to convert an image URL to base64
-  const getBase64Image = async (imageUrl) => {
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error('Error fetching image for base64 conversion:', error);
-      return null;
-    }
-  };
+  // // Function to convert an image URL to base64
+  // const getBase64Image = async (imageUrl) => {
+  //   try {
+  //     const response = await fetch(imageUrl);
+  //     const blob = await response.blob();
+  //     return new Promise((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.onload = () => resolve(reader.result);
+  //       reader.onerror = reject;
+  //       reader.readAsDataURL(blob);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error fetching image for base64 conversion:', error);
+  //     return null;
+  //   }
+  // };
 
 
   // Image Function for payment
@@ -606,14 +610,15 @@ const EditDrawerApp = ({ userData }) => {
     formData.append('file', file);
     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-    try {
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
       const data = await response.json();
       console.log("Data.response hon->>>", data.secure_url);
 
@@ -621,15 +626,15 @@ const EditDrawerApp = ({ userData }) => {
       // setStudentImage(data.secure_url);
 
       // Convert the image to base64
-      const base64Image = await getBase64PaymentImage(data.secure_url);
-      console.log("Base64 image:", base64Image);
+      // const base64Image = await getBase64PaymentImage(data.secure_url);
+      // console.log("Base64 image:", base64Image);
 
       // Update the form data with the base64 representation of the image
       if (data.secure_url) {
 
-        setPaymentImg(base64Image)
-        setPaymentImage(base64Image)
-        setPayment("done")
+        setPaymentImg(data.secure_url)
+        setPaymentImage(data.secure_url)
+        setPayment("Done")
 
       }
 
@@ -638,23 +643,32 @@ const EditDrawerApp = ({ userData }) => {
     }
   };
 
-  // Function to convert an image URL to base64
-  const getBase64PaymentImage = async (imageUrl) => {
-    try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (error) {
-      console.error('Error fetching image for base64 conversion:', error);
-      return null;
-    }
+  // // Function to convert an image URL to base64
+  // const getBase64PaymentImage = async (imageUrl) => {
+  //   try {
+  //     const response = await fetch(imageUrl);
+  //     const blob = await response.blob();
+  //     return new Promise((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.onload = () => resolve(reader.result);
+  //       reader.onerror = reject;
+  //       reader.readAsDataURL(blob);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error fetching image for base64 conversion:', error);
+  //     return null;
+  //   }
+  // };
+
+  // for user pic
+  const triggerFileInput = () => {
+    document.getElementById('file-upload').click();
   };
 
+  // for paymentpic
+  const triggerFileInput1 = () => {
+    document.getElementById('file-upload1').click();
+  };
 
 
   const [isHovered, setIsHovered] = useState(false);
@@ -708,99 +722,76 @@ const EditDrawerApp = ({ userData }) => {
 
 
 
-          <div className='display-inline flex felx-col'>
+          <div className='display-inline flex felx-col space-x-8 ml-[7%]'>
 
-            <div className="image-uploader" onClick={() => document.getElementById('student-image-upload').click()}>
-              <input id="student-image-upload" type="file" onChange={handleStudentImage} style={{ display: 'none' }} />
-              {studentImage ? (
-                <div className="uploaded-image" style={{ backgroundImage: `url(${studentImage})` }}></div>
-              ) : (
-                <p className="upload-text">Upload Image</p>
-              )}
-
-              <style jsx>{`
-    .image-uploader {
-      width: 160px;
-      height: 140px;
-      background-color: #f2f2f2;
-      border: 2px solid #ccc; /* Solid border */
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
-    }
-    .image-uploader:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Increased box shadow on hover */
-    }
-    .upload-text {
-      margin: 0;
-      color: #555;
-      font-size: 14px;
+          <div className="image-upload-container mb-12 mt-4 bg-[#e0e0e0] shadow-md shadow-gray-400" onClick={triggerFileInput}>
+    {!studentImage ? (
+    <label className="text-gray-600 text-2xl" htmlFor="file-upload">Upload <PlusOutlined/> </label>
+    ) : (
+    <img src={studentImage} alt="Uploaded image" className="uploaded-image" />
+    )}
+    <input
+    id="file-upload"
+    type="file"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handleStudentImage}
+    />
+    <style jsx>{`
+    .image-upload-container {
+    width: 180px;
+    height: 220px;
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     }
     .uploaded-image {
-      width: 100%;
-      height: 100%;
-      background-size: cover; /* Ensure image covers the full area without stretching */
-      background-position: center; /* Center the image */
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover; /* This line is important */
     }
-    input[type='file'] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
+    `}</style>
+    </div>
+
+    <div className="image-upload-container mb-12 mt-4 bg-[#e0e0e0] shadow-md shadow-gray-400" onClick={triggerFileInput1}>
+    {!paymentImage || paymentImage == "Not-Done" ? (
+    <label className="text-gray-600 text-2xl" htmlFor="file-upload">Upload Payment Image <PlusOutlined/> </label>
+    ) : (
+    <img src={paymentImage} alt="Uploaded image" className="uploaded-image" />
+    )}
+    <input
+    id="file-upload1"
+    type="file"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handlePaymentImage}
+    />
+    <style jsx>{`
+    .image-upload-container {
+    width: 350px;
+    height: 220px;
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
     }
-  `}</style>
-            </div>
+    .uploaded-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover; /* This line is important */
+    }
+    `}</style>
+    </div>
 
 
-            <div className="image-uploader" onClick={() => document.getElementById('payment-image-upload').click()}>
-              <input id="payment-image-upload" type="file" onChange={handlePaymentImage} style={{ display: 'none' }} />
-              {/* {image ? (
-        <img src={image} alt="ID Card" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '5px' }} /> */}
-              {/* ) : (
-        <p className="upload-text">Upload</p>
-      )} */}
-
-              {paymentImage && paymentImage !== "Not-Done" && <NextImage src={paymentImage} style={{ width: '320px', height: '140px' }} width={600} height={400}
-              />}
-
-              <style jsx>{`
-    .image-uploader {
-      width: 320px;
-      height: 140px; /* Reduced height */
-      background-color: #f2f2f2;
-      border: 2px dashed #ccc;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
-    .upload-text {
-      margin: 0;
-      color: #555;
-    }
-    input[type='file'] {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 120px;
-      height: 120px;
-      opacity: 0;
-      cursor: pointer;
-    }
-  `}</style>
-            </div>
+          
 
           </div>
 

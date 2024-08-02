@@ -7,6 +7,7 @@
 // import Image2UploadComponent from "@/components/AntUpload/ubaid2";
 import React, { useEffect, useState } from "react";
 import AntInputComponent from "../../components/AntInput";
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
 import ImageUploadComponent from "../../components/AntUpload";
@@ -16,6 +17,12 @@ import img from "../../../public/images/paymentBg5.avif"
 import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 import Notification from "../../components/Notification";
 import { Bounce, toast } from "react-toastify";
+import dotenv from 'dotenv'
+import { PlusOneOutlined } from "@mui/icons-material";
+
+  dotenv.config()
+
+
 
 // const cloudinary = require('cloudinary').v2;
 // import { v2 as cloudinary } from "cloudinary";
@@ -330,29 +337,30 @@ const handleImageUpload = async (e) => {
   formData.append('file', file);
   formData.append('upload_preset', 'Rizwan_Tayyab');
 
-  try {
-      const response = await fetch(
-          'https://api.cloudinary.com/v1_1/dbcpfhk6n/image/upload',
-          {
-              method: 'POST',
-              body: formData,
-          }
-      );
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
       const data = await response.json();
       console.log("Data.response hon->>>", data.secure_url);
 
       // Set the image URL received from Cloudinary
       // setImageee(data.secure_url);
 
-      // Convert the image to base64
-      const base64Image = await getBase64Image(data.secure_url);
-      console.log("Base64 image:", base64Image);
+      // // Convert the image to base64
+      // const base64Image = await getBase64Image(data.secure_url);
+      // console.log("Base64 image:", base64Image);
 
       // Update the form data with the base64 representation of the image
       if(data.secure_url){
 
-        setPaymentImg(base64Image);
-        setImageee(base64Image);
+        setPaymentImg(data.secure_url);
+        setImageee(data.secure_url);
 
       }
       // setPayment("done")
@@ -361,34 +369,36 @@ const handleImageUpload = async (e) => {
   }
 };
 
-// Function to convert an image URL to base64
-const getBase64Image = async (imageUrl) => {
-  try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-      });
-  } catch (error) {
-      console.error('Error fetching image for base64 conversion:', error);
-      return null;
-  }
+// // Function to convert an image URL to base64
+// const getBase64Image = async (imageUrl) => {
+// //   try {
+// //       const response = await fetch(imageUrl);
+// //       const blob = await response.blob();
+// //       return new Promise((resolve, reject) => {
+// //           const reader = new FileReader();
+// //           reader.onload = () => resolve(reader.result);
+// //           reader.onerror = reject;
+// //           reader.readAsDataURL(blob);
+// //       });
+// //   } catch (error) {
+// //       console.error('Error fetching image for base64 conversion:', error);
+// //       return null;
+// //   }
+// };
+
+
+
+
+
+
+
+
+
+
+
+const triggerFileInput = () => {
+  document.getElementById('file-upload').click();
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
@@ -466,59 +476,40 @@ console.log("Image Url ka baap hon----->", paymentImg)
             <p style={{ fontSize: "15px", marginLeft: "20px" }}>Upload</p>
             <ImageUploadComponent />
           </div> */}
-<div
-          className="image-uploader"
-          onClick={() => document.getElementById("image-upload").click()}
-        >
-          {/* <h1>Upload</h1> */}
-          {/* Upload */}
 
-          <input
-            id="image-upload"
-            type="file"
-            placeholder="Upload here"
-            onChange={handleImageUpload}
-            style={{ display: "none" }}
-          /> {!paymentImg ||  paymentImg === "Not-Done" ? (
-            <h1> Upload Here</h1>
-          ) : (
-            <NextImage
-            alt="image"
-              // cloudName="dbcpfhk6n"
-              src={paymentImg}
-              // style={{ width: "100%", height: "100%" }}
-              width={600} height={400}
-            />
-          )}
 
-          <style jsx>{`
-            .image-uploader {
-              width: 120px;
-              height: 120px; /* Reduced height */
-              background-color: #f2f2f2;
-              border: 2px dashed #ccc;
-              border-radius: 5px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              overflow: hidden;
-              position: relative;
-            }
-            . .upload-text {
-              margin: 0;
-              color: #555;
-            }
-            input[type="file"] {
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 120px;
-              height: 120px;
-              opacity: 0;
-              cursor: pointer;
-            }
-          `}</style>
-        </div>
+        <div className="image-upload-container bg-[#e0e0e0] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
+    {!paymentImg || paymentImg == "Not-Done" ? (
+    <label className="text-gray-600 text-2xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
+    ) : (
+    <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
+    )}
+    <input
+    id="file-upload"
+    type="file"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handleImageUpload}
+    />
+    <style jsx>{`
+    .image-upload-container {
+    width: 300px;
+    height: 180px;
+    border: 2px dashed #aaa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    }
+    .uploaded-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover; /* This line is important */
+    }
+    `}</style>
+    </div>
 
 
         </div>
