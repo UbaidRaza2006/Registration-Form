@@ -21,7 +21,7 @@ const AntInputComponent = ({placeholder,value,onChange}) => {
       style={{
        //backgroundColor: "	#C0C0C0",
          backgroundColor: "white",
-         width: "320px",
+         width: "270px",
          height: "33px",
         //  borderRadius: "10px",
          fontSize: "15px",

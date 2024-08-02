@@ -741,7 +741,7 @@ const EditDrawerApp = ({ userData }) => {
     .image-upload-container {
     width: 180px;
     height: 220px;
-    border: 2px dashed #aaa;
+    border: 2px solid #aaa;
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -774,7 +774,7 @@ const EditDrawerApp = ({ userData }) => {
     .image-upload-container {
     width: 350px;
     height: 220px;
-    border: 2px dashed #aaa;
+    border: 2px solid #aaa;
     border-radius: 12px;
     display: flex;
     justify-content: center;

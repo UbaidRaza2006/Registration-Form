@@ -969,7 +969,7 @@ const registerUser = async (formData) => {
     .image-upload-container {
     width: 130px;
     height: 150px;
-    border: 2px dashed #aaa;
+    border: 2px solid #aaa;
     border-radius: 12px;
     display: flex;
     justify-content: center;

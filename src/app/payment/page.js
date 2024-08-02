@@ -12,7 +12,7 @@ import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
 import ImageUploadComponent from "../../components/AntUpload";
 import NextImage from "next/image"; // Alias one of the imports
-import img from "../../../public/images/paymentBg5.avif"
+import img from "../../../public/images/payment11.jpg"
 
 import { Image as CloudinaryImage } from "cloudinary-react"; // Keep the other import as is
 import Notification from "../../components/Notification";
@@ -48,7 +48,7 @@ export default function PaymentVerify() {
       flexDirection: "column",
       margin: "0 auto",
     //   width: "400px",
-      height: "600px",
+      height: "510px",
       marginTop: "35px",
       boxShadow: "1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)",
       // boxShadow: '5px 0px 1px 12px rgba(0, 0, 0, 0.1)',
@@ -71,6 +71,7 @@ export default function PaymentVerify() {
 
   const [imageee, setImageee] = useState("");
   const [rollNumber,setRollNumber] = useState("")
+  const [registering, setRegistering] = useState(false)
 
   // const [paymentFormData, setPaymentFormData] = useState("");
 
@@ -218,7 +219,10 @@ const [fullName, setFullName] = useState('');
 
 const updateUser = async (userId) => {
   try {
+    setRegistering(true)
     if(check){
+    setRegistering(false)
+
       // setNotification({ message: 'Payment is Already Done!', success: true });
       toast.info('Your Payment is already done!', {
         position: "top-right",
@@ -233,6 +237,7 @@ const updateUser = async (userId) => {
         });
     }
     else if(rollNumber.length !== 5 && fullName == ""){
+    setRegistering(false)
       toast.error('Enter a correct 5 digit Roll Number!', {
         position: "top-right",
         autoClose: 5000,
@@ -259,6 +264,7 @@ const updateUser = async (userId) => {
     dataToEdit = await dataToEdit.json();
 
     if (dataToEdit.success) {
+    setRegistering(false)
       // alert("Your Payment process has been done!..");
       // setNotification({ message: 'Payment successful!', success: true });
       toast.success('Payment Successful!', {
@@ -281,6 +287,7 @@ const updateUser = async (userId) => {
       setRollNumber("")
       setCheck(false)
     } else if(dataToEdit.success === false) {
+    setRegistering(false)
       toast.error(dataToEdit.error, {
         position: "top-right",
         autoClose: 5000,
@@ -296,7 +303,8 @@ const updateUser = async (userId) => {
       console.log(dataToEdit.error);
     }
   }
-  else if(paymentImg== "not-done"){
+  else if(paymentImg== "Not-Done"){
+    setRegistering(false)
     toast.error('Provide your Payment pic!', {
       position: "top-right",
       autoClose: 5000,
@@ -311,6 +319,7 @@ const updateUser = async (userId) => {
   }
   
   } catch (error) {
+    setRegistering(false)
     console.error("An error occurred while updating user:", error);
     toast.error('Error, Try again later!', {
       position: "top-right",
@@ -404,36 +413,36 @@ console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
-    <div id="payment" 
+    <div id="payment" className="bg-[#eefcfd]"
     // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
     >
 
 
 {/* Background Image */}
-<NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-full object-cover z-0" width={600} height={400} />
+{/* <NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-[650px] object-cover z-0" width={600} height={600} /> */}
 
       {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 
       <div
     style={{ boxShadow: "0px -5px 1px 12px rgba(0, 0, 0, 0.1)" }}
-    className="items-center justify-between mt-0 w-screen bg-[#248ba5] lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12 relative z-10"
+    className="items-center justify-between mt-0 w-screen bg-gradient-to-t from-[#0e303e] to-[#18819b]  lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12 relative z-10"
   >
     <p className="mx-auto">
       Payment Verify Form
     </p>
   </div>
 
-      <div className="space-y-6 mx-auto w-[400px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500 relative z-10" style={styles.container}>
+      <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500 relative z-10 rounded-md" style={styles.container}>
         <div
-          style={{
-            margin: "0 auto", 
-            marginTop: "10px",
-            //  backgroundColor: "white",
-          }}
-          className="space-y-3 mx-auto"
+          // style={{
+          //   margin: "0 auto", 
+          //   marginTop: "10px",
+          //   //  backgroundColor: "white",
+          // }}
+          className="space-y-6 ml-6 mt-6"
         >
           <div>
-            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
             <AntInputComponent
               placeholder={"Enter Roll No."}
               style={styles.inputs}
@@ -446,8 +455,8 @@ console.log("Image Url ka baap hon----->", paymentImg)
                 }}
             />
           </div>
-          <div style={{ marginTop: "5px" }}>
-            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p>
+          <div >
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
             <AntInputComponent
               placeholder={"Enter Name"}
               style={styles.inputs}
@@ -455,7 +464,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
             />
           </div>
           <div>
-            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
             <AntInputComponent
               placeholder={"Enter Course"}
               style={styles.inputs}
@@ -463,7 +472,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
             />
           </div>
           <div>
-            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
 
             <AntInputComponent
               placeholder={"Enter Batch"}
@@ -476,11 +485,12 @@ console.log("Image Url ka baap hon----->", paymentImg)
             <p style={{ fontSize: "15px", marginLeft: "20px" }}>Upload</p>
             <ImageUploadComponent />
           </div> */}
+</div>
+  
 
-
-        <div className="image-upload-container bg-[#e0e0e0] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
+        <div className="image-upload-container bg-[#f3f3f3] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
     {!paymentImg || paymentImg == "Not-Done" ? (
-    <label className="text-gray-600 text-2xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
+    <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
     ) : (
     <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
     )}
@@ -493,9 +503,9 @@ console.log("Image Url ka baap hon----->", paymentImg)
     />
     <style jsx>{`
     .image-upload-container {
-    width: 300px;
-    height: 180px;
-    border: 2px dashed #aaa;
+    width: 250px;
+    height: 160px;
+    border: 2px solid #aaa;
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -512,7 +522,6 @@ console.log("Image Url ka baap hon----->", paymentImg)
     </div>
 
 
-        </div>
         
         {/* <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
         color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
@@ -520,7 +529,23 @@ console.log("Image Url ka baap hon----->", paymentImg)
          onClick={updateUser(idForUser)}
          >Submit</Button> */}
 
-         <button onClick={() => updateUser(idForUser)}>Submit</button>
+{registering?(<button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-6 tracking-wider"
+            // onClick={handleRegister}
+        // disabled={!isFormValid()}
+    ><div className="flex items-center space-x-3 mx-auto">
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+    </div>
+    </button>):(
+
+         <button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-8 tracking-wider"
+    onClick={() => updateUser(idForUser)}
+    // disabled={!isFormValid()}
+    >Submit
+    </button>
+    )}
 
          
 
