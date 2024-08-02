@@ -6,37 +6,21 @@ import { Button } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Bounce, toast } from "react-toastify";
+import StudentDeleteModal from "../StudentDelete";
 
-export default function DeleteIconComponent({id}){
+export default function DeleteIconComponent({user}){
   const router = useRouter();
     
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalVisible6,setIsModalVisible6] = useState(false)
 
-const deleteUser =async ()=>{
+  
 
-  console.log("id-->",id)
-let response = await fetch(`/api/students/${id}`,{
-  method:"delete"
-})
-response= await response.json()
-if(response.success){
-  toast.success('Student Removed!', {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    transition: Bounce,
-    });
-  // router.replace("/registration")
 
+
+const handleCancel= () => {
+setIsModalVisible6(false)
 }
-
-}
-
   
   return (
     <>
@@ -48,7 +32,7 @@ if(response.success){
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={deleteUser}
+      onClick={() => setIsModalVisible6(true)} // Change to this
     >
       <DeleteOutlined
         style={{
@@ -61,6 +45,8 @@ if(response.success){
         }}
       />
     </Button>
+
+<StudentDeleteModal isOpen={isModalVisible6} onClose={()=>{handleCancel()}} userToDelete={user}/>
 </>
 )
 };

@@ -706,6 +706,21 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
 
     if (data.success) {
       // Convert single object to an array of length 1
+      
+      if(page==1){
+      toast.info(`You have ${data.totalUsers} Students`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+
       const users = Array.isArray(data.data) ? data.data : [data.data];
 
       // Decode address and qualification fields
@@ -742,11 +757,9 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
       if (data.more === false) {
         setHasMore(false);
         setPage(1)
+        setCoursesToLoad(true);
         if(api){
           setApi(false)
-        }
-        else{
-          setCoursesToLoad(true);
         }
       toast.info(`Fetching Students Done ${data.totalUsers}`, {
         position: "top-right",
@@ -1113,7 +1126,7 @@ const handleAPIError = (message) => {
 
           <EditDrawerApp userData={record} />
 
-          <DeleteIconComponent id={record._id} />
+          <DeleteIconComponent user={record} />
 
 
           {/* <EyeOutlined style={{ cursor: "pointer" }} /> */}
