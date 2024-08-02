@@ -6,24 +6,26 @@ const RegistrationSchema = new mongoose.Schema({
     fullName: String,
     fatherName: String,
     email: String,
-    rollNo:String,
-    course:String,
-    batch:Number,
-    payment:String,
-    paymentImg:String,
-    status:String,
+    rollNo: {
+        type: String,
+        unique: true
+    },
+    course: String,
+    batch: Number,
+    payment: String,
+    paymentImg: String,
+    status: String,
     city: String,
     cnic: String,
-    phone:String,
-    dateOfBirth:String,
-    gender:String,
-    qualification:String,
-    address:String,
-    imageUrl:String
+    phone: String,
+    dateOfBirth: String,
+    gender: String,
+    qualification: String,
+    address: String,
+    imageUrl: String
 },
-    {timestamps:true}
+{ timestamps: true }
 )
 
-const Register = mongoose.models.Register || mongoose.model('Register', RegistrationSchema )
-
+const Register = mongoose.models.Register || mongoose.model('Register', RegistrationSchema)
 export default Register;

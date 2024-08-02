@@ -53,10 +53,13 @@ export async function POST(req) {
             imageUrl
         } = extractData;
 
-        const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 }).session(session);
-        const lastRollNo = lastRegisteredUser ? parseInt(lastRegisteredUser.rollNo) : 0;
-        const nextRollNo = lastRollNo + 1;
-        const generatedRollNo = nextRollNo.toString().padStart(5, '0');
+        // const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 }).session(session);
+        // const lastRollNo = lastRegisteredUser ? parseInt(lastRegisteredUser.rollNo) : 0;
+        // const nextRollNo = lastRollNo + 1;
+        // const generatedRollNo = nextRollNo.toString().padStart(5, '0');
+
+        const lastRollNo = await Register.countDocuments({})
+        const rollNo = (+lastRollNo + 1).toString() // yahn apny hisaab sy increment krlena
 
         const { error } = RegistrationSchema.validate({
             fullName,
@@ -75,7 +78,7 @@ export async function POST(req) {
             qualification,
             address,
             imageUrl,
-            rollNo: generatedRollNo
+            rollNo
         });
 
         if (error) {
@@ -104,7 +107,7 @@ export async function POST(req) {
             qualification,
             address,
             imageUrl,
-            rollNo: generatedRollNo
+            rollNo
         }], { session });
 
         await session.commitTransaction();
