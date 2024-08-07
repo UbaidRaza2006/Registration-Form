@@ -1,5 +1,3 @@
-
-import domtoimage from 'dom-to-image';
 import { Button } from "antd";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -77,64 +75,61 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
 
     const handleDownload = async () => {
         setIsGenerating(true);
+  
     
         const inputData = idCardRef.current;
     
         try {
-            // Convert the HTML content to an image
-            const dataUrl = await domtoimage.toPng(inputData);
-            
-            // Create a new jsPDF instance
-            const pdf = new jsPDF({
-                orientation: "portrait",
-                unit: "px",
-                format: "a4",
+          const canvas = await html2canvas(inputData, {
+            scale: 9,
+            letterRendering: true,
+          });
+    
+          const imageData = canvas.toDataURL("image/png", 0.8);
+    
+          const pdf = new jsPDF({
+            orientation: "portrait",
+            unit: "px",
+            format: "a4",
+          });
+    
+          const width = pdf.internal.pageSize.getWidth();
+          const height = (canvas.height * width) / canvas.width;
+    
+          pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
+          pdf.save(`Student:${user.rollNo}.pdf`);
+    
+          setIsGenerating(false);
+          setDownloaded(true);
+          toast.success('Downloaded Successfully!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
             });
-    
-            const img = new Image();
-            img.src = dataUrl;
-    
-            // Wait for the image to load
-            img.onload = () => {
-                const width = pdf.internal.pageSize.getWidth();
-                const height = (img.height * width) / img.width;
-                
-                // Add image to PDF
-                pdf.addImage(dataUrl, "PNG", 0, 0, width, height, '', 'FAST');
-                pdf.save(`Student:${user.rollNo}.pdf`);
-                
-                setIsGenerating(false);
-                setDownloaded(true);
-                toast.success('Downloaded Successfully!', {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                });
-                onClose();
-            };
+          onClose()
         } catch (e) {
-            console.error("Error generating PDF:", e);
-            setIsGenerating(false);
-            setDownloaded(true);
-            toast.error('Error, Go to Download Page!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
+          console.error("Error generating PDF:", e);
+          setIsGenerating(false);
+          setDownloaded(true);
+          toast.error('Error, Go to Download Page!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
             });
         }
-    };
+      };
 
     return (
         <ReactModal
