@@ -58,7 +58,8 @@ export async function POST(req) {
         // const nextRollNo = lastRollNo + 1;
         // const generatedRollNo = nextRollNo.toString().padStart(5, '0');
 
-        const lastRollNo = await Register.countDocuments({})
+        const highestRollNo = await Register.findOne().sort({ rollNo: -1 }).exec();
+        const lastRollNo = highestRollNo ? highestRollNo.rollNo : 0;
         const rollNo = (+lastRollNo + 1).toString() // yahn apny hisaab sy increment krlena
 
         const { error } = RegistrationSchema.validate({
