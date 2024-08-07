@@ -712,21 +712,21 @@ const registerUser = async (formData) => {
 
             /></div>
 
-            <div className="bg-none flex items-center justify-center rounded-xl space-x-0 mt-4 mb-4">
+            <div className="bg-none flex items-center justify-center rounded-xl space-x-1 mt-4 mb-4">
             <button
         //   color="inherit"
-          id='button1'
+          id='button3'
           onClick={()=>{router.push("/download")}}
-          className='btn h-12 inline md:hidden w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
+          className='btn h-12 inline md:hidden bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
         //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
           <p className='font-bold '>Download ID Card</p>
         </button>
         <button
         //   color="inherit"
-          id='button2'
+          id='button4'
           onClick={()=>{router.push("/payment")}}
-          className='btn h-12 inline md:hidden w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
+          className='btn h-12 inline md:hidden  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] text-white rounded-md text-lg'
         //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
           <p className='font-bold'>Payment Verify</p>

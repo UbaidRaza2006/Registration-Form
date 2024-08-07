@@ -28,10 +28,11 @@ const RegistrationSchema = Joi.object({
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+    await connectToDb();  // Ensure DB connection before starting the session
     const session = await mongoose.startSession();
-    session.startTransaction();
+    
     try {
-        await connectToDb();
+        session.startTransaction();
 
         const extractData = await req.json();
         const {
@@ -53,13 +54,10 @@ export async function POST(req) {
             imageUrl
         } = extractData;
 
-        // const lastRegisteredUser = await Register.findOne().sort({ rollNo: -1 }).session(session);
-        // const lastRollNo = lastRegisteredUser ? parseInt(lastRegisteredUser.rollNo) : 0;
-        // const nextRollNo = lastRollNo + 1;
-        // const generatedRollNo = nextRollNo.toString().padStart(5, '0');
-
-        const lastRollNo = await Register.countDocuments({})
-        const rollNo = (+lastRollNo + 1).toString() // yahn apny hisaab sy increment krlena
+        // Get the highest roll number and increment it
+        const highestRollNo = await Register.findOne().sort({ rollNo: -1 }).session(session).exec();
+        const lastRollNo = highestRollNo ? highestRollNo.rollNo : 0;
+        const rollNo = (+lastRollNo + 1).toString();
 
         const { error } = RegistrationSchema.validate({
             fullName,
@@ -83,7 +81,6 @@ export async function POST(req) {
 
         if (error) {
             await session.abortTransaction();
-            session.endSession();
             return NextResponse.json({
                 success: false,
                 message: error.details[0].message,
@@ -111,29 +108,23 @@ export async function POST(req) {
         }], { session });
 
         await session.commitTransaction();
-        session.endSession();
 
-        if (newlyRegisteredUser) {
-            return NextResponse.json({
-                success: true,
-                user: newlyRegisteredUser[0],
-                message: 'Registered Successfully!',
-            });
-        } else {
-            return NextResponse.json({
-                success: false,
-                message: 'Failed to register. Please try again!',
-            });
-        }
+        return NextResponse.json({
+            success: true,
+            user: newlyRegisteredUser[0],
+            message: 'Registered Successfully!',
+        });
 
     } catch (error) {
         await session.abortTransaction();
-        session.endSession();
         console.log('Error in adding new user-->', error);
 
         return NextResponse.json({
             success: false,
             message: 'Something went wrong, please try again later!'
         });
+
+    } finally {
+        session.endSession(); // Ensure session is ended
     }
 }

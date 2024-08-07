@@ -86,7 +86,7 @@ const customStyles = {
     padding: '20px',
     maxWidth: '500px',
     width: '90%',
-    height: '190px',
+    height: '220px',
     zIndex: 1002,
      // Set a higher z-index for modal content
     
