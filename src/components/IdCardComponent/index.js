@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -24,10 +24,10 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             transform: 'translate(-50%, -50%)',
             border: 'none',
             borderRadius: '8px',
-            padding: '15px', // Adjust padding as needed
-            maxWidth: '90%', // Adjust width as needed
+            padding: '15px',
+            maxWidth: '90%',
             width: '400px',
-            height:"170px", // Adjust width as needed
+            height: "170px",
             maxHeight: '30vh',
             overflow: 'auto',
         }
@@ -46,10 +46,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
         fetchImage();
     }, [isOpen]);
 
-    // Function to convert an image URL to base64
     const getBase64Image = async (imageUrl) => {
-        console.log("Function Running!")
-        // Check if window is defined (i.e., we're in the browser environment)
+        console.log("Function Running!");
         if (typeof window !== 'undefined') {
             try {
                 const response = await fetch(imageUrl);
@@ -65,71 +63,67 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
                 return null;
             }
         } else {
-            // Handle the case where window is not defined (e.g., in a server-side context)
             console.warn('getBase64Image function is being executed in a non-browser context.');
             return null;
         }
     };
 
-   
-
     const handleDownload = async () => {
         setIsGenerating(true);
-  
-    
+
         const inputData = idCardRef.current;
-    
+
         try {
-          const canvas = await html2canvas(inputData, {
-            scale: 9,
-            letterRendering: true,
-          });
-    
-          const imageData = canvas.toDataURL("image/png", 0.8);
-    
-          const pdf = new jsPDF({
-            orientation: "portrait",
-            unit: "px",
-            format: "a4",
-          });
-    
-          const width = pdf.internal.pageSize.getWidth();
-          const height = (canvas.height * width) / canvas.width;
-    
-          pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
-          pdf.save(`Student:${user.rollNo}.pdf`);
-    
-          setIsGenerating(false);
-          setDownloaded(true);
-          toast.success('Downloaded Successfully!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
+            const canvas = await html2canvas(inputData, {
+                scale: 9,
+                letterRendering: true,
             });
-          onClose()
+
+            const imageData = canvas.toDataURL("image/png", 0.8);
+
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "px",
+                format: "a4",
+            });
+
+            const width = pdf.internal.pageSize.getWidth();
+            const height = (canvas.height * width) / canvas.width;
+
+            pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
+            pdf.save(`Student:${user.rollNo}.pdf`);
+
+            setIsGenerating(false);
+            setDownloaded(true);
+            toast.success('Downloaded Successfully!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            onClose();
         } catch (e) {
-          console.error("Error generating PDF:", e);
-          setIsGenerating(false);
-          setDownloaded(true);
-          toast.error('Error, Go to Download Page!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
+            console.error("Error generating PDF:", e);
+            setIsGenerating(false);
+            setDownloaded(true);
+            toast.error('Error, Go to Download Page!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
             });
         }
-      };
+    };
 
     return (
         <ReactModal
@@ -138,9 +132,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             style={customStyles}
             contentLabel="Custom Modal"
         >
-            {/* Content to be captured for the PDF */}
             <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-                <div ref={idCardRef} className="relative"> {/* Removed absolute positioning */}
+                <div ref={idCardRef} className="relative">
                     <Image
                         src="/images/Green Minimalist School ID Card (1).svg"
                         alt="bg-img"
