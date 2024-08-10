@@ -69,7 +69,7 @@ function IdCard({ user }) {
 
   return (
     <div>
-      <Button style={{ backgroundColor: "#248ba5" }} onClick={handleDownload} disabled={isGenerating}>
+      <Button className="bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white " onClick={handleDownload} disabled={isGenerating}>
         {isGenerating ? "Generating..." : "Download"}
       </Button>
 

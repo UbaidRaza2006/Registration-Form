@@ -3,10 +3,11 @@
 // import DownloadIdCardTable from "@/components/AntIdCardsTable";
 // import AntInputComponent from "@/components/AntInput";
 // import { Button } from "antd";
+import { EditOutlined, PlusOutlined,DownloadOutlined } from '@ant-design/icons';
 import React, { useEffect } from "react";
 import { useContext, useRef, useState } from "react";
 import AntInputComponent from "../../components/AntInput";
-import { Button, Table } from "antd";
+import { Button, Input, Table } from "antd";
 import DownloadIdCardTable from "../../components/AntIdCardsTable";
 import style from "../globals.css"
 import Link from "next/link";
@@ -157,15 +158,18 @@ function DownloadIdCard() {
   };
 
   return (
-    <div className="h-full bg-gray">
-      <div className="bg-[#248ba5] py-4 lg:py-6 text-white text-2xl md:text-4xl text-center font-bold">
+    <div className="h-[1100px] bg-[#d4f6f9]">
+      <div className="flex justify-center bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white text-3xl md:text-4xl text-center font-bold h-[60px] py-2">
+      <div className='text-3xl font-bold mr-4'><DownloadOutlined/></div>
         Download ID Card
       </div>
 
-      <div className="mx-auto max-w-xl mt-6">
-        <div className="p-4 rounded">
+      <div className="w-full h-[750px] mt-12 flex flex-col items-center">
+        <div className="mx-auto">
 
-          <InputComponent
+          <Input
+          className="rounded-3xl border-5 border-gray-400 py-1 text-xl text-center"
+          style={{width:"400px", height:"45px", backgroundColor:"white"}}
             id="cnicInput"
             type="text"
             maxLength="15"
@@ -184,16 +188,15 @@ function DownloadIdCard() {
           />
         </div>
 
-        <Button
-          className="disabled:opacity-50 mt-4 bg-[#248ba5] text-white font-semibold w-full"
-          style={{ height: "50px" }}
+        <button
+          className="btn disabled:opacity-50 disabled:bg-gradient-to-t from-[#0e303e] to-[#18819b] mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-[400px]"
           disabled={!isFormValid()}
           onClick={() => getUserCnicData(inputCnic)}
         >
           SUBMIT
-        </Button>
-        <div className="mt-6">
-          {usersWithCnic.length > 0 ? <Table columns={columns} dataSource={usersWithCnic} style={{ width: '550px', borderRadius: "0px" }} /> : null}
+        </button>
+        <div className="mt-6 rounded-lg">
+          {usersWithCnic.length > 0 ? <Table columns={columns} dataSource={usersWithCnic} className='rounded-lg w-[400px]' /> : null}
         </div>
       </div>
 
