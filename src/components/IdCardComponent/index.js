@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -14,23 +14,23 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
 
   const customStyles = {
     overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 1000
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      zIndex: 1000,
     },
     content: {
-      backgroundColor: 'rgba(211, 222, 223, 0.98)',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      border: 'none',
-      borderRadius: '8px',
-      padding: '15px',
-      maxWidth: '90%',
-      width: '400px',
-      height: '170px',
-      maxHeight: '30vh',
-      overflow: 'auto',
-    }
+      backgroundColor: "rgba(211, 222, 223, 0.98)",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%)",
+      border: "none",
+      borderRadius: "8px",
+      padding: "15px",
+      maxWidth: "90%",
+      width: "400px",
+      height: "170px",
+      maxHeight: "30vh",
+      overflow: "auto",
+    },
   };
 
   useEffect(() => {
@@ -47,8 +47,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
   }, [isOpen]);
 
   const getBase64Image = async (imageUrl) => {
-    console.log("Function Running!")
-    if (typeof window !== 'undefined') {
+    console.log("Function Running!");
+    if (typeof window !== "undefined") {
       try {
         const response = await fetch(imageUrl);
         const blob = await response.blob();
@@ -59,11 +59,13 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
           reader.readAsDataURL(blob);
         });
       } catch (error) {
-        console.error('Error fetching image for base64 conversion:', error);
+        console.error("Error fetching image for base64 conversion:", error);
         return null;
       }
     } else {
-      console.warn('getBase64Image function is being executed in a non-browser context.');
+      console.warn(
+        "getBase64Image function is being executed in a non-browser context."
+      );
       return null;
     }
   };
@@ -72,30 +74,32 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
     setIsGenerating(true);
 
     const inputData = idCardRef.current;
+    // console.log("inputData", inputData);
 
     try {
       const canvas = await html2canvas(inputData, {
         scale: 9,
         letterRendering: true,
       });
-
+      // console.log("canvas", canvas);
       const imageData = canvas.toDataURL("image/png", 0.8);
+      // console.log("imageData", imageData);
 
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "px",
         format: "a4",
       });
-
+      // console.log("pdf", pdf);
       const width = pdf.internal.pageSize.getWidth();
       const height = (canvas.height * width) / canvas.width;
 
-      pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
+      pdf.addImage(imageData, "PNG", 0, 0, width, height, "", "FAST");
       pdf.save(`Student:${user.rollNo}.pdf`);
 
       setIsGenerating(false);
       setDownloaded(true);
-      toast.success('Downloaded Successfully!', {
+      toast.success("Downloaded Successfully!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -111,7 +115,7 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
       console.error("Error generating PDF:", e);
       setIsGenerating(false);
       setDownloaded(true);
-      toast.error('Error, Go to Download Page!', {
+      toast.error("Error, Go to Download Page!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -150,18 +154,50 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
               height={400}
             />
             <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold" }} className="break-words">
+              <p
+                style={{
+                  color: "#018394",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                }}
+                className="break-words"
+              >
                 {user?.fullName}
               </p>
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
+              <p
+                style={{
+                  color: "#018394",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "2px",
+                }}
+                className="break-words"
+              >
                 {user?.course}
               </p>
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
+              <p
+                style={{
+                  color: "#018394",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  marginTop: "2px",
+                }}
+                className="break-words"
+              >
                 {user?.batch}
               </p>
             </div>
             <div className="absolute mt-[184.5px] ml-[75px] w-[100px] h-[35px] overflow-hidden">
-              <p style={{ color: "white", fontSize: "13px", fontWeight: "bold", letterSpacing: "2px", fontStyle: "italic" }} className="break-words">
+              <p
+                style={{
+                  color: "white",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                  letterSpacing: "2px",
+                  fontStyle: "italic",
+                }}
+                className="break-words"
+              >
                 {user?.rollNo}
               </p>
             </div>
