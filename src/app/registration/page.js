@@ -39,17 +39,20 @@ export default function AdminPage() {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+ 
+  
   useEffect(() => {
     checkLocalStorage(); // Check local storage on component mount
     const intervalId = setInterval(checkLocalStorage, 60000); // Check local storage every minute
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
-
+  
   useEffect(() => {
-    if(admin){
-    setIsFormValid(adminName === admin.adminName && adminPassword === admin.adminPassword);}
-  }, [ admin, adminName, adminPassword,]);
-
+    if (admin) {
+      setIsFormValid(adminName === admin.adminName && adminPassword === admin.adminPassword);
+    }
+  }, [admin, adminName, adminPassword]);
+  
   const handleAdminLogin = () => {
     if (isFormValid) {
       const expirationTime = Date.now() + 3600000; // 1 hour in milliseconds
@@ -61,12 +64,12 @@ export default function AdminPage() {
       alert("Invalid admin credentials");
     }
   };
-
+  
   const checkLocalStorage = () => {
     const storedAdminName = localStorage.getItem("adminName");
     const storedAdminPassword = localStorage.getItem("adminPassword");
     const expirationTime = localStorage.getItem("expirationTime");
-
+  
     if (storedAdminName && storedAdminPassword && expirationTime) {
       const currentTime = Date.now();
       if (currentTime < parseInt(expirationTime, 10)) {
@@ -80,7 +83,8 @@ export default function AdminPage() {
       setModalOpen(true);
     }
   };
-
+  
+ 
   const clearLocalStorage = () => {
     localStorage.removeItem("adminName");
     localStorage.removeItem("adminPassword");
@@ -89,7 +93,14 @@ export default function AdminPage() {
     setAdminPassword(""); // Clear adminPassword state
     setModalOpen(true); // Reopen the modal for admin login
   };
-
+  
+  // Reset form fields when modal opens
+  useEffect(() => {
+    if (modalOpen) {
+      setAdminName(""); // Reset input fields
+      setAdminPassword(""); // Reset input fields
+    }
+  }, [modalOpen]);
   const [isHovered, setIsHovered] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false)
   // const [query, setQuery] = useState("")
