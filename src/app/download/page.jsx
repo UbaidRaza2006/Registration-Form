@@ -112,6 +112,7 @@ function DownloadIdCard() {
             payment: decodeURIComponent(user.payment),
             paymentImg: decodeURIComponent(user.paymentImg),
             status: decodeURIComponent(user.status),
+            otherStatus: decodeURIComponent(user.otherStatus),
             city: decodeURIComponent(user.city),
             cnic: decodeURIComponent(user.cnic),
             phone: decodeURIComponent(user.phone),

@@ -42,6 +42,7 @@ const EditDrawerApp = ({ userData }) => {
   const [course, setCourse] = useState("");
   const [batch, setBatch] = useState(null);
   const [status, setStatus] = useState("");
+  const [otherStatus, setOtherStatus] = useState("");
   const [city, setCity] = useState("");
   const [cnic, setCnic] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,6 +61,9 @@ const EditDrawerApp = ({ userData }) => {
   const [verified, setVerified] = useState(true); // Initial state is verified
   const [buttonText, setButtonText] = useState("Pending");
   const [buttonColor, setButtonColor] = useState("Blue");
+
+  const [otherButtonText, setOtherButtonText] = useState("Pending");
+  const [otherButtonColor, setOtherButtonColor] = useState("Blue");
 
 
   useEffect(() => {
@@ -86,6 +90,7 @@ const EditDrawerApp = ({ userData }) => {
         payment: decodeURIComponent(user.payment),
         paymentImg: decodeURIComponent(user.paymentImg),
         status: decodeURIComponent(user.status),
+        otherStatus: decodeURIComponent(user.otherStatus),
         city: decodeURIComponent(user.city),
         cnic: decodeURIComponent(user.cnic),
         phone: decodeURIComponent(user.phone),
@@ -108,6 +113,7 @@ const EditDrawerApp = ({ userData }) => {
       setCourse(result.course);
       setBatch(result.batch);
       setStatus(result.status);
+      setOtherStatus(result.otherStatus);
       setCity(result.city);
       setCnic(result.cnic);
       setPhone(result.phone);
@@ -140,6 +146,20 @@ const EditDrawerApp = ({ userData }) => {
       else {
         setButtonColor("red")
         setButtonText("Un-verified")
+      }
+
+
+      if (result.otherStatus === "Pending") {
+        setOtherButtonColor("blue")
+        setOtherButtonText("Pending")
+      }
+      else if(result.otherStatus === "Enrolled"){
+        setOtherButtonColor("yellow")
+        setOtherButtonText("Enrolled")
+      }
+      else if(result.otherStatus === "Completed"){
+        setOtherButtonColor("green")
+        setOtherButtonText("Completed")
       }
 
 
@@ -215,7 +235,7 @@ const EditDrawerApp = ({ userData }) => {
 
                         let data = await fetch(`/api/students/${userId}`, {
                           method: "PUT",
-                          body: JSON.stringify({ _id: userId, address: formattedAddress, batch: formattedBatch, city: formattedCity, cnic, course: formattedCourse, dateOfBirth, email, fatherName: formattedFatherName, fullName: formattedFullName, gender: formattedGender, imageUrl, payment, paymentImg, phone, qualification: formattedQualification, rollNo, status }), headers: {
+                          body: JSON.stringify({ _id: userId, address: formattedAddress, batch: formattedBatch, city: formattedCity, cnic, course: formattedCourse, dateOfBirth, email, fatherName: formattedFatherName, fullName: formattedFullName, gender: formattedGender, imageUrl, payment, paymentImg, phone, qualification: formattedQualification, rollNo, status, otherStatus }), headers: {
                             "Content-Type": "application/json"
                           }
                         })
@@ -512,6 +532,25 @@ const EditDrawerApp = ({ userData }) => {
       setStatus("Verified")
       setButtonText('Verified');
       setButtonColor('green');
+    }
+    // updateUser(userData._id)
+  };
+
+  const handleButtonClick1 = () => {
+    // Toggle the verification status and update button text and color accordingly
+    // setVerified(!verified);
+    if (otherStatus === "Pending") {
+      setOtherStatus("Enrolled")
+      setOtherButtonText('Enrolled');
+      setOtherButtonColor('yellow');
+    } else if (otherStatus === "Enrolled"){
+      setOtherStatus("Completed")
+      setOtherButtonText('Completed');
+      setOtherButtonColor('green');
+    } else if (otherStatus === "Completed"){
+      setOtherStatus("Pending")
+      setOtherButtonText('Pending');
+      setOtherButtonColor('blue');
     }
     // updateUser(userData._id)
   };
@@ -1007,6 +1046,13 @@ const EditDrawerApp = ({ userData }) => {
               onClick={handleButtonClick}
             >
               {buttonText}
+            </button>
+
+            <button
+              style={{ backgroundColor: otherButtonColor, color: 'white', padding: '10px', borderRadius: '5px', border: 'none', cursor: 'pointer' }}
+              onClick={handleButtonClick1}
+            >
+              {otherButtonText}
             </button>
 
 

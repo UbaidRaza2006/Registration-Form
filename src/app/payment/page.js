@@ -88,6 +88,7 @@ const [fullName, setFullName] = useState('');
   const [course, setCourse] = useState('');
   const [batch, setBatch] = useState('');
   const [status, setStatus] = useState('');
+  const [otherStatus, setOtherStatus] = useState('');
   const [city, setCity] = useState('');
   const [cnic, setCnic] = useState('');
   const [phone, setPhone] = useState('');
@@ -148,6 +149,7 @@ const [fullName, setFullName] = useState('');
       payment: decodeURIComponent(data.payment),
       paymentImg: decodeURIComponent(data.paymentImg),
       status: decodeURIComponent(data.status),
+      otherStatus: decodeURIComponent(data.otherStatus),
       city: decodeURIComponent(data.city),
       cnic: decodeURIComponent(data.cnic),
       phone: decodeURIComponent(data.phone),
@@ -164,6 +166,7 @@ const [fullName, setFullName] = useState('');
     setCourse(decodedUser.course);
         setBatch(decodedUser.batch);
         setStatus(decodedUser.status);
+        setOtherStatus(decodedUser.otherStatus);
         setCity(decodedUser.city);
         setCnic(decodedUser.cnic);
         setPhone(decodedUser.phone);
@@ -186,6 +189,7 @@ const [fullName, setFullName] = useState('');
         }
         else{
           setPayment("Done")
+          setOtherStatus("Enrolled")
           setCheck(false)
 
         }
@@ -255,7 +259,7 @@ const updateUser = async (userId) => {
       // 27577
     let dataToEdit = await fetch(`/api/students/${userId}`, {
       method: "PUT",
-      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, paymentImg, phone, qualification, rollNo, status }),
+      body: JSON.stringify({ _id: userId, address, batch, city, cnic, course, dateOfBirth, email, fatherName, fullName, gender, imageUrl, payment, paymentImg, phone, qualification, rollNo, status,otherStatus }),
       headers: {
         "Content-Type": "application/json"
       }

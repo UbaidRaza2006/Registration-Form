@@ -15,6 +15,7 @@ const RegistrationSchema = new mongoose.Schema({
     payment: String,
     paymentImg: String,
     status: String,
+    otherStatus: String,
     city: String,
     cnic: String,
     phone: String,
