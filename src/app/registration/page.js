@@ -15,6 +15,7 @@ import { usePassword } from "../../context";
 import InputComponent from "../../components/InputComponent";
 import { Bounce, toast } from "react-toastify";
 import { useRadioGroup } from "@mui/material";
+import OtherVerificationButton from "../../components/OtherVerificationButton";
 const { Search } = Input;
 
 const { Option } = Select;
@@ -1118,6 +1119,16 @@ const handleAPIError = (message) => {
 
 
 <VerificationButton id={record._id} userStatus={record.status} />
+
+      ),
+    },
+    {
+      title: "Other-Status",
+      key: "otherStatus",
+      render: (text, record) => (
+
+
+<OtherVerificationButton id={record._id} userOtherStatus={record.otherStatus} />
 
       ),
     },
