@@ -502,6 +502,8 @@ export default function MainPage() {
             });
             setShowModal(true);
             setCurrentUser(res.user);
+            setFormData(initialFormData)
+            setImage(null)
 
         } else if (res.success === false) {
             toast.error(res.message, {
