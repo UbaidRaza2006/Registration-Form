@@ -16,6 +16,7 @@ export async function GET(req) {
   const cityQuery = new URL(req.url).searchParams.get("city");
   const genderQuery = new URL(req.url).searchParams.get("gender");
   const statusQuery = new URL(req.url).searchParams.get("status");
+  const otherStatusQuery = new URL(req.url).searchParams.get("otherStatus");
   const batchQuery = new URL(req.url).searchParams.get("batch");
   const courseQuery = new URL(req.url).searchParams.get("course");
   const paymentQuery = new URL(req.url).searchParams.get("payment"); // Extracting payment query parameter
@@ -24,7 +25,7 @@ export async function GET(req) {
 
       
       
-      if (!rollNoQuery && !cnicQuery && !cityQuery && !genderQuery && !courseQuery && !batchQuery && !statusQuery && !paymentQuery) {
+      if (!rollNoQuery && !cnicQuery && !cityQuery && !genderQuery && !courseQuery && !batchQuery && !statusQuery && !otherStatusQuery && !paymentQuery) {
 
 
           const totalUsers = await Register.countDocuments();
@@ -139,6 +140,7 @@ export async function GET(req) {
           if (cityQuery) filter2.city = cityQuery;
           if (genderQuery) filter2.gender = genderQuery;
           if (statusQuery) filter2.status = statusQuery;
+          if (otherStatusQuery) filter2.otherStatus = otherStatusQuery;
           if (batchQuery) filter2.batch = batchQuery;
           if (courseQuery) filter2.course = courseQuery;
           if (paymentQuery) filter2.payment = paymentQuery; // Adding payment query parameter to the filter

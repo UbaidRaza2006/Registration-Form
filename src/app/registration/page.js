@@ -81,9 +81,10 @@ export default function AdminPage() {
         clearLocalStorage();
       }
     } else {
-      setModalOpen(true);
+      clearLocalStorage(); // Ensure that the modal opens and fields are reset
     }
   };
+  
   
  
   const clearLocalStorage = () => {
@@ -126,6 +127,7 @@ export default function AdminPage() {
   const [course, setCourse] = useState("")
   const [city, setCity] = useState("")
   const [status, setStatus] = useState("")
+  const [otherStatus, setOtherStatus] = useState("")
   const [payment, setPayment] = useState("")
 
   const [genderDone, setGenderDone] = useState("")
@@ -133,6 +135,7 @@ export default function AdminPage() {
   const [courseDone, setCourseDone] = useState("")
   const [cityDone, setCityDone] = useState("")
   const [statusDone, setStatusDone] = useState("")
+  const [otherStatusDone, setOtherStatusDone] = useState("")
   const [paymentDone, setPaymentDone] = useState("")
   const [rollNumberDone, setRollNumberDone] = useState("")
   const [cnicNumberDone, setCnicNumberDone] = useState("")
@@ -188,35 +191,39 @@ useEffect(() => {
     else if(rollNumber.length !== 5  && cnicNumber.length !== 15 ){
       setRollNumberDone("")
       setCnicNumberDone("")
-      if (city || course || batch || gender || status || payment) {
-        console.log("Condition met! Other state has value.", status, city, batch, course, gender,payment);
-        if(city !== cityDone || course !== courseDone || batch !== batchDone || gender !== genderDone || status !== statusDone || payment !== paymentDone){
-        getUsersFromFilter(status,batch,gender,city,course,payment);
+      if (city || course || batch || gender || status || otherStatus || payment) {
+        console.log("Condition met! Other state has value.", status, otherStatus, city, batch, course, gender,payment);
+        if(city !== cityDone || course !== courseDone || batch !== batchDone || gender !== genderDone || status !== statusDone || otherStatus !== otherStatusDone || payment !== paymentDone){
+        getUsersFromFilter(status,otherStatus,batch,gender,city,course,payment);
         // console.log("filterUsers-->",filterUsers)
         // setAllUsers(filterUsers)
         // setVerifiedUsers(filterVerified)
       }
       }
-      else if(!city && !course && !batch && !gender && !status && !payment){
+      else if(!city && !course && !batch && !gender && !status && !otherStatus && !payment){
         setAllUsers(alternateUsers)
         setVerifiedUsers(alternateVerified)
       }
     }
-}, [rollNumber, cnicNumber, city, status, course, batch, gender, payment]);
+}, [rollNumber, cnicNumber, city, status, otherStatus, course, batch, gender, payment]);
 
 
   
 
 
-const getUsersFromFilter = async (status, batch, gender, city, course, payment) => {
+const getUsersFromFilter = async (status, otherStatus, batch, gender, city, course, payment) => {
   // setIsLoading(true); // Set loading state to true
 
-  console.log("Filter Query Values-->", status, batch, gender, city, course, payment);
+  console.log("Filter Query Values-->", status, otherStatus, batch, gender, city, course, payment);
 
   let queryParams = '';
 
   if (status) {
     queryParams += `${queryParams ? '&' : ''}status=${status}`;
+  }
+
+  if (otherStatus) {
+    queryParams += `${queryParams ? '&' : ''}otherStatus=${otherStatus}`;
   }
 
   if (batch) {
@@ -274,7 +281,9 @@ const getUsersFromFilter = async (status, batch, gender, city, course, payment) 
 
       const verified = decodedUsers.filter(user => user.status === "verified");
 
+      
       setStatusDone(status)
+      setOtherStatusDone(otherStatus)
       setBatchDone(batch)
       setGenderDone(gender)
       setCityDone(city)
@@ -943,6 +952,7 @@ const handleAPIError = (message) => {
     setCourse("");
     setBatch(null);
     setStatus("");
+    setOtherStatus("");
     setPayment("");
     setGender("");
     // setRollNumber("");
@@ -1184,41 +1194,41 @@ const handleAPIError = (message) => {
 
 
 <DynamicModal
-        title="Admin Login"
-        visible={modalOpen}
-        footer={null}
-        centered
-        destroyOnClose
-        afterClose={() => {
-          // Reset adminName and adminPassword when the modal is closed
-          setAdminName("");
-          setAdminPassword("");
-        }}
-      >
-        <form className="mx-auto space-y-[20px]">
-          <Input
-            className="w-[100%] h-[40px]"
-            placeholder="Admin Name"
-            value={adminName}
-            onChange={(e) => setAdminName(e.target.value)}
-            autoComplete="off"
-          />
-          <Input.Password
-            className="w-[100%] h-[40px]"
-            placeholder="Admin Key"
-            value={adminPassword}
-            onChange={(e) => setAdminPassword(e.target.value)}
-            autoComplete="off"
-          />
-          <Button
-            className="mx-auto w-[20%] h-[40px] "
-            onClick={handleAdminLogin}
-            disabled={!isFormValid}
-          >
-            Login
-          </Button>
-        </form>
-      </DynamicModal>
+  title="Admin Login"
+  visible={modalOpen}
+  footer={null}
+  centered
+  destroyOnClose
+  afterClose={() => {
+    // Reset adminName and adminPassword when the modal is closed
+    setAdminName("");
+    setAdminPassword("");
+  }}
+>
+  <form className="mx-auto space-y-[20px]">
+    <Input
+      className="w-[100%] h-[40px]"
+      placeholder="Admin Name"
+      value={adminName}
+      onChange={(e) => setAdminName(e.target.value)}
+      autoComplete="off"
+    />
+    <Input.Password
+      className="w-[100%] h-[40px]"
+      placeholder="Admin Key"
+      value={adminPassword}
+      onChange={(e) => setAdminPassword(e.target.value)}
+      autoComplete="off"
+    />
+    <Button
+      className="mx-auto w-[20%] h-[40px]"
+      onClick={handleAdminLogin}
+      disabled={!isFormValid}
+    >
+      Login
+    </Button>
+  </form>
+</DynamicModal>
 
       
 {!modalOpen && (
@@ -1316,6 +1326,24 @@ const handleAPIError = (message) => {
       >
         <Select.Option value="Verified">Verified</Select.Option>
         <Select.Option value="Un-Verified">Un-Verified</Select.Option>
+      </Select>
+
+
+        {/* otherStatus */}
+      <Select
+        showSearch
+        style={{ width: 95 }}
+        value={otherStatus || undefined}
+        placeholder="Other-Status"
+        optionFilterProp="children"
+        onChange={(value) => setOtherStatus(value)}
+        filterOption={(input, option) =>
+          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        }
+      >
+        <Select.Option value="Pending">Pending</Select.Option>
+        <Select.Option value="Enrolled">Enrolled</Select.Option>
+        <Select.Option value="Completed">Completed</Select.Option>
       </Select>
 
       {/* Payment */}

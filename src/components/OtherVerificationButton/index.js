@@ -100,12 +100,12 @@ const OtherVerificationButton = ({ id, userOtherStatus }) => {
   'Pending';
     // console.log("status-->",status)
     setOtherStatus(newOtherStatus);
-    setOtherButtonText(newOtherStatus === 'Pending' ? 'Enrolled' : 
-        newOtherStatus === 'Enrolled' ? 'Completed' : 
-        newOtherStatus === 'Completed' ? 'Pending' : '');
-    setOtherButtonColor(newOtherStatus === 'Pending' ? 'yellow' : 
-        newOtherStatus === 'Enrolled' ? 'green' : 
-        newOtherStatus === 'Completed' ? 'blue' : 
+    setOtherButtonText(newOtherStatus === 'Pending' ? 'Pending' : 
+        newOtherStatus === 'Enrolled' ? 'Enrolled' : 
+        newOtherStatus === 'Completed' ? 'Completed' : '');
+    setOtherButtonColor(newOtherStatus === 'Pending' ? 'blue' : 
+        newOtherStatus === 'Enrolled' ? 'yellow' : 
+        newOtherStatus === 'Completed' ? 'green' : 
         '');
 
     // Call updateUser function to update user data
