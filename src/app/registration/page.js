@@ -56,7 +56,7 @@ export default function AdminPage() {
   
   const handleAdminLogin = () => {
     if (isFormValid) {
-      const expirationTime = Date.now() + 3600000; // 1 hour in milliseconds
+      const expirationTime = Date.now() + 60000; // 1 hour in milliseconds
       localStorage.setItem("adminName", adminName);
       localStorage.setItem("adminPassword", adminPassword);
       localStorage.setItem("expirationTime", expirationTime);
@@ -74,16 +74,20 @@ export default function AdminPage() {
     if (storedAdminName && storedAdminPassword && expirationTime) {
       const currentTime = Date.now();
       if (currentTime < parseInt(expirationTime, 10)) {
+        // Valid session
         setAdminName(storedAdminName);
         setAdminPassword(storedAdminPassword);
         setModalOpen(false);
       } else {
+        // Expired session
         clearLocalStorage();
       }
     } else {
-      clearLocalStorage(); // Ensure that the modal opens and fields are reset
+      // No session data
+      clearLocalStorage();
     }
   };
+  
   
   
  
@@ -91,10 +95,12 @@ export default function AdminPage() {
     localStorage.removeItem("adminName");
     localStorage.removeItem("adminPassword");
     localStorage.removeItem("expirationTime");
-    setAdminName(""); // Clear adminName state
-    setAdminPassword(""); // Clear adminPassword state
-    setModalOpen(true); // Reopen the modal for admin login
+    // Clear form fields and ensure modal opens
+    setAdminName("");
+    setAdminPassword("");
+    setModalOpen(true);
   };
+  
   
   // Reset form fields when modal opens
   useEffect(() => {
@@ -1205,20 +1211,22 @@ const handleAPIError = (message) => {
     setAdminPassword("");
   }}
 >
-  <form className="mx-auto space-y-[20px]">
+  <form className="mx-auto space-y-[20px]" autoComplete="off">
     <Input
       className="w-[100%] h-[40px]"
       placeholder="Admin Name"
       value={adminName}
       onChange={(e) => setAdminName(e.target.value)}
       autoComplete="off"
+      name={`adminName_${Math.random()}`} // Randomized name attribute
     />
     <Input.Password
       className="w-[100%] h-[40px]"
       placeholder="Admin Key"
       value={adminPassword}
       onChange={(e) => setAdminPassword(e.target.value)}
-      autoComplete="off"
+      autoComplete="new-password"
+      name={`adminPassword_${Math.random()}`} // Randomized name attribute
     />
     <Button
       className="mx-auto w-[20%] h-[40px]"
@@ -1229,6 +1237,7 @@ const handleAPIError = (message) => {
     </Button>
   </form>
 </DynamicModal>
+
 
       
 {!modalOpen && (
