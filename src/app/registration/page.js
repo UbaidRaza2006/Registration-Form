@@ -373,10 +373,10 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
     
-          const verified = decodedUsers[0].status === "verified";
+          const verified = decodedUsers.filter(user => user.status === "verified");
 
           setRollNumberDone(rollNumber)
-          setAllUsers(decodedUsers[0]);
+          setAllUsers(decodedUsers);
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
@@ -552,9 +552,9 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           }));
     
           // const verified = decodedUsers.filter(user => user.status === "verified");
-          const verified1 = decodedUsers[0].status === "verified";
+          const verified1 = decodedUsers.filter(user => user.status === "verified");
           const verified = Array.isArray(verified1) ? verified1 : [verified1];
-          const theUser = decodedUsers[0]
+          const theUser = decodedUsers
           const finalUser = Array.isArray(theUser) ? theUser : [theUser];
 
 
