@@ -56,7 +56,7 @@ export default function AdminPage() {
   
   const handleAdminLogin = () => {
     if (isFormValid) {
-      const expirationTime = Date.now() + 60000; // 1 hour in milliseconds
+      const expirationTime = Date.now() + 3600000; // 1 hour in milliseconds
       localStorage.setItem("adminName", adminName);
       localStorage.setItem("adminPassword", adminPassword);
       localStorage.setItem("expirationTime", expirationTime);
