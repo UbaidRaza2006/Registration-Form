@@ -996,16 +996,39 @@ const EditDrawerApp = ({ userData }) => {
               }}
             />
 
-            <InputComponent
-              id="batchInput"
-              label="Batch"
-              type="number"
-              // options={batchOptions}
-              value={batch}
-              onChange={(event) => {
-                setBatch(event.target.value)
-              }}
+
+            <div className='flex space-x-4'>
+            <div className="relative h-14 mt-3 mb-[-5px]">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Roll-No</p>
+            <Input
+            id="rollNoInput"
+            label="rollNo"
+            type="text"
+                value={rollNo}
+                className="h-8 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit"
+                onChange={(event) => {
+                  setRollNo(event.target.value)
+                }}
             />
+        </div>
+
+
+ <div className="relative h-14 mt-3 mb-[-5px]">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Batch</p>
+            <Input
+            id="batchInput"
+            label="Batch"
+            type="number"
+            // options={batchOptions}
+            value={batch}
+            onChange={(event) => {
+              setBatch(event.target.value)
+            }}
+                className="h-8 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit"
+            />
+        </div>
+
+</div>
 
 
             <div style={{ marginTop: "20px" }}>
