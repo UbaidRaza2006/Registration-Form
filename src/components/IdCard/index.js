@@ -74,16 +74,16 @@ function IdCard({ user }) {
       </Button>
 
       <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-        <div ref={idCardRef} className="relative">
+        <div ref={idCardRef} className="relative pt-4">
           <Image
             src="/images/Green Minimalist School ID Card (1).svg"
-            className="absolute ml-[28%] h-[100px] w-[180px] object-cover z-0"
+            className="absolute ml-[28%] h-[100px] w-[160px] object-cover z-0"
             width={600}
             height={400}
           />
-          <div className="id-card flex mx-auto mt-8 h-[230px] w-[350px] relative z-10">
+          <div className="id-card flex mx-auto mt-8 h-[100px] w-[100px] border border-gray-900 z-10">
             <Image
-              className="absolute w-[25.6%] h-[88px] mt-[88px] ml-[7.8%]"
+              className="absolute w-[13%] h-[44px] mt-[37px] ml-[32%]"
               alt="User-Image"
               src={user.imageUrl}
               width={600}
