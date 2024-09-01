@@ -28,6 +28,7 @@ export async function GET(req) {
 
       if (students.length > 0) {
         const encodedStudents = students.map(student => ({
+            createdAt:student.createdAt,
           rollNo: student.rollNo,
           batch: student.batch,
           _id: student._id,
@@ -81,6 +82,7 @@ export async function GET(req) {
       const students = await Register.find(filter1).sort({_id: -1});
 
       const encodedStudents = students.map(student => ({
+        createdAt:student.createdAt,
         rollNo: student.rollNo,
         batch: student.batch,
         _id: student._id,
@@ -136,6 +138,7 @@ export async function GET(req) {
 
       if (students.length > 0) {
         const encodedStudents = students.map(student => ({
+            createdAt:student.createdAt,
           rollNo: student.rollNo,
           batch: student.batch,
           _id: student._id,
@@ -191,41 +194,41 @@ export async function GET(req) {
   }
 }
 
-export async function POST(req) {
-  await connectToDb();
+// export async function POST(req) {
+//   await connectToDb();
   
-  try {
-    // Parse the request body to get user data
-    const userData = await req.json();
+//   try {
+//     // Parse the request body to get user data
+//     const userData = await req.json();
     
-    // Find the latest roll number and increment atomically
-    const updatedUser = await Register.findOneAndUpdate(
-      {},
-      { $inc: { rollNo: 1 } },  // Atomically increment roll number
-      { sort: { rollNo: -1 }, new: true, upsert: true }
-    );
+//     // Find the latest roll number and increment atomically
+//     const updatedUser = await Register.findOneAndUpdate(
+//       {},
+//       { $inc: { rollNo: 1 } },  // Atomically increment roll number
+//       { sort: { rollNo: -1 }, new: true, upsert: true }
+//     );
 
-    // Assign the new roll number to the user data
-    userData.rollNo = updatedUser ? updatedUser.rollNo : 1;
+//     // Assign the new roll number to the user data
+//     userData.rollNo = updatedUser ? updatedUser.rollNo : 1;
 
-    // Create a new user with the updated roll number
-    const newUser = new Register(userData);
+//     // Create a new user with the updated roll number
+//     const newUser = new Register(userData);
     
-    // Save the new user to the database
-    await newUser.save();
+//     // Save the new user to the database
+//     await newUser.save();
 
-    return NextResponse.json({
-      success: true,
-      message: "User registered successfully!",
-      user: newUser
-    });
+//     return NextResponse.json({
+//       success: true,
+//       message: "User registered successfully!",
+//       user: newUser
+//     });
 
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return NextResponse.json({
-      success: false,
-      status: 500,
-      message: "Internal Server Error"
-    });
-  }
-}
+//   } catch (error) {
+//     console.error("An error occurred:", error);
+//     return NextResponse.json({
+//       success: false,
+//       status: 500,
+//       message: "Internal Server Error"
+//     });
+//   }
+// }

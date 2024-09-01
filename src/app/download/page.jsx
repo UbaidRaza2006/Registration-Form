@@ -102,6 +102,7 @@ function DownloadIdCard() {
           const users = Array.isArray(data) ? data : [data];
 
           const decodedUsers = users.map(user => ({
+          createdAt:user.createdAt,
             rollNo:user.rollNo,
             batch:user.batch,
             _id:user._id,

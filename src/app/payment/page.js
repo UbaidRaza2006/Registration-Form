@@ -139,6 +139,7 @@ const [fullName, setFullName] = useState('');
     // agar ese data inputs mein nhi ata to phir ye user walay usestate se nikaal lena
     
     const decodedUser = {
+      createdAt:data.createdAt,
       rollNo:data.rollNo,
       batch:data.batch,
       _id:data._id,

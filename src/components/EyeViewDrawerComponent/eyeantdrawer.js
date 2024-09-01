@@ -16,6 +16,21 @@ const EyeViewDrawerApp = ({ userData }) => {
     setOpen(false);
   };
 
+  // Utility function to format date and time
+const formatDateTime = (dateString) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true, // To display in 12-hour format with AM/PM
+  };
+  const date = new Date(dateString);
+  return date.toLocaleString('en-US', options);
+};
+
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -165,6 +180,11 @@ const EyeViewDrawerApp = ({ userData }) => {
               <div className="font-semibold">Other-Status:</div>
               <div>{userData.otherStatus}</div>
               <div className="border-b border-gray-300 col-span-2"></div>
+
+              <div className="font-semibold">Registered:</div>
+              <div>{formatDateTime(userData.createdAt)}</div>
+              <div className="border-b border-gray-300 col-span-2"></div>
+
 
             </div>
           </div>

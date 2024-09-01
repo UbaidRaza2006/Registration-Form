@@ -264,6 +264,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
       // Convert single object to an array of length 1
       const users = Array.isArray(data) ? data : [data];
       const decodedUsers = users.map(user => ({
+        createdAt:user.createdAt,
         rollNo:user.rollNo,
         batch:user.batch,
         _id:user._id,
@@ -352,6 +353,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
+        createdAt:user.createdAt,
             rollNo:user.rollNo,
             batch:user.batch,
             _id:user._id,
@@ -441,6 +443,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
+        createdAt:user.createdAt,
             rollNo:user.rollNo,
             batch:user.batch,
             _id:user._id,
@@ -530,6 +533,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
+        createdAt:user.createdAt,
             rollNo:user.rollNo,
             batch:user.batch,
             _id:user._id,
@@ -756,6 +760,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
 
       // Decode address and qualification fields
       const decodedUsers = users.map(user => ({
+        createdAt:user.createdAt,
         rollNo:user.rollNo,
         batch:user.batch,
         _id:user._id,

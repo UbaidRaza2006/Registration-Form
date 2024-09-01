@@ -80,6 +80,7 @@ const EditDrawerApp = ({ userData }) => {
       let user = data.result
 
       const result = {
+        createdAt:user.createdAt,
         rollNo:user.rollNo,
         batch:user.batch,
         _id:user._id,

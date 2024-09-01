@@ -15,7 +15,7 @@ export async function GET(request, content) {
             const result = await Register.findById(record)
 
             const encodedResult = {
-              ...result,
+              createdAt:result.createdAt,
               rollNo:result.rollNo,
               batch:result.batch,
               _id:result._id,
@@ -57,7 +57,7 @@ export async function GET(request, content) {
             const result = await Register.findOneAndUpdate(filter,payload,{new:true})
             
             const encodedResult = {
-              ...result,
+              createdAt:result.createdAt,
               rollNo:result.rollNo,
               batch:result.batch,
               _id:result._id,
@@ -98,7 +98,10 @@ export async function GET(request, content) {
             const result = await Register.deleteOne(record)
 
             const encodedResult = {
-              ...result,
+              createdAt:result.createdAt,
+              rollNo:result.rollNo,
+              batch:result.batch,
+              _id:result._id,
               fullName: encodeURIComponent(result.fullName),
               fatherName: encodeURIComponent(result.fatherName),
               email: encodeURIComponent(result.email),
