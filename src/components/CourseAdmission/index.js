@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { usePassword } from '../../context';
 import { Bounce, toast } from 'react-toastify';
+import DownloadButton from '../DownlaodButton';
 
 const AdmissionModal = ({ isOpen, onClose, user }) => {
   const [isAdmission, setIsAdmission] = useState("Wait..");
@@ -160,6 +161,10 @@ const handleSwitchChange = () => {
         </div>):"Wait...."
         }
        
+       <DownloadButton/>
+
+
+
       </div>
     </ReactModal>
   );

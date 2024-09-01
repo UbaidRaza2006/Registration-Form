@@ -7,6 +7,7 @@ import { ClassroomOutlined } from '@ant-design/icons';
 import {
   UserOutlined,
   LaptopOutlined,
+  DownloadOutlined,
   BlockOutlined,
   LockOutlined,
   GlobalOutlined,
@@ -40,6 +41,8 @@ import img from "../../../public/images/—Pngtree—line building dubai city si
 import img1 from "../../../public/images/images1.png"
 import InputComponent from '../InputComponent';
 import { Bounce, toast } from 'react-toastify';
+import DownloadButton from '../DownlaodButton';
+import DownloadModal from '../DownloadModal';
 const { Sider } = Layout;
 
 
@@ -55,6 +58,7 @@ function SideNavbarComponent() {
   const [isModalVisible5, setIsModalVisible5] = useState(false);
   const [isModalVisible6, setIsModalVisible6] = useState(false);
   const [isModalVisible7, setIsModalVisible7] = useState(false);
+  const [isModalVisible9, setIsModalVisible9] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -499,6 +503,10 @@ const handlePassword = () => {
       console.log("showModal", par)
       setIsModalVisible7(true)
     }
+    else if (par === 9) {
+      console.log("showModal", par)
+      setIsModalVisible9(true)
+    }
   };
 
   const handleCancel = (par) => {
@@ -529,6 +537,10 @@ const handlePassword = () => {
     else if (par === 7) {
       console.log("closeModal", par)
       setIsModalVisible7(false)
+    }
+    else if (par === 9) {
+      console.log("closeModal", par)
+      setIsModalVisible9(false)
     }
   };
 
@@ -833,11 +845,12 @@ const handlePassword = () => {
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '-20px' }}>
       <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px', height: "100%" }} width={80} theme="dark">
         <Menu mode="vertical" className='space-y-5' style={{ backgroundColor: "#0E4C92" }} theme="dark" defaultSelectedKeys={['1']}>
-          <Menu.Item key="i1" icon={<Image style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }}   width={600} height={400} src='/images/BhattiSahab.jpg' alt='User' />} />
+          {/* <Menu.Item key="i1" icon={<Image style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }}   width={600} height={400} src='/images/BhattiSahab.jpg' alt='User' />} /> */}
           <Menu.Item key="1" icon={<LockOutlined />} onClick={() => showModal(1)} />
           <Menu.Item key="2" icon={<StopOutlined />} onClick={() => showModal(2)} />
           <Menu.Item key="3" icon={<LaptopOutlined />} onClick={() => showModal(3)} />
           <Menu.Item key="4" icon={<GlobalOutlined/>} onClick={() => showModal(7)} />
+          <Menu.Item key="6" icon={<DownloadOutlined/>} onClick={() => showModal(9)} />
           <Menu.Item key="5" icon={api ? (
             <div className="flex items-center space-x-2">
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
@@ -1204,6 +1217,7 @@ const handlePassword = () => {
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
 <AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
 <DeleteModal isOpen={isModalVisible6} onClose={()=>{handleCancel(6)}} user={currentUser}/>
+  <DownloadModal isOpen={isModalVisible9} onClose={()=>{handleCancel(9)}}/>
 
     </Layout>
   );
