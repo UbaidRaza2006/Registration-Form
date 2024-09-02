@@ -79,7 +79,7 @@ function IdCard({ user }) {
 
 <div className=" mx-auto w-[180px] h-[120px]">
 
-<div className="absolute w-[177px] h-[116px]">
+<div className="absolute w-[177px] h-[116px] border border-gray-900">
       <Image
         src="/images/Green Minimalist School ID Card (1).svg"
         className="w-full h-full object-cover"
@@ -93,7 +93,7 @@ function IdCard({ user }) {
     <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
       {/* User Image */}
       <Image
-        className="absolute top-0 left-0  w-[26.5%] h-[38.5%] mt-[25%] ml-[6%]"
+        className="absolute top-0 left-0  w-[26%] h-[38.5%] mt-[25%] ml-[6.8%]"
         alt="User-Image"
         src={user.imageUrl}
         width={600}
@@ -101,9 +101,12 @@ function IdCard({ user }) {
       />
       
       {/* User Details */}
-      <div className="absolute top-0 left-0 w-[37%] h-[35%] border border-gray-900">
+      <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[34.2%] ml-[62%] space-y-[-1px] overflow-hidden">
         <p
-          style={{ color: "#018394", fontSize: "5px", fontWeight: "bold" }}
+          style={{ color: "#018394",
+             fontSize: "6px", 
+             fontWeight: "bold",
+             }}
           className="break-words"
         >
           {user.fullName}
@@ -111,9 +114,9 @@ function IdCard({ user }) {
         <p
           style={{
             color: "#018394",
-            fontSize: "5px",
+            fontSize: "6px",
             fontWeight: "bold",
-            marginTop: "2px",
+            // marginTop: "2px",
           }}
           className="break-words"
         >
@@ -122,9 +125,9 @@ function IdCard({ user }) {
         <p
           style={{
             color: "#018394",
-            fontSize: "5px",
+            fontSize: "6px",
             fontWeight: "bold",
-            marginTop: "2px",
+            // marginTop: "2px",
           }}
           className="break-words"
         >
@@ -133,11 +136,11 @@ function IdCard({ user }) {
       </div>
 
       {/* User Roll Number */}
-      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[53%] ml-[22%] border-2 border-blue-900 flex justify-center items-center">
+      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[54.3%] ml-[19%] flex justify-center items-center">
         <p
           style={{
             color: "white",
-            fontSize: "8px",
+            fontSize: "7px",
             fontWeight: "bold",
             letterSpacing: "2px",
             fontStyle: "italic",
