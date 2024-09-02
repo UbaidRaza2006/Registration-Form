@@ -74,40 +74,85 @@ function IdCard({ user }) {
       </Button>
 
       <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-        <div ref={idCardRef} className="relative pt-4">
-          <Image
-            src="/images/Green Minimalist School ID Card (1).svg"
-            className="absolute ml-[28%] h-[100px] w-[160px] object-cover z-0"
-            width={600}
-            height={400}
-          />
-          <div className="id-card flex mx-auto mt-8 h-[100px] w-[100px] border border-gray-900 z-10">
-            <Image
-              className="absolute w-[13%] h-[44px] mt-[37px] ml-[32%]"
-              alt="User-Image"
-              src={user.imageUrl}
-              width={600}
-              height={400}
-            />
-            <div className="absolute mt-[115px] ml-[210px] w-[230px] h-[100px] overflow-hidden">
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold" }} className="break-words">
-                {user.fullName}
-              </p>
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
-                {user.course}
-              </p>
-              <p style={{ color: "#018394", fontSize: "10px", fontWeight: "bold", marginTop: "2px" }} className="break-words">
-                {user.batch}
-              </p>
-            </div>
-            <div className="absolute mt-[184.5px] ml-[75px] w-[100px] h-[35px] overflow-hidden">
-              <p style={{ color: "white", fontSize: "13px", fontWeight: "bold", letterSpacing: "2px", fontStyle: "italic" }} className="break-words">
-                {user.rollNo}
-              </p>
-            </div>
-          </div>
-        </div>
+  <div ref={idCardRef} className="relative pt-2 w-[350px] h-[230px] ">
+    {/* First child div for the school image */}
+
+<div className=" mx-auto w-[180px] h-[120px]">
+
+<div className="absolute w-[177px] h-[116px]">
+      <Image
+        src="/images/Green Minimalist School ID Card (1).svg"
+        className="w-full h-full object-cover"
+        width={600}
+        height={400}
+        alt="School Image"
+      />
+    </div>
+
+    {/* Second child div for the rest of the ID card content */}
+    <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
+      {/* User Image */}
+      <Image
+        className="absolute top-0 left-0  w-[26.5%] h-[38.5%] mt-[25%] ml-[6%]"
+        alt="User-Image"
+        src={user.imageUrl}
+        width={600}
+        height={400}
+      />
+      
+      {/* User Details */}
+      <div className="absolute top-0 left-0 w-[37%] h-[35%] border border-gray-900">
+        <p
+          style={{ color: "#018394", fontSize: "5px", fontWeight: "bold" }}
+          className="break-words"
+        >
+          {user.fullName}
+        </p>
+        <p
+          style={{
+            color: "#018394",
+            fontSize: "5px",
+            fontWeight: "bold",
+            marginTop: "2px",
+          }}
+          className="break-words"
+        >
+          {user.course}
+        </p>
+        <p
+          style={{
+            color: "#018394",
+            fontSize: "5px",
+            fontWeight: "bold",
+            marginTop: "2px",
+          }}
+          className="break-words"
+        >
+          {user.batch}
+        </p>
       </div>
+
+      {/* User Roll Number */}
+      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[53%] ml-[22%] border-2 border-blue-900 flex justify-center items-center">
+        <p
+          style={{
+            color: "white",
+            fontSize: "8px",
+            fontWeight: "bold",
+            letterSpacing: "2px",
+            fontStyle: "italic",
+          }}
+          className="break-words"
+        >
+          {user.rollNo}
+        </p>
+      </div>
+    </div> 
+    </div>
+
+  </div>
+</div>
+
     </div>
   );
 }
