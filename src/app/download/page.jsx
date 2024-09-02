@@ -1,111 +1,63 @@
 "use client";
 
-// import DownloadIdCardTable from "@/components/AntIdCardsTable";
-// import AntInputComponent from "@/components/AntInput";
-// import { Button } from "antd";
-import { EditOutlined, PlusOutlined,DownloadOutlined } from '@ant-design/icons';
-import React, { useEffect } from "react";
-import { useContext, useRef, useState } from "react";
-import AntInputComponent from "../../components/AntInput";
-import { Button, Input, Table } from "antd";
-import DownloadIdCardTable from "../../components/AntIdCardsTable";
-import style from "../globals.css"
-import Link from "next/link";
-import InputComponent from "../../components/InputComponent";
-import { findUserByCNIC, getAllUsers, getUserWithCnic } from "../../services/register";
-// import IdCard from "../../components/IdCard";
-import dynamic from "next/dynamic";
+import { HomeOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Input, Table } from "antd";
 import IdCard from "../../components/IdCard";
 import { Bounce, toast } from "react-toastify";
+import Link from "next/link";
 
 function DownloadIdCard() {
-
-  const [res, setRes] = useState(null)
-  const [allUsers, setAllUsers] = useState([])
-  const [cnic, setCnic] = useState(false)
-  const [inputCnic, setInputCnic] = useState('')
-  const [simpleCnic, setSimpleCnic] = useState('')
-  const [usersWithCnic, setUsersWithCnic] = useState([])
-  // const [usersWithCnic,setUsersWithCnic]= useState([])
-
+  const [res, setRes] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+  const [cnic, setCnic] = useState(false);
+  const [inputCnic, setInputCnic] = useState("");
+  const [simpleCnic, setSimpleCnic] = useState("");
+  const [usersWithCnic, setUsersWithCnic] = useState([]);
 
   useEffect(() => {
-
-    if (inputCnic.length > 15 || inputCnic.length < 15) {
-      setUsersWithCnic([])
+    if (inputCnic.length !== 15) {
+      setUsersWithCnic([]);
     }
-
   }, [inputCnic]);
-
-  const data = [
-    {
-      key: '1',
-      course: 'Course 1',
-      batch: 'Batch 1',
-    },
-    {
-      key: '2',
-      course: 'Course 2',
-      batch: 'Batch 2',
-    },
-    {
-      key: '3',
-      course: 'Course 3',
-      batch: 'Batch 3',
-    },
-  ];
 
   const columns = [
     {
-      title: 'Course',
-      dataIndex: 'course',
-      key: 'course',
+      title: "Course",
+      dataIndex: "course",
+      key: "course",
     },
     {
-      title: 'Batch',
-      dataIndex: 'batch',
-      key: 'batch',
+      title: "Batch",
+      dataIndex: "batch",
+      key: "batch",
     },
     {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <IdCard user={record} />
-      ),
-
+      title: "Action",
+      key: "action",
+      render: (text, record) => <IdCard user={record} />,
     },
   ];
 
   const formatCnicNumber = (input) => {
-    const cleanedInput = input.replace(/\D/g, '');
-    let formattedCnic = cleanedInput.replace(/^(\d{5})(\d{7})(\d{1})$/, '$1-$2-$3');
-    return formattedCnic;
+    const cleanedInput = input.replace(/\D/g, "");
+    return cleanedInput.replace(/^(\d{5})(\d{7})(\d{1})$/, "$1-$2-$3");
   };
 
-  function isFormValid() {
-    return inputCnic.length === 15 ? true : false
-  }
+  const isFormValid = () => inputCnic.length === 15;
 
   const getUserCnicData = async (cnicNumber) => {
     console.log("cnicForUser-->", cnicNumber);
     if (cnicNumber) {
       try {
-        console.log("ruko zara, sabar karo!")
+        console.log("Fetching user data...");
         let userData = await fetch(`/api/students?cnic=${cnicNumber}`);
         userData = await userData.json();
         console.log(userData);
 
         if (userData.success) {
-          let data = userData.data;
-          console.log("data-->", data);
-
-          const users = Array.isArray(data) ? data : [data];
-
-          const decodedUsers = users.map(user => ({
-          createdAt:user.createdAt,
-            rollNo:user.rollNo,
-            batch:user.batch,
-            _id:user._id,
+          const decodedUsers = userData.data.map((user) => ({
+            ...user,
             fullName: decodeURIComponent(user.fullName),
             fatherName: decodeURIComponent(user.fatherName),
             email: decodeURIComponent(user.email),
@@ -121,12 +73,11 @@ function DownloadIdCard() {
             gender: decodeURIComponent(user.gender),
             qualification: decodeURIComponent(user.qualification),
             address: decodeURIComponent(user.address),
-            imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
+            imageUrl: decodeURIComponent(user.imageUrl),
           }));
-    
 
           setUsersWithCnic(decodedUsers);
-        } else if (userData.success === false) {
+        } else {
           toast.error(userData.message, {
             position: "top-right",
             autoClose: 5000,
@@ -137,11 +88,11 @@ function DownloadIdCard() {
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
-        } 
+          });
+        }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        toast.error('Error, Try again later!', {
+        toast.error("Error, Try again later!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -151,37 +102,41 @@ function DownloadIdCard() {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
-    }
-    else{
-      console.log("cnicNumber nhi araha!")
+    } else {
+      console.log("CNIC number is not provided!");
     }
   };
 
   return (
-    <div className="h-[1100px] bg-[#d4f6f9]">
-      <div className="flex justify-center bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white text-3xl md:text-4xl text-center font-bold h-[60px] py-2">
-      <div className='text-3xl font-bold mr-4'><DownloadOutlined/></div>
-        Download ID Card
+    <div className="min-h-screen bg-[#d4f6f9]">
+      {/* Navbar */}
+      <div className="flex justify-between items-center bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
+        <Link href="/" passHref>
+          <HomeOutlined className="text-2xl cursor-pointer" />
+        </Link>
+        <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
+          Download ID Card
+        </div>
       </div>
 
-      <div className="w-full h-[750px] mt-12 flex flex-col items-center">
-        <div className="mx-auto">
-
+      {/* Main Content */}
+      <div className="w-full flex flex-col items-center py-8 px-4 md:px-0">
+        {/* CNIC Input */}
+        <div className="mb-4 w-full max-w-xs md:max-w-md lg:max-w-lg">
           <Input
-          className="rounded-3xl border-5 border-gray-400 py-1 text-xl text-center"
-          style={{width:"400px", height:"45px", backgroundColor:"white"}}
+            className="rounded-3xl border-2 border-gray-400 py-2 text-xl text-center w-full"
+            style={{ backgroundColor: "white" }}
             id="cnicInput"
             type="text"
             maxLength="15"
             inputMode="numeric"
             placeholder="00000-0000000-0"
-            label="Cnic/B-form"
             value={inputCnic}
             onChange={(event) => {
-              setSimpleCnic(event.target.value)
-              const inputValue = event.target.value.replace(/\D/g, ''); // Remove non-digit characters
+              setSimpleCnic(event.target.value);
+              const inputValue = event.target.value.replace(/\D/g, ""); // Remove non-digit characters
               if (inputValue.length <= 13) {
                 const formattedCnic = formatCnicNumber(inputValue);
                 setInputCnic(formattedCnic);
@@ -190,24 +145,30 @@ function DownloadIdCard() {
           />
         </div>
 
+        {/* Submit Button */}
         <button
-          className="btn disabled:opacity-50 disabled:bg-gradient-to-t from-[#0e303e] to-[#18819b] mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-[400px]"
+          className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
           disabled={!isFormValid()}
           onClick={() => getUserCnicData(inputCnic)}
         >
           SUBMIT
         </button>
-        <div className="mt-6 rounded-lg">
-          {usersWithCnic.length > 0 ? <Table columns={columns} dataSource={usersWithCnic} className='rounded-lg w-[400px]' /> : null}
+
+        {/* Users Table */}
+        <div className="mt-6 rounded-lg w-full px-4 md:px-8 lg:px-16 max-w-2xl mx-auto">
+          {usersWithCnic.length > 0 ? (
+            <Table
+              columns={columns}
+              dataSource={usersWithCnic}
+              className="rounded-lg"
+              pagination={false}
+              style={{ width: "100%" }}
+            />
+          ) : null}
         </div>
       </div>
-
     </div>
   );
 }
 
-export default DownloadIdCard
-
-// export default dynamic(() => Promise.resolve(Cart), {
-//     ssr: false,
-// });
+export default DownloadIdCard;
