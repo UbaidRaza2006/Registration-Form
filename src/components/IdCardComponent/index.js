@@ -195,13 +195,13 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
       </div>
 
       {/* User Roll Number */}
-      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[54.3%] ml-[19%] flex justify-center items-center">
+      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[53.8%] ml-[19.5%] flex justify-center items-center">
         <p
           style={{
             color: "white",
             fontSize: "7px",
             fontWeight: "bold",
-            letterSpacing: "2px",
+            letterSpacing: "1.5px",
             fontStyle: "italic",
           }}
           className="break-words"
