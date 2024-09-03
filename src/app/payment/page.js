@@ -418,6 +418,7 @@ console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
+    // Some new functionalities are going to come as sir has said, today is 4 September, this line is to be removed whenver it is seen
     <div id="payment" className="bg-[#eefcfd]"
     // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
     >
