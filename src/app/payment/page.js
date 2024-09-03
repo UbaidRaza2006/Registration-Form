@@ -7,7 +7,7 @@
 // import Image2UploadComponent from "@/components/AntUpload/ubaid2";
 import React, { useEffect, useState } from "react";
 import AntInputComponent from "../../components/AntInput";
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, PlusOutlined, ButtonOutlined, HomeOutlined } from '@ant-design/icons';
 import { Button } from "antd";
 // import style from "../../components/Navbar/nav.css"
 import ImageUploadComponent from "../../components/AntUpload";
@@ -19,6 +19,7 @@ import Notification from "../../components/Notification";
 import { Bounce, toast } from "react-toastify";
 import dotenv from 'dotenv'
 import { PlusOneOutlined } from "@mui/icons-material";
+import Link from "next/link";
 
   dotenv.config()
 
@@ -48,7 +49,7 @@ export default function PaymentVerify() {
       flexDirection: "column",
       margin: "0 auto",
     //   width: "400px",
-      height: "510px",
+      height: "550px",
       marginTop: "35px",
       boxShadow: "1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)",
       // boxShadow: '5px 0px 1px 12px rgba(0, 0, 0, 0.1)',
@@ -59,10 +60,21 @@ export default function PaymentVerify() {
       // marginLeft: "200px"
     },
     inputs: {
-      color: "green",
-      width: "500px",
-      height: "105px",
+      // borderRadius: "4px", // Add a slight border-radius for a more polished look
+    boxShadow: "0 2px 3px rgba(156, 163, 175, 0.4)",
+      // color: "green",
+      // width: "500px",
+      // height: "140px",
       //   border: "2px solid black",
+      
+        //backgroundColor: "	#C0C0C0",
+        border: "1px solid #aaa",
+          backgroundColor: "inherit",
+          width: "270px",
+          height: "40px",
+         //  borderRadius: "10px",
+          fontSize: "15px",
+       
     },
     upload: {
       backgroundColor: "green",
@@ -408,6 +420,7 @@ const handleImageUpload = async (e) => {
 
 
 
+const isFormValid = () => rollNo.length === 5;
 
 
 const triggerFileInput = () => {
@@ -419,7 +432,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
     // Some new functionalities are going to come as sir has said, today is 4 September, this line is to be removed whenver it is seen
-    <div id="payment" className="bg-[#eefcfd]"
+    <div id="payment" className="bg-[#eefcfd] h-[700px]"
     // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
     >
 
@@ -429,16 +442,28 @@ console.log("Image Url ka baap hon----->", paymentImg)
 
       {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 
-      <div
-    style={{ boxShadow: "0px -5px 1px 12px rgba(0, 0, 0, 0.1)" }}
-    className="items-center justify-between mt-0 w-screen bg-gradient-to-t from-[#0e303e] to-[#18819b]  lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12 relative z-10"
-  >
-    <p className="mx-auto">
-      Payment Verify Form
-    </p>
-  </div>
+      <div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
+  {/* Enlarged Circular Home Icon Button using Ant Design */}
+  <Link href="/" passHref>
+    <Button
+      type="default" // Default type for Ant Design button with custom border
+      shape="circle"
+      size="large"  // Increased size of the button
+      icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
+      className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
+      style={{
+        backgroundColor: "transparent", // Match navbar background
+        color: "white", // Icon color
+      }}
+    />
+  </Link>
 
-      <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500 relative z-10 rounded-md" style={styles.container}>
+  <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
+    Payment Form
+  </div>
+</div>
+
+      <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] bg-[#f8f8f8] border border-black-1500 relative z-10 rounded-md" style={styles.container}>
         <div
           // style={{
           //   margin: "0 auto", 
@@ -450,6 +475,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
           <div>
             {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
             <AntInputComponent
+            className="shadow-md shadow-gray-400"
               placeholder={"Enter Roll No."}
               style={styles.inputs}
               value={rollNumber}
@@ -464,6 +490,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
           <div >
             {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
             <AntInputComponent
+            className="shadow-md shadow-gray-400"
               placeholder={"Enter Name"}
               style={styles.inputs}
               value={fullName}
@@ -472,6 +499,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
           <div>
             {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
             <AntInputComponent
+            className="shadow-md shadow-gray-400"
               placeholder={"Enter Course"}
               style={styles.inputs}
               value={course}
@@ -481,6 +509,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
             {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
 
             <AntInputComponent
+            className="shadow-md shadow-gray-400"
               placeholder={"Enter Batch"}
               style={styles.inputs}
               value={batch}
@@ -494,7 +523,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
 </div>
   
 
-        <div className="image-upload-container bg-[#f3f3f3] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
+        <div className="image-upload-container bg-[#f8f8f8] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
     {!paymentImg || paymentImg == "Not-Done" ? (
     <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
     ) : (
@@ -509,9 +538,9 @@ console.log("Image Url ka baap hon----->", paymentImg)
     />
     <style jsx>{`
     .image-upload-container {
-    width: 250px;
-    height: 160px;
-    border: 2px solid #aaa;
+    width: 270px;
+    height: 180px;
+    border: 1px solid #aaa;
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -535,7 +564,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
          onClick={updateUser(idForUser)}
          >Submit</Button> */}
 
-{registering?(<button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-6 tracking-wider"
+{registering?(<button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"  
             // onClick={handleRegister}
         // disabled={!isFormValid()}
     ><div className="flex items-center space-x-3 mx-auto">
@@ -546,10 +575,10 @@ console.log("Image Url ka baap hon----->", paymentImg)
     </div>
     </button>):(
 
-         <button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-8 tracking-wider"
-    onClick={() => updateUser(idForUser)}
-    // disabled={!isFormValid()}
-    >Submit
+         <button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"
+        //  disabled={!isFormValid()}
+         onClick={() => updateUser(idForUser)}
+    >SUBMIT
     </button>
     )}
 
