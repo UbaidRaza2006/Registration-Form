@@ -2,12 +2,13 @@
 
 import { HomeOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
-import { Input, Table } from "antd";
+import { Button, Input, Table } from "antd";
 import IdCard from "../../components/IdCard";
 import { Bounce, toast } from "react-toastify";
 import Link from "next/link";
 
 function DownloadIdCard() {
+  const [registering, setRegistering] = useState(false);
   const [res, setRes] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [cnic, setCnic] = useState(false);
@@ -50,6 +51,7 @@ function DownloadIdCard() {
     console.log("cnicForUser-->", cnicNumber);
     if (cnicNumber) {
       try {
+        setRegistering(true)
         console.log("Fetching user data...");
         let userData = await fetch(`/api/students?cnic=${cnicNumber}`);
         userData = await userData.json();
@@ -77,6 +79,7 @@ function DownloadIdCard() {
           }));
 
           setUsersWithCnic(decodedUsers);
+          setRegistering(false)
         } else {
           toast.error(userData.message, {
             position: "top-right",
@@ -89,6 +92,7 @@ function DownloadIdCard() {
             theme: "light",
             transition: Bounce,
           });
+          setRegistering(false)
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -112,14 +116,26 @@ function DownloadIdCard() {
   return (
     <div className="min-h-screen bg-[#d4f6f9]">
       {/* Navbar */}
-      <div className="flex justify-between items-center bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
-        <Link href="/" passHref>
-          <HomeOutlined className="text-2xl cursor-pointer" />
-        </Link>
-        <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
-          Download ID Card
-        </div>
-      </div>
+      <div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
+  {/* Enlarged Circular Home Icon Button using Ant Design */}
+  <Link href="/" passHref>
+    <Button
+      type="default" // Default type for Ant Design button with custom border
+      shape="circle"
+      size="large"  // Increased size of the button
+      icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
+      className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
+      style={{
+        backgroundColor: "transparent", // Match navbar background
+        color: "white", // Icon color
+      }}
+    />
+  </Link>
+
+  <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
+    Download ID Card
+  </div>
+</div>
 
       {/* Main Content */}
       <div className="w-full flex flex-col items-center py-8 px-4 md:px-0">
@@ -146,13 +162,34 @@ function DownloadIdCard() {
         </div>
 
         {/* Submit Button */}
-        <button
+
+        {registering ? (
+          <button
           className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
-          disabled={!isFormValid()}
-          onClick={() => getUserCnicData(inputCnic)}
+          // disabled={!isFormValid()}
+          // onClick={() => getUserCnicData(inputCnic)}
         >
-          SUBMIT
-        </button>
+        <div className="flex items-center space-x-3 mx-auto">
+              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+            </div>
+          </button>) : 
+          (
+
+          <button
+            className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
+            disabled={!isFormValid()}
+            onClick={() => getUserCnicData(inputCnic)}
+          >
+            SUBMIT
+          </button>
+        )}
+
+
+
+
 
         {/* Users Table */}
         <div className="mt-6 rounded-lg w-full px-4 md:px-8 lg:px-16 max-w-2xl mx-auto">
@@ -161,7 +198,7 @@ function DownloadIdCard() {
               columns={columns}
               dataSource={usersWithCnic}
               className="rounded-lg"
-              pagination={false}
+              pagination={{ pageSize: 10 }} // Pagination with 10 rows per page
               style={{ width: "100%" }}
             />
           ) : null}
