@@ -41,55 +41,31 @@ export default function PaymentVerify() {
 
   const styles = {
     container: {
-      backgroundColor: "white",
-      border: "1px solid #ddd",
-      borderRadius: "10px",
+    //   backgroundColor: "white",
+      // border: "2px solid black",
+      // borderRadius: "20px",
       display: "flex",
       flexDirection: "column",
       margin: "0 auto",
-      height: "auto",
+    //   width: "400px",
+      height: "510px",
       marginTop: "35px",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+      boxShadow: "1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)",
+      // boxShadow: '5px 0px 1px 12px rgba(0, 0, 0, 0.1)',
       maxWidth: "600px",
-      padding: "20px",
+
+      
+
+      // marginLeft: "200px"
     },
     inputs: {
-      width: "100%",
-      marginBottom: "15px",
-      borderRadius: "5px",
-      border: "1px solid #ccc",
-      padding: "10px",
+      color: "green",
+      width: "500px",
+      height: "105px",
+      //   border: "2px solid black",
     },
     upload: {
-      backgroundColor: "#f3f3f3",
-      border: "1px solid #ccc",
-      borderRadius: "5px",
-      padding: "10px",
-    },
-    navbar: {
-      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.1)",
-    },
-    navbarLink: {
-      color: "white",
-      textDecoration: "none",
-      padding: "10px 20px",
-      borderRadius: "5px",
-      fontWeight: "bold",
-    },
-    button: {
-      backgroundColor: "#0e303e",
-      border: "none",
-      color: "white",
-      padding: "10px 20px",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontWeight: "bold",
-      fontSize: "16px",
-      marginTop: "20px",
-      transition: "background-color 0.3s",
-    },
-    buttonHover: {
-      backgroundColor: "#18819b",
+      backgroundColor: "green",
     },
   };
 
@@ -441,75 +417,146 @@ const triggerFileInput = () => {
 console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
 
-return (
-  <div id="payment" className="bg-[#eefcfd]" style={{ minHeight: '100vh' }}>
-    {/* Navbar */}
-    <div className="bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white flex items-center justify-between px-4 py-2" style={styles.navbar}>
-      <a href="/" style={styles.navbarLink}>Home</a>
-      <p className="text-2xl font-bold">Payment Verify Form</p>
-    </div>
+  return (
+    <div id="payment" className="bg-[#eefcfd]"
+    // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
+    >
 
-    {/* Form Container */}
-    <div className="space-y-6 mx-auto" style={styles.container}>
-      <div className="space-y-6">
-        <AntInputComponent
-          placeholder={"Enter Roll No."}
-          style={styles.inputs}
-          value={rollNumber}
-          onChange={(event) => setRollNumber(event.target.value)}
-        />
-        <AntInputComponent
-          placeholder={"Enter Name"}
-          style={styles.inputs}
-          value={fullName}
-        />
-        <AntInputComponent
-          placeholder={"Enter Course"}
-          style={styles.inputs}
-          value={course}
-        />
-        <AntInputComponent
-          placeholder={"Enter Batch"}
-          style={styles.inputs}
-          value={batch}
-        />
-      </div>
 
-      {/* Image Upload */}
-      <div className="image-upload-container" onClick={triggerFileInput} style={styles.upload}>
-        {!paymentImg || paymentImg === "Not-Done" ? (
-          <label className="text-gray-600" htmlFor="file-upload">
-            Payment Image <PlusOutlined />
-          </label>
-        ) : (
-          <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
-        )}
-        <input
-          id="file-upload"
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={handleImageUpload}
-        />
-      </div>
+{/* Background Image */}
+{/* <NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-[650px] object-cover z-0" width={600} height={600} /> */}
 
-      {/* Submit Button */}
-      {registering ? (
-        <button className="btn" style={{ ...styles.button, ...styles.buttonHover }}>
-          <div className="flex items-center space-x-3 mx-auto">
-            <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite' }}></div>
-            <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite' }}></div>
-            <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite' }}></div>
+      {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
 
-            {/* Add more loader dots if needed */}
-          </div>
-        </button>
-      ) : (
-        <button className="btn" style={styles.button} onClick={() => updateUser(idForUser)}>
-          Submit
-        </button>
-      )}
-    </div>
+      <div
+    style={{ boxShadow: "0px -5px 1px 12px rgba(0, 0, 0, 0.1)" }}
+    className="items-center justify-between mt-0 w-screen bg-gradient-to-t from-[#0e303e] to-[#18819b]  lg:h-16 md:h-16 mx:h-16 lg:text-4xl md:text-4xl mx:text-4xl text-white flex items-center justify-center text-2xl xs:text-1xl text-[20px] font-bold h-12 relative z-10"
+  >
+    <p className="mx-auto">
+      Payment Verify Form
+    </p>
   </div>
-);
+
+      <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] md:bg-white mx:bg-white lg:bg-white xl:bg-white sm:bg-white bg-none border border-black-1500 relative z-10 rounded-md" style={styles.container}>
+        <div
+          // style={{
+          //   margin: "0 auto", 
+          //   marginTop: "10px",
+          //   //  backgroundColor: "white",
+          // }}
+          className="space-y-6 ml-6 mt-6"
+        >
+          <div>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
+            <AntInputComponent
+              placeholder={"Enter Roll No."}
+              style={styles.inputs}
+              value={rollNumber}
+              onChange={(event)=>{
+                // setRollNumber(event.target.value)
+                console.log(event.target.value)
+                  setRollNumber(event.target.value)
+
+                }}
+            />
+          </div>
+          <div >
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
+            <AntInputComponent
+              placeholder={"Enter Name"}
+              style={styles.inputs}
+              value={fullName}
+            />
+          </div>
+          <div>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
+            <AntInputComponent
+              placeholder={"Enter Course"}
+              style={styles.inputs}
+              value={course}
+            />
+          </div>
+          <div>
+            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
+
+            <AntInputComponent
+              placeholder={"Enter Batch"}
+              style={styles.inputs}
+              value={batch}
+            />
+          </div>
+
+          {/* <div>
+            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Upload</p>
+            <ImageUploadComponent />
+          </div> */}
+</div>
+  
+
+        <div className="image-upload-container bg-[#f3f3f3] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
+    {!paymentImg || paymentImg == "Not-Done" ? (
+    <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
+    ) : (
+    <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
+    )}
+    <input
+    id="file-upload"
+    type="file"
+    accept="image/*"
+    style={{ display: 'none' }}
+    onChange={handleImageUpload}
+    />
+    <style jsx>{`
+    .image-upload-container {
+    width: 250px;
+    height: 160px;
+    border: 2px solid #aaa;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    }
+    .uploaded-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover; /* This line is important */
+    }
+    `}</style>
+    </div>
+
+
+        
+        {/* <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
+        color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
+         }}
+         onClick={updateUser(idForUser)}
+         >Submit</Button> */}
+
+{registering?(<button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-6 tracking-wider"
+            // onClick={handleRegister}
+        // disabled={!isFormValid()}
+    ><div className="flex items-center space-x-3 mx-auto">
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+    </div>
+    </button>):(
+
+         <button className="btn mt-4 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-10 rounded-lg mx-auto block px-8 tracking-wider"
+    onClick={() => updateUser(idForUser)}
+    // disabled={!isFormValid()}
+    >Submit
+    </button>
+    )}
+
+         
+
+         {/* {notification && <Notification message={notification.message} success={notification.success} />} */}
+
+      </div>
+    </div>
+  );
 }
