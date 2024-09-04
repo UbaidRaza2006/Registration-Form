@@ -81,6 +81,7 @@ export default function PaymentVerify() {
     },
   };
 
+  
   const [imageee, setImageee] = useState("");
   const [rollNumber,setRollNumber] = useState("")
   const [registering, setRegistering] = useState(false)
