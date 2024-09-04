@@ -119,7 +119,7 @@ function DownloadIdCard() {
     // Simulate page load completion
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 500); // Adjust the timeout as needed
+    }, 300); // Adjust the timeout as needed
     return () => clearTimeout(timer);
   }, []);
 
