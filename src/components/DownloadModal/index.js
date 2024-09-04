@@ -13,7 +13,7 @@ const DownloadModal = ({ isOpen, onClose }) => {
           zIndex: 1001 // Set a higher z-index for overlay
         },
         content: {
-          backgroundColor: "#d3d0d0",
+          backgroundColor: "#eefcfd",
           top: '50%',
           left: '50%',
           right: 'auto',

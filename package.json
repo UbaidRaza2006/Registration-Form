@@ -46,7 +46,8 @@
     "sharp": "^0.33.3",
     "styled-components": "^6.1.8",
     "uuid": "^9.0.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

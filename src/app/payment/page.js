@@ -129,6 +129,8 @@ const [fullName, setFullName] = useState('');
     setFullName("")
     setFatherName("")
     setImageee("")
+    setPaymentImg("")
+    setImageUrl("")
     setCheck(false)
     }
   }, [rollNumber])
@@ -138,6 +140,8 @@ const [fullName, setFullName] = useState('');
   const getUserData = async (rollNumber) => {
   console.log("rollNoForUser-->", rollNumber);
   if(rollNumber){
+
+    setRegistering(true)
 
 
     let userData = await fetch(`/api/students?rollNo=${rollNumber}`)
@@ -197,6 +201,8 @@ const [fullName, setFullName] = useState('');
     
         setImageee(decodedUser.paymentImg);
 
+        setRegistering(false)
+
 
         if(userData.data[0].payment == "Done"){
           setCheck(true)
@@ -212,6 +218,10 @@ const [fullName, setFullName] = useState('');
 
   }
   else if(userData.success === false){
+
+    setRegistering(true)
+
+
     toast.error(userData.message, {
       position: "top-right",
       autoClose: 5000,
@@ -459,8 +469,12 @@ console.log("Image Url ka baap hon----->", paymentImg)
     />
   </Link>
 
-  <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
+
+  <div className="text-center flex-grow text-3xl md:text-4xl font-bold block lg:hidden">
     Payment Form
+  </div>
+  <div className="text-center flex-grow text-3xl md:text-4xl font-bold hidden lg:block">
+    Payment Verify Form
   </div>
 </div>
 
