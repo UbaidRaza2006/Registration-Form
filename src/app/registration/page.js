@@ -25,9 +25,9 @@ const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
 
 
 export default function AdminPage() {
- 
 
-  const {api,setApi,coursesToLoad,setCoursesToLoad, sideNavbarCity, setSideNavbarCity} = usePassword();
+
+  const { api, setApi, coursesToLoad, setCoursesToLoad, sideNavbarCity, setSideNavbarCity } = usePassword();
 
 
   const [admin, setAdmin] = useState(null)
@@ -40,20 +40,20 @@ export default function AdminPage() {
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
- 
-  
+
+
   useEffect(() => {
     checkLocalStorage(); // Check local storage on component mount
     const intervalId = setInterval(checkLocalStorage, 60000); // Check local storage every minute
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
-  
+
   useEffect(() => {
     if (admin) {
       setIsFormValid(adminName === admin.adminName && adminPassword === admin.adminPassword);
     }
   }, [admin, adminName, adminPassword]);
-  
+
   const handleAdminLogin = () => {
     if (isFormValid) {
       const expirationTime = Date.now() + 3600000; // 1 hour in milliseconds
@@ -62,15 +62,26 @@ export default function AdminPage() {
       localStorage.setItem("expirationTime", expirationTime);
       setModalOpen(false);
     } else {
-      alert("Invalid admin credentials");
+      // alert("Invalid admin credentials");
+      toast.error("Invalid admin credentials", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
-  
+
   const checkLocalStorage = () => {
     const storedAdminName = localStorage.getItem("adminName");
     const storedAdminPassword = localStorage.getItem("adminPassword");
     const expirationTime = localStorage.getItem("expirationTime");
-  
+
     if (storedAdminName && storedAdminPassword && expirationTime) {
       const currentTime = Date.now();
       if (currentTime < parseInt(expirationTime, 10)) {
@@ -87,10 +98,10 @@ export default function AdminPage() {
       clearLocalStorage();
     }
   };
-  
-  
-  
- 
+
+
+
+
   const clearLocalStorage = () => {
     localStorage.removeItem("adminName");
     localStorage.removeItem("adminPassword");
@@ -100,8 +111,8 @@ export default function AdminPage() {
     setAdminPassword("");
     setModalOpen(true);
   };
-  
-  
+
+
   // Reset form fields when modal opens
   useEffect(() => {
     if (modalOpen) {
@@ -161,147 +172,164 @@ export default function AdminPage() {
     return formattedCnic;
   };
 
-  
 
 
 
 
-useEffect(() => {
-    if (rollNumber.length === 5 && cnicNumber.length !== 15){
+
+  useEffect(() => {
+    if (rollNumber.length === 5 && cnicNumber.length !== 15) {
       setCnicNumberDone("")
       console.log("Updated rollNo:", rollNumber);
-      if(rollNumber !== rollNumberDone){
-      getUserRollNoData(rollNumber)
-      // setAllUsers(rollNoUsers)
-      // setVerifiedUsers(verifiedRollNo)
+      if (rollNumber !== rollNumberDone) {
+        getUserRollNoData(rollNumber)
+        // setAllUsers(rollNoUsers)
+        // setVerifiedUsers(verifiedRollNo)
+      }
     }
-    }
-    else if(rollNumber.length === 5 && cnicNumber.length === 15){
+    else if (rollNumber.length === 5 && cnicNumber.length === 15) {
       console.log("Updated cnic:", cnicNumber);
       console.log("Updated rollNo:", rollNumber);
-      if(rollNumber !== rollNumberDone || cnicNumber !== cnicNumberDone){
-      getUserCnicAndRollNoData(cnicNumber, rollNumber)
-    //   setAllUsers(cnicAndRollNoUsers)
-    //   setVerifiedUsers(verifiedrollNoAndCnic)
+      if (rollNumber !== rollNumberDone || cnicNumber !== cnicNumberDone) {
+        getUserCnicAndRollNoData(cnicNumber, rollNumber)
+        //   setAllUsers(cnicAndRollNoUsers)
+        //   setVerifiedUsers(verifiedrollNoAndCnic)
       }
     }
-    else if(rollNumber.length !== 5 && cnicNumber.length === 15){
+    else if (rollNumber.length !== 5 && cnicNumber.length === 15) {
       console.log("Updated cnic:", cnicNumber);
-      if(cnicNumber !== cnicNumberDone || rollNumber.length < rollNumberDone.length){
+      if (cnicNumber !== cnicNumberDone || rollNumber.length < rollNumberDone.length) {
         setRollNumberDone("")
-      getUserCnicData(cnicNumber)
-      // setAllUsers(cnicUsers)
-      // setVerifiedUsers(verifiedCnic)
+        getUserCnicData(cnicNumber)
+        // setAllUsers(cnicUsers)
+        // setVerifiedUsers(verifiedCnic)
       }
     }
-    else if(rollNumber.length !== 5  && cnicNumber.length !== 15 ){
+    else if (rollNumber.length !== 5 && cnicNumber.length !== 15) {
       setRollNumberDone("")
       setCnicNumberDone("")
       if (city || course || batch || gender || status || otherStatus || payment) {
-        console.log("Condition met! Other state has value.", status, otherStatus, city, batch, course, gender,payment);
-        if(city !== cityDone || course !== courseDone || batch !== batchDone || gender !== genderDone || status !== statusDone || otherStatus !== otherStatusDone || payment !== paymentDone){
-        getUsersFromFilter(status,otherStatus,batch,gender,city,course,payment);
-        // console.log("filterUsers-->",filterUsers)
-        // setAllUsers(filterUsers)
-        // setVerifiedUsers(filterVerified)
+        console.log("Condition met! Other state has value.", status, otherStatus, city, batch, course, gender, payment);
+        if (city !== cityDone || course !== courseDone || batch !== batchDone || gender !== genderDone || status !== statusDone || otherStatus !== otherStatusDone || payment !== paymentDone) {
+          getUsersFromFilter(status, otherStatus, batch, gender, city, course, payment);
+          // console.log("filterUsers-->",filterUsers)
+          // setAllUsers(filterUsers)
+          // setVerifiedUsers(filterVerified)
+        }
       }
-      }
-      else if(!city && !course && !batch && !gender && !status && !otherStatus && !payment){
+      else if (!city && !course && !batch && !gender && !status && !otherStatus && !payment) {
         setAllUsers(alternateUsers)
         setVerifiedUsers(alternateVerified)
       }
     }
-}, [rollNumber, cnicNumber, city, status, otherStatus, course, batch, gender, payment]);
+  }, [rollNumber, cnicNumber, city, status, otherStatus, course, batch, gender, payment]);
 
 
-  
 
 
-const getUsersFromFilter = async (status, otherStatus, batch, gender, city, course, payment) => {
-  // setIsLoading(true); // Set loading state to true
 
-  console.log("Filter Query Values-->", status, otherStatus, batch, gender, city, course, payment);
+  const getUsersFromFilter = async (status, otherStatus, batch, gender, city, course, payment) => {
+    // setIsLoading(true); // Set loading state to true
 
-  let queryParams = '';
+    console.log("Filter Query Values-->", status, otherStatus, batch, gender, city, course, payment);
 
-  if (status) {
-    queryParams += `${queryParams ? '&' : ''}status=${status}`;
-  }
+    let queryParams = '';
 
-  if (otherStatus) {
-    queryParams += `${queryParams ? '&' : ''}otherStatus=${otherStatus}`;
-  }
+    if (status) {
+      queryParams += `${queryParams ? '&' : ''}status=${status}`;
+    }
 
-  if (batch) {
-    queryParams += `${queryParams ? '&' : ''}batch=${batch}`;
-  }
+    if (otherStatus) {
+      queryParams += `${queryParams ? '&' : ''}otherStatus=${otherStatus}`;
+    }
 
-  if (gender) {
-    queryParams += `${queryParams ? '&' : ''}gender=${gender}`;
-  }
+    if (batch) {
+      queryParams += `${queryParams ? '&' : ''}batch=${batch}`;
+    }
 
-  if (city) {
-    queryParams += `${queryParams ? '&' : ''}city=${city}`;
-  }
+    if (gender) {
+      queryParams += `${queryParams ? '&' : ''}gender=${gender}`;
+    }
 
-  if (course) {
-    queryParams += `${queryParams ? '&' : ''}course=${course}`;
-  }
+    if (city) {
+      queryParams += `${queryParams ? '&' : ''}city=${city}`;
+    }
 
-  if (payment) {
-    queryParams += `${queryParams ? '&' : ''}payment=${payment}`;
-  }
+    if (course) {
+      queryParams += `${queryParams ? '&' : ''}course=${course}`;
+    }
 
-  try {
-    let userData = await fetch(`/api/students${queryParams ? '?' + queryParams : ''}`);
-    userData = await userData.json();
-    console.log(userData, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
+    if (payment) {
+      queryParams += `${queryParams ? '&' : ''}payment=${payment}`;
+    }
 
-    if (userData.success) {
-      let data = userData.data;
-      console.log("data-->", data, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
+    try {
+      let userData = await fetch(`/api/students${queryParams ? '?' + queryParams : ''}`);
+      userData = await userData.json();
+      console.log(userData, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
 
-      // Convert single object to an array of length 1
-      const users = Array.isArray(data) ? data : [data];
-      const decodedUsers = users.map(user => ({
-        createdAt:user.createdAt,
-        rollNo:user.rollNo,
-        batch:user.batch,
-        _id:user._id,
-        fullName: decodeURIComponent(user.fullName),
-        fatherName: decodeURIComponent(user.fatherName),
-        email: decodeURIComponent(user.email),
-        course: decodeURIComponent(user.course),
-        payment: decodeURIComponent(user.payment),
-        paymentImg: decodeURIComponent(user.paymentImg),
-        status: decodeURIComponent(user.status),
-        otherStatus: decodeURIComponent(user.otherStatus),
-        city: decodeURIComponent(user.city),
-        cnic: decodeURIComponent(user.cnic),
-        phone: decodeURIComponent(user.phone),
-        dateOfBirth: decodeURIComponent(user.dateOfBirth),
-        gender: decodeURIComponent(user.gender),
-        qualification: decodeURIComponent(user.qualification),
-        address: decodeURIComponent(user.address),
-        imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
-      }));
+      if (userData.success) {
+        let data = userData.data;
+        console.log("data-->", data, "url-->", `/api/students${queryParams ? '?' + queryParams : ''}`);
 
-      const verified = decodedUsers.filter(user => user.status === "verified");
+        // Convert single object to an array of length 1
+        const users = Array.isArray(data) ? data : [data];
+        const decodedUsers = users.map(user => ({
+          createdAt: user.createdAt,
+          rollNo: user.rollNo,
+          batch: user.batch,
+          _id: user._id,
+          fullName: decodeURIComponent(user.fullName),
+          fatherName: decodeURIComponent(user.fatherName),
+          email: decodeURIComponent(user.email),
+          course: decodeURIComponent(user.course),
+          payment: decodeURIComponent(user.payment),
+          paymentImg: decodeURIComponent(user.paymentImg),
+          status: decodeURIComponent(user.status),
+          otherStatus: decodeURIComponent(user.otherStatus),
+          city: decodeURIComponent(user.city),
+          cnic: decodeURIComponent(user.cnic),
+          phone: decodeURIComponent(user.phone),
+          dateOfBirth: decodeURIComponent(user.dateOfBirth),
+          gender: decodeURIComponent(user.gender),
+          qualification: decodeURIComponent(user.qualification),
+          address: decodeURIComponent(user.address),
+          imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
+        }));
 
-      
-      setStatusDone(status)
-      setOtherStatusDone(otherStatus)
-      setBatchDone(batch)
-      setGenderDone(gender)
-      setCityDone(city)
-      setCourseDone(course)
-      setPaymentDone(payment)
-      setAllUsers(decodedUsers);
-      setVerifiedUsers(verified);
-    } else if (userData.success === false) {
-      setAllUsers([]);
-      setVerifiedUsers([]);
-      toast.error(userData.message, {
+        const verified = decodedUsers.filter(user => user.status === "verified");
+
+
+        setStatusDone(status)
+        setOtherStatusDone(otherStatus)
+        setBatchDone(batch)
+        setGenderDone(gender)
+        setCityDone(city)
+        setCourseDone(course)
+        setPaymentDone(payment)
+        setAllUsers(decodedUsers);
+        setVerifiedUsers(verified);
+      } else if (userData.success === false) {
+        setAllUsers([]);
+        setVerifiedUsers([]);
+        toast.error(userData.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        // Consider a more informative message for the user here (e.g., "No students match your filter criteria")
+      } else {
+        alert("An error occurred!"); // Handle other potential errors more gracefully
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      toast.error(error, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -311,32 +339,15 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        });
-      // Consider a more informative message for the user here (e.g., "No students match your filter criteria")
-    } else {
-      alert("An error occurred!"); // Handle other potential errors more gracefully
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    toast.error(error, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
       });
-    // Handle network errors or other issues more gracefully (e.g., display an error message to the user)
-  } 
-  // finally {
-  //   setIsLoading(false); // Set loading state to false after fetching is complete
-  // }
-};
+      // Handle network errors or other issues more gracefully (e.g., display an error message to the user)
+    }
+    // finally {
+    //   setIsLoading(false); // Set loading state to false after fetching is complete
+    // }
+  };
 
-  
+
 
   const getUserRollNoData = async (rollNumber) => {
     console.log("rollNoForUser-->", rollNumber);
@@ -345,18 +356,18 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
         let userData = await fetch(`/api/students?rollNo=${rollNumber}`);
         userData = await userData.json();
         console.log(userData);
-  
+
         if (userData.success) {
           let data = userData.data;
           console.log("data-->", data);
-          
+
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-        createdAt:user.createdAt,
-            rollNo:user.rollNo,
-            batch:user.batch,
-            _id:user._id,
+            createdAt: user.createdAt,
+            rollNo: user.rollNo,
+            batch: user.batch,
+            _id: user._id,
             fullName: decodeURIComponent(user.fullName),
             fatherName: decodeURIComponent(user.fatherName),
             email: decodeURIComponent(user.email),
@@ -374,7 +385,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             address: decodeURIComponent(user.address),
             imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
-    
+
           const verified = decodedUsers.filter(user => user.status === "verified");
 
           setRollNumberDone(rollNumber)
@@ -393,12 +404,12 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
           setAllUsers([])
           // setAlternateUsers(allUsers)
           setVerifiedUsers([]);
         } else {
-        
+
           toast.error(userData.message, {
             position: "top-right",
             autoClose: 5000,
@@ -409,7 +420,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -423,7 +434,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
     }
   };
@@ -435,18 +446,18 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
         let userData = await fetch(`/api/students?cnic=${cnicNumber}`);
         userData = await userData.json();
         console.log(userData);
-  
+
         if (userData.success) {
           let data = userData.data;
           console.log("data-->", data);
-          
+
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-        createdAt:user.createdAt,
-            rollNo:user.rollNo,
-            batch:user.batch,
-            _id:user._id,
+            createdAt: user.createdAt,
+            rollNo: user.rollNo,
+            batch: user.batch,
+            _id: user._id,
             fullName: decodeURIComponent(user.fullName),
             fatherName: decodeURIComponent(user.fatherName),
             email: decodeURIComponent(user.email),
@@ -464,7 +475,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             address: decodeURIComponent(user.address),
             imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
-    
+
           const verified = decodedUsers.filter(user => user.status === "verified");
 
           setCnicNumberDone(cnicNumber)
@@ -483,7 +494,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
           setAllUsers([]);
           setVerifiedUsers([])
           // setAlternateUsers(allUsers)
@@ -498,7 +509,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
         }
       } catch (error) {
         console.log(error)
@@ -512,12 +523,12 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
     }
   };
 
-  const getUserCnicAndRollNoData = async (cnicNumber,rollNumber) => {
+  const getUserCnicAndRollNoData = async (cnicNumber, rollNumber) => {
     console.log("rollNoForUser-->", rollNumber);
     console.log("cnicForUser-->", cnicNumber);
     if (rollNumber && cnicNumber) {
@@ -525,18 +536,18 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
         let queryData = await fetch(`/api/students?cnic=${cnicNumber}&rollNo=${rollNumber}`);
         queryData = await queryData.json();
         console.log(queryData);
-  
+
         if (queryData.success) {
           let data = queryData.data;
           console.log("data-->", data);
-          
+
           // Convert single object to an array of length 1
           const users = Array.isArray(data) ? data : [data];
           const decodedUsers = users.map(user => ({
-        createdAt:user.createdAt,
-            rollNo:user.rollNo,
-            batch:user.batch,
-            _id:user._id,
+            createdAt: user.createdAt,
+            rollNo: user.rollNo,
+            batch: user.batch,
+            _id: user._id,
             fullName: decodeURIComponent(user.fullName),
             fatherName: decodeURIComponent(user.fatherName),
             email: decodeURIComponent(user.email),
@@ -554,7 +565,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             address: decodeURIComponent(user.address),
             imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
           }));
-    
+
           // const verified = decodedUsers.filter(user => user.status === "verified");
           const verified1 = decodedUsers.filter(user => user.status === "verified");
           const verified = Array.isArray(verified1) ? verified1 : [verified1];
@@ -570,7 +581,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           setVerifiedUsers(verified)
           // setAlternateUsers(allUsers)
           // checkingVerifiedUsers(users);
-        } else if( queryData.message === "No students found!") {
+        } else if (queryData.message === "No students found!") {
           toast.error(queryData.message, {
             position: "top-right",
             autoClose: 5000,
@@ -581,7 +592,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
           setAllUsers([]);
           setVerifiedUsers([])
         } else {
@@ -595,7 +606,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+          });
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -609,7 +620,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
     }
   };
@@ -637,10 +648,10 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
   }, [coursesToLoad])
 
   useEffect(() => {
-    if(sideNavbarCity.length > 0){
-    console.log("sideNavbarCity from /registration -->",sideNavbarCity);
-    setCity(sideNavbarCity);
-    setSideNavbarCity("")
+    if (sideNavbarCity.length > 0) {
+      console.log("sideNavbarCity from /registration -->", sideNavbarCity);
+      setCity(sideNavbarCity);
+      setSideNavbarCity("")
     }
   }, [sideNavbarCity]);
 
@@ -650,12 +661,12 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
   //     console.log("coursesToLoad-->",coursesToLoad)
   //   }
   // }, [allUsers,admin]);
-  
+
   useEffect(() => {
     // const fetchData = async () => {
     //   if (api === true) {
     //     console.log("Reload hoja bhai");
-  
+
     //     try {
     //       const res = await fetch("/api/students", {
     //         method: "GET",
@@ -663,7 +674,7 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
     //       });
     //       const data = await res.json();
     //       console.log("reload ka data", data)
-  
+
     //       // Convert single object to an array of length 1
     //       const users = Array.isArray(data.data) ? data.data : [data.data];
 
@@ -672,14 +683,14 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
     //         address: decodeURIComponent(user.address),
     //         qualification: decodeURIComponent(user.qualification),
     //       }));
-    
+
     //       const verified = decodedUsers.filter(user => user.status === "verified");
 
-          
-  
+
+
     //       setVerifiedUsers(verified);
     //       setAlternateVerified(verified);
-  
+
     //       // Set all users into state
     //       setAllUsers(decodedUsers);
     //       setAlternateUsers(decodedUsers);
@@ -690,24 +701,24 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
     //     setApi(false);
     //   }
     // };
-  
+
     // fetchData();
-    if(api){
-    setAllUsers([])
-    setVerifiedUsers([])
-    setHasMore(true)
+    if (api) {
+      setAllUsers([])
+      setVerifiedUsers([])
+      setHasMore(true)
     }
   }, [api]); // api ko dependency list mein include kiya hai
 
   useEffect(() => {
-    console.log("hasMore----",hasMore,"---page---",page,"---allUsers---",allUsers)
+    console.log("hasMore----", hasMore, "---page---", page, "---allUsers---", allUsers)
     if (hasMore) {
-      gettingUsers(page,api);
+      gettingUsers(page, api);
     }
-    else if(!hasMore){
+    else if (!hasMore) {
       settingVerified()
     }
-  }, [page,hasMore]);
+  }, [page, hasMore]);
 
   // const fetchUsers = async (page) => {
   //   setIsLoading(true);
@@ -727,146 +738,146 @@ const getUsersFromFilter = async (status, otherStatus, batch, gender, city, cour
   //   }
   // };
 
- const gettingUsers = async (page,api) => {
-  console.log("gettingUsers");
-  setIsLoading(true);
-  try {
-    console.log("try chal raha he");
-    const res = await fetch(`/api/students?page=${page}`, {
-      method: "GET",
-      cache: "no-cache", // Set cache control policy to 'no-cache'
-    });
-    const data = await res.json();
-    console.log("allUsers ka data-->",data)
-
-    if (data.success) {
-      // Convert single object to an array of length 1
-      
-      if(page==1){
-      toast.info(`You have ${data.totalUsers} Students`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+  const gettingUsers = async (page, api) => {
+    console.log("gettingUsers");
+    setIsLoading(true);
+    try {
+      console.log("try chal raha he");
+      const res = await fetch(`/api/students?page=${page}`, {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
       });
-    }
+      const data = await res.json();
+      console.log("allUsers ka data-->", data)
 
-      const users = Array.isArray(data.data) ? data.data : [data.data];
+      if (data.success) {
+        // Convert single object to an array of length 1
 
-      // Decode address and qualification fields
-      const decodedUsers = users.map(user => ({
-        createdAt:user.createdAt,
-        rollNo:user.rollNo,
-        batch:user.batch,
-        _id:user._id,
-        fullName: decodeURIComponent(user.fullName),
-        fatherName: decodeURIComponent(user.fatherName),
-        email: decodeURIComponent(user.email),
-        course: decodeURIComponent(user.course),
-        payment: decodeURIComponent(user.payment),
-        paymentImg: decodeURIComponent(user.paymentImg),
-        status: decodeURIComponent(user.status),
-        otherStatus: decodeURIComponent(user.otherStatus),
-        city: decodeURIComponent(user.city),
-        cnic: decodeURIComponent(user.cnic),
-        phone: decodeURIComponent(user.phone),
-        dateOfBirth: decodeURIComponent(user.dateOfBirth),
-        gender: decodeURIComponent(user.gender),
-        qualification: decodeURIComponent(user.qualification),
-        address: decodeURIComponent(user.address),
-        imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
-      }));
-
-      // const verified = decodedUsers.filter(user => user.status === "verified");
-
-      // Update state with new users
-      setAllUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
-      // setVerifiedUsers((prevUsers) => [...prevUsers, ...verified]);
-      // setAlternateVerified((prevUsers) => [...prevUsers, ...verified]);
-      // setAlternateUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
-
-      // Check if more users are available to fetch
-      if (data.more === false) {
-        setHasMore(false);
-        setPage(1)
-        setCoursesToLoad(true);
-        if(api){
-          setApi(false)
+        if (page == 1) {
+          toast.info(`You have ${data.totalUsers} Students`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
         }
-      toast.info(`Fetching Students Done ${data.totalUsers}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+
+        const users = Array.isArray(data.data) ? data.data : [data.data];
+
+        // Decode address and qualification fields
+        const decodedUsers = users.map(user => ({
+          createdAt: user.createdAt,
+          rollNo: user.rollNo,
+          batch: user.batch,
+          _id: user._id,
+          fullName: decodeURIComponent(user.fullName),
+          fatherName: decodeURIComponent(user.fatherName),
+          email: decodeURIComponent(user.email),
+          course: decodeURIComponent(user.course),
+          payment: decodeURIComponent(user.payment),
+          paymentImg: decodeURIComponent(user.paymentImg),
+          status: decodeURIComponent(user.status),
+          otherStatus: decodeURIComponent(user.otherStatus),
+          city: decodeURIComponent(user.city),
+          cnic: decodeURIComponent(user.cnic),
+          phone: decodeURIComponent(user.phone),
+          dateOfBirth: decodeURIComponent(user.dateOfBirth),
+          gender: decodeURIComponent(user.gender),
+          qualification: decodeURIComponent(user.qualification),
+          address: decodeURIComponent(user.address),
+          imageUrl: decodeURIComponent(user.imageUrl) // Decoding the image URL
+        }));
+
+        // const verified = decodedUsers.filter(user => user.status === "verified");
+
+        // Update state with new users
+        setAllUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
+        // setVerifiedUsers((prevUsers) => [...prevUsers, ...verified]);
+        // setAlternateVerified((prevUsers) => [...prevUsers, ...verified]);
+        // setAlternateUsers((prevUsers) => [...prevUsers, ...decodedUsers]);
+
+        // Check if more users are available to fetch
+        if (data.more === false) {
+          setHasMore(false);
+          setPage(1)
+          setCoursesToLoad(true);
+          if (api) {
+            setApi(false)
+          }
+          toast.info(`Fetching Students Done ${data.totalUsers}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }
+        else if (data.more === true) {
+          setHasMore(true)
+          setPage((prevPage) => prevPage + 1);
+        }
+
+
+        // proper fetch karna he no students found kiu likha ata he or is k ialawah wo jo 2 se kum ho agar to sethasmore ko false lr raha he us ka bhi masla he k agar 2 hi hui le gth or wo akhri they to , or is k ilawah dtaa slow he kahin or functions to nhi chal rahay saath saath or is k ilawah kia admin ko fetch karnay ki zarurat he? or is k ilawah verified set krnay hein ahi se , or is k ilawah baaki fetch mein bhi pagination lagani he agar refreesh mein pagination se kaam nhi hota to phir alag route banaa paray ga
+
+
+
+      } else if (data.message === "No students found!") {
+        setHasMore(false);
+        console.log("No students found!");
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      } else {
+        handleAPIError(data.message);
       }
-      else if(data.more === true){
-      setHasMore(true)
-        setPage((prevPage) => prevPage + 1);
-      }
-      
-
-      // proper fetch karna he no students found kiu likha ata he or is k ialawah wo jo 2 se kum ho agar to sethasmore ko false lr raha he us ka bhi masla he k agar 2 hi hui le gth or wo akhri they to , or is k ilawah dtaa slow he kahin or functions to nhi chal rahay saath saath or is k ilawah kia admin ko fetch karnay ki zarurat he? or is k ilawah verified set krnay hein ahi se , or is k ilawah baaki fetch mein bhi pagination lagani he agar refreesh mein pagination se kaam nhi hota to phir alag route banaa paray ga
-
-      
-
-    } else if (data.message === "No students found!") {
-      setHasMore(false);
-      console.log("No students found!");
-      toast.error(data.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    } else {
-      handleAPIError(data.message);
+    } catch (error) {
+      handleAPIError(error.message);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    handleAPIError(error.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
-const handleAPIError = (message) => {
-  console.error("Error fetching users:", message);
-  toast.error(message, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "light",
-    transition: Bounce,
-  });
-};
+  const handleAPIError = (message) => {
+    console.error("Error fetching users:", message);
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+  };
 
   const settingVerified = () => {
 
-    console.log("verifed set kr raha hu..",allUsers)
+    console.log("verifed set kr raha hu..", allUsers)
     const verified = allUsers.filter(user => user.status === "Verified");
 
     setAlternateUsers(allUsers)
     setVerifiedUsers(verified);
-      setAlternateVerified(verified);
+    setAlternateVerified(verified);
   }
 
 
@@ -879,10 +890,10 @@ const handleAPIError = (message) => {
         cache: "no-cache", // Set cache control policy to 'no-cache'
       });
       const data = await res.json();
-      if(data.success){
-      setAdmin(data.data[0])
+      if (data.success) {
+        setAdmin(data.data[0])
       }
-      else if (data.success === false){
+      else if (data.success === false) {
         toast.error(data.message, {
           position: "top-right",
           autoClose: 5000,
@@ -893,9 +904,9 @@ const handleAPIError = (message) => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
-      
+
     } catch (error) {
       console.error("Error fetching admin:", error);
       toast.error(error, {
@@ -908,7 +919,7 @@ const handleAPIError = (message) => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        });
+      });
     }
   };
 
@@ -929,7 +940,7 @@ const handleAPIError = (message) => {
         const sortedCourses = courses.slice().sort((a, b) => {
           const courseA = a.course.toLowerCase(); // Convert to lowercase for case-insensitive sorting
           const courseB = b.course.toLowerCase();
-        
+
           // Natural sorting using localeCompare with options
           return courseA.localeCompare(courseB, undefined, { numeric: true });
         });
@@ -1139,7 +1150,7 @@ const handleAPIError = (message) => {
       render: (text, record) => (
 
 
-<VerificationButton id={record._id} userStatus={record.status} />
+        <VerificationButton id={record._id} userStatus={record.status} />
 
       ),
     },
@@ -1149,7 +1160,7 @@ const handleAPIError = (message) => {
       render: (text, record) => (
 
 
-<OtherVerificationButton id={record._id} userOtherStatus={record.otherStatus} />
+        <OtherVerificationButton id={record._id} userOtherStatus={record.otherStatus} />
 
       ),
     },
@@ -1170,7 +1181,7 @@ const handleAPIError = (message) => {
             )}
           </Button> */}
 
-<EyeViewDrawerApp userData={record} />
+          <EyeViewDrawerApp userData={record} />
 
           <EditDrawerApp userData={record} />
 
@@ -1199,298 +1210,318 @@ const handleAPIError = (message) => {
   };
 
 
+  const [loading, setLoading] = useState(true);
+
+
+useEffect(() => {
+  // Simulate page load completion
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 500); // Adjust the timeout as needed
+  return () => clearTimeout(timer);
+}, []);
+
 
   return (
     <div style={{}}>
 
 
-<DynamicModal
-  title="Admin Login"
-  visible={modalOpen}
-  footer={null}
-  centered
-  destroyOnClose
-  afterClose={() => {
-    // Reset adminName and adminPassword when the modal is closed
-    setAdminName("");
-    setAdminPassword("");
-  }}
->
-  <form className="mx-auto space-y-[20px]" autoComplete="off">
-    <Input
-      className="w-[100%] h-[40px]"
-      placeholder="Admin Name"
-      value={adminName}
-      onChange={(e) => setAdminName(e.target.value)}
-      autoComplete="off"
-      name={`adminName_${Math.random()}`} // Randomized name attribute
-    />
-    <Input.Password
-      className="w-[100%] h-[40px]"
-      placeholder="Admin Key"
-      value={adminPassword}
-      onChange={(e) => setAdminPassword(e.target.value)}
-      autoComplete="new-password"
-      name={`adminPassword_${Math.random()}`} // Randomized name attribute
-    />
-    <Button
-      className="mx-auto w-[20%] h-[40px]"
-      onClick={handleAdminLogin}
-      disabled={!isFormValid}
-    >
-      Login
-    </Button>
-  </form>
-</DynamicModal>
-
-
-      
-{!modalOpen && (
-    <>
-      <div
-      //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
+      <DynamicModal
+        title="Admin Login"
+        visible={modalOpen}
+        footer={null}
+        centered
+        destroyOnClose
+        afterClose={() => {
+          // Reset adminName and adminPassword when the modal is closed
+          setAdminName("");
+          setAdminPassword("");
+        }}
       >
-        <SideNavbarComponent/>
-      </div>
+        <form className="mx-auto space-y-[20px]" autoComplete="off">
+          <Input
+            className="w-[100%] h-[40px]"
+            placeholder="Admin Name"
+            value={adminName}
+            onChange={(e) => setAdminName(e.target.value)}
+            autoComplete="off"
+            name={`adminName_${Math.random()}`} // Randomized name attribute
+          />
+          <Input.Password
+            className="w-[100%] h-[40px]"
+            placeholder="Admin Key"
+            value={adminPassword}
+            onChange={(e) => setAdminPassword(e.target.value)}
+            autoComplete="new-password"
+            name={`adminPassword_${Math.random()}`} // Randomized name attribute
+          />
+          <Button
+            className="ml-[30%] w-[40%] h-[40px]"
+            onClick={handleAdminLogin}
+            // disabled={!isFormValid}
+          >
+            Login
+          </Button>
+        </form>
+      </DynamicModal>
 
-   
-{/* Cards */}
-<div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
-      {/* First card */}
-      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
-        <h2 className="text-xl font-bold text-gray-800">Students</h2>
-        <p className="text-4xl font-bold text-blue-600">{allUsers.length}</p>
-      </div>
-
-      {/* Second card */}
-      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
-        <h2 className="text-xl font-bold text-gray-800">Verified</h2>
-        <p className="text-4xl font-bold text-blue-600">{verifiedUsers.length}</p>
-      </div>
-
-      {/* Third card */}
-      <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
-        <h2 className="text-xl font-bold text-gray-800">Un-Verified</h2>
-        <p className="text-4xl font-bold text-blue-600">{allUsers.length - verifiedUsers.length}</p>
-      </div>
-    </div>
 
 
-      {/* Search Bar */}
-<div className="mx-auto flex space-x-2 items-center mt-7 ml-[8%]">
+      {!modalOpen && !loading ? (
+        <>
+          <div
+          //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
+          >
+            <SideNavbarComponent />
+          </div>
 
-      <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
-      {/* City */}
 
-      <Input
-      style={{ height: "32px", width: "115px" }}
-      className="placeholder-gray-300 text-md bg-white"
-      type="text"
-      placeholder="City"
-      label=""
-      value={city || undefined}
-      onChange={(event) => event.target.value} // Update state for visual feedback
-      onKeyDown={handleKeyDown}
-    />
-                
+          {/* Cards */}
+          <div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
+            {/* First card */}
+            <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+              <h2 className="text-xl font-bold text-gray-800">Students</h2>
+              <p className="text-4xl font-bold text-blue-600">{allUsers.length}</p>
+            </div>
 
-      {/* Course */}
-      <Select
-            showSearch
-            style={{ width: 120 }}
-            value={course || undefined}
-            placeholder="Course"
-            optionFilterProp="children"
-            onChange={(value) => setCourse(value)}
-            filterOption={(input, option) =>
-                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-        >
-            {allCourses.map((course) => (
-                    <Select.Option key={course._id} value={course.course}>
-                        {course.course}
-                    </Select.Option>
+            {/* Second card */}
+            <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+              <h2 className="text-xl font-bold text-gray-800">Verified</h2>
+              <p className="text-4xl font-bold text-blue-600">{verifiedUsers.length}</p>
+            </div>
+
+            {/* Third card */}
+            <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+              <h2 className="text-xl font-bold text-gray-800">Un-Verified</h2>
+              <p className="text-4xl font-bold text-blue-600">{allUsers.length - verifiedUsers.length}</p>
+            </div>
+          </div>
+
+
+          {/* Search Bar */}
+          <div className="mx-auto flex space-x-2 items-center mt-7 ml-[8%]">
+
+            <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
+              {/* City */}
+
+              <Input
+                style={{ height: "32px", width: "115px" }}
+                className="placeholder-gray-300 text-md bg-white"
+                type="text"
+                placeholder="City"
+                label=""
+                value={city || undefined}
+                onChange={(event) => event.target.value} // Update state for visual feedback
+                onKeyDown={handleKeyDown}
+              />
+
+
+              {/* Course */}
+              <Select
+                showSearch
+                style={{ width: 120 }}
+                value={course || undefined}
+                placeholder="Course"
+                optionFilterProp="children"
+                onChange={(value) => setCourse(value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {allCourses.map((course) => (
+                  <Select.Option key={course._id} value={course.course}>
+                    {course.course}
+                  </Select.Option>
                 ))}
-        </Select>
+              </Select>
 
-      {/* Batch */}
-      <Input
-                style={{height:"32px", width:"115px"}}
+              {/* Batch */}
+              <Input
+                style={{ height: "32px", width: "115px" }}
                 className="placeholder-gray-300 text-md bg-white"
                 type="number"
                 placeholder="Batch"
                 label=""
                 value={batch || undefined}
-                onChange={(event) => {setBatch(event.target.value)}}
-                 />
-
-      
-
-      {/* Status */}
-      <Select
-        showSearch
-        style={{ width: 120 }}
-        value={status || undefined}
-        placeholder="Status"
-        optionFilterProp="children"
-        onChange={(value) => setStatus(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Verified">Verified</Select.Option>
-        <Select.Option value="Un-Verified">Un-Verified</Select.Option>
-      </Select>
-
-
-        {/* otherStatus */}
-      <Select
-        showSearch
-        style={{ width: 95 }}
-        value={otherStatus || undefined}
-        placeholder="Other-Status"
-        optionFilterProp="children"
-        onChange={(value) => setOtherStatus(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Pending">Pending</Select.Option>
-        <Select.Option value="Enrolled">Enrolled</Select.Option>
-        <Select.Option value="Completed">Completed</Select.Option>
-      </Select>
-
-      {/* Payment */}
-      <Select
-        showSearch
-        style={{ width: 120 }}
-        value={payment || undefined}
-        placeholder="Payment"
-        optionFilterProp="children"
-        onChange={(value) => setPayment(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Done">Done</Select.Option>
-        <Select.Option value="Not-Done">Not-Done</Select.Option>
-      </Select>
-
-      {/* Gender */}
-      <Select
-        showSearch
-        style={{ width: 120 }}
-        value={gender || undefined}
-        placeholder="Gender"
-        optionFilterProp="children"
-        onChange={(value) => setGender(value)}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
-      >
-        <Select.Option value="Male">Male</Select.Option>
-        <Select.Option value="Female">Female</Select.Option>
-      </Select>
-
-      {/* Clear Button */}
-      <Button onClick={handleClearQueries} style={{ backgroundColor: '#333', color: '#fff' }}>Clear</Button>
-    </div>
-
-        
+                onChange={(event) => { setBatch(event.target.value) }}
+              />
 
 
 
-    
+              {/* Status */}
+              <Select
+                showSearch
+                style={{ width: 120 }}
+                value={status || undefined}
+                placeholder="Status"
+                optionFilterProp="children"
+                onChange={(value) => setStatus(value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Select.Option value="Verified">Verified</Select.Option>
+                <Select.Option value="Un-Verified">Un-Verified</Select.Option>
+              </Select>
 
-    <div className="flex space-x-2 items-center bg-[#333] w-[32%] mt-4 p-4 rounded-md shadow-md">
-  <div className="flex items-center space-x-2">
-    {/* Search Cnic-No */}
-    <Search
-      style={{ width: 200, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
-      placeholder="Search Cnic-No" 
-      value={cnicNumber}
-      onChange={(event) => {
-        const inputValue=event.target.value
-        if (inputValue.length <= 15) {
-          const formattedCnic = formatCnicNumber(inputValue);
-          setCnicNumber(formattedCnic);
-          console.log(formattedCnic);
-        }
-      }} 
-      enterButton 
-    />
-    
-    {/* Search Roll-No */}
-    <Search
-      style={{ width: 150, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
-      placeholder="Search Roll-No" 
-      value={rollNumber}
-      onChange={(event) => {
-        console.log(event.target.value);
-        setRollNumber(event.target.value);
-      }} 
-      enterButton 
-    />
-  </div>
-</div>
 
-      </div>
+              {/* otherStatus */}
+              <Select
+                showSearch
+                style={{ width: 95 }}
+                value={otherStatus || undefined}
+                placeholder="Other-Status"
+                optionFilterProp="children"
+                onChange={(value) => setOtherStatus(value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Select.Option value="Pending">Pending</Select.Option>
+                <Select.Option value="Enrolled">Enrolled</Select.Option>
+                <Select.Option value="Completed">Completed</Select.Option>
+              </Select>
 
-{/* Table */}
-      <div className="mt-8 ml-[-1.5%]">
+              {/* Payment */}
+              <Select
+                showSearch
+                style={{ width: 120 }}
+                value={payment || undefined}
+                placeholder="Payment"
+                optionFilterProp="children"
+                onChange={(value) => setPayment(value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Select.Option value="Done">Done</Select.Option>
+                <Select.Option value="Not-Done">Not-Done</Select.Option>
+              </Select>
 
-        {/* <TableComponent /> */}
-        {/* <MyAntTable/> */}
-        {allUsers.length>0?<Table
-          style={{
-            marginLeft: "8.5%",
-            width: "90%",
-            // backgroundColor:"yellow",
-          }}
-          dataSource={allUsers}
-          columns={columns}
-        />:
-    //     <div className="flex justify-center items-center h-screen bg-gray-200 to-indigo-600">
-    //   <div className="bg-white p-12 ml-20 mt-[-160px] rounded-lg shadow-2xl w-[90%]">
-    //     <p className="text-6xl font-extrabold text-center text-gray-900">No Students Found!</p>
-    //     <p className="text-xl text-center text-gray-800 mt-6">Thier might be a technical or network delay in fetching Students, or may be the student according to your queries does not exist</p>
-    //     <div className="mt-12 flex justify-center">
-    //       <button className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Clear Queries</button>
-    //     </div>
-    //   </div>
-    // </div>
+              {/* Gender */}
+              <Select
+                showSearch
+                style={{ width: 120 }}
+                value={gender || undefined}
+                placeholder="Gender"
+                optionFilterProp="children"
+                onChange={(value) => setGender(value)}
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                <Select.Option value="Male">Male</Select.Option>
+                <Select.Option value="Female">Female</Select.Option>
+              </Select>
+
+              {/* Clear Button */}
+              <Button onClick={handleClearQueries} style={{ backgroundColor: '#333', color: '#fff' }}>Clear</Button>
+            </div>
 
 
 
 
 
-    <div className="flex justify-center items-center h-screen ml-24">
-      <div className="flex mt-[-300px] space-x-4">
-        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-        <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
-      </div>
-    </div>
 
 
-  //   <div className="flex justify-center items-center fixed top-0 left-0 w-full h-full bg-transparent z-50">
-  //   <div className="flex space-x-4">
-  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-  //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
-  //   </div>
-  // </div>
+            <div className="flex space-x-2 items-center bg-[#333] w-[32%] mt-4 p-4 rounded-md shadow-md">
+              <div className="flex items-center space-x-2">
+                {/* Search Cnic-No */}
+                <Search
+                  style={{ width: 200, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
+                  placeholder="Search Cnic-No"
+                  value={cnicNumber}
+                  onChange={(event) => {
+                    const inputValue = event.target.value
+                    if (inputValue.length <= 15) {
+                      const formattedCnic = formatCnicNumber(inputValue);
+                      setCnicNumber(formattedCnic);
+                      console.log(formattedCnic);
+                    }
+                  }}
+                  enterButton
+                />
 
-        }
-        
-      </div>
-      </>
-)}
-{/* )} */}
+                {/* Search Roll-No */}
+                <Search
+                  style={{ width: 150, backgroundColor: "rgb(13, 109, 219)", borderRadius: "10px" }}
+                  placeholder="Search Roll-No"
+                  value={rollNumber}
+                  onChange={(event) => {
+                    console.log(event.target.value);
+                    setRollNumber(event.target.value);
+                  }}
+                  enterButton
+                />
+              </div>
+            </div>
+
+          </div>
+
+          {/* Table */}
+          <div className="mt-8 ml-[-1.5%]">
+
+            {/* <TableComponent /> */}
+            {/* <MyAntTable/> */}
+            {allUsers.length > 0 ? <Table
+              style={{
+                marginLeft: "8.5%",
+                width: "90%",
+                // backgroundColor:"yellow",
+              }}
+              dataSource={allUsers}
+              columns={columns}
+            /> :
+              //     <div className="flex justify-center items-center h-screen bg-gray-200 to-indigo-600">
+              //   <div className="bg-white p-12 ml-20 mt-[-160px] rounded-lg shadow-2xl w-[90%]">
+              //     <p className="text-6xl font-extrabold text-center text-gray-900">No Students Found!</p>
+              //     <p className="text-xl text-center text-gray-800 mt-6">Thier might be a technical or network delay in fetching Students, or may be the student according to your queries does not exist</p>
+              //     <div className="mt-12 flex justify-center">
+              //       <button className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-xl hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Clear Queries</button>
+              //     </div>
+              //   </div>
+              // </div>
+
+
+
+
+
+              <div className="flex justify-center items-center h-screen ml-24">
+                <div className="flex mt-[-300px] space-x-4">
+                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
+                </div>
+              </div>
+
+
+              //   <div className="flex justify-center items-center fixed top-0 left-0 w-full h-full bg-transparent z-50">
+              //   <div className="flex space-x-4">
+              //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+              //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+              //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+              //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+              //     <div className="loader-dot w-5 h-5 bg-blue-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
+              //   </div>
+              // </div>
+
+            }
+
+          </div>
+        </>
+      ) :  loading ? (
+        <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center pt-[310px] mt-[-10px]">
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                </div>
+      ):(
+        null
+      ) }
 
     </div>
   );

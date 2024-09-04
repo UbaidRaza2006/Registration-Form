@@ -423,9 +423,16 @@ const handleImageUpload = async (e) => {
 // //   }
 // };
 
+const [loading, setLoading] = useState(true);
 
 
-
+useEffect(() => {
+  // Simulate page load completion
+  const timer = setTimeout(() => {
+    setLoading(false);
+  }, 500); // Adjust the timeout as needed
+  return () => clearTimeout(timer);
+}, []);
 
 
 
@@ -442,166 +449,179 @@ console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
 
   return (
-    // Some new functionalities are going to come as sir has said, today is 4 September, this line is to be removed whenver it is seen
-    <div id="payment" className="bg-[#eefcfd] h-[700px]"
-    // style={{ backgroundImage: 'url("/images/paymentBg5.avif")', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center', minHeight: '100vh' }}
-    >
 
-
-{/* Background Image */}
-{/* <NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-[650px] object-cover z-0" width={600} height={600} /> */}
-
-      {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
-
-      <div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
-  {/* Enlarged Circular Home Icon Button using Ant Design */}
-  <Link href="/" passHref>
-    <Button
-      type="default" // Default type for Ant Design button with custom border
-      shape="circle"
-      size="large"  // Increased size of the button
-      icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
-      className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
-      style={{
-        backgroundColor: "transparent", // Match navbar background
-        color: "white", // Icon color
-      }}
-    />
-  </Link>
-
-
-  <div className="text-center flex-grow text-3xl md:text-4xl font-bold block lg:hidden">
-    Payment Form
-  </div>
-  <div className="text-center flex-grow text-3xl md:text-4xl font-bold hidden lg:block">
-    Payment Verify Form
-  </div>
-</div>
-
-      <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] bg-[#f8f8f8] border border-black-1500 relative z-10 rounded-md" style={styles.container}>
-        <div
-          // style={{
-          //   margin: "0 auto", 
-          //   marginTop: "10px",
-          //   //  backgroundColor: "white",
-          // }}
-          className="space-y-6 ml-6 mt-6"
-        >
-          <div>
-            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
-            <AntInputComponent
-            className="shadow-md shadow-gray-400"
-              placeholder={"Enter Roll No."}
-              style={styles.inputs}
-              value={rollNumber}
-              onChange={(event)=>{
-                // setRollNumber(event.target.value)
-                console.log(event.target.value)
-                  setRollNumber(event.target.value)
-
-                }}
-            />
-          </div>
-          <div >
-            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
-            <AntInputComponent
-            className="shadow-md shadow-gray-400"
-              placeholder={"Enter Name"}
-              style={styles.inputs}
-              value={fullName}
-            />
-          </div>
-          <div>
-            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
-            <AntInputComponent
-            className="shadow-md shadow-gray-400"
-              placeholder={"Enter Course"}
-              style={styles.inputs}
-              value={course}
-            />
-          </div>
-          <div>
-            {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
-
-            <AntInputComponent
-            className="shadow-md shadow-gray-400"
-              placeholder={"Enter Batch"}
-              style={styles.inputs}
-              value={batch}
-            />
-          </div>
-
-          {/* <div>
-            <p style={{ fontSize: "15px", marginLeft: "20px" }}>Upload</p>
-            <ImageUploadComponent />
-          </div> */}
-</div>
-  
-
-        <div className="image-upload-container bg-[#f8f8f8] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
-    {!paymentImg || paymentImg == "Not-Done" ? (
-    <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
-    ) : (
-    <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
-    )}
-    <input
-    id="file-upload"
-    type="file"
-    accept="image/*"
-    style={{ display: 'none' }}
-    onChange={handleImageUpload}
-    />
-    <style jsx>{`
-    .image-upload-container {
-    width: 270px;
-    height: 180px;
-    border: 1px solid #aaa;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    }
-    .uploaded-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    object-fit: cover; /* This line is important */
-    }
-    `}</style>
-    </div>
-
-
-        
-        {/* <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
-        color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
-         }}
-         onClick={updateUser(idForUser)}
-         >Submit</Button> */}
-
-{registering?(<button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"  
-            // onClick={handleRegister}
-        // disabled={!isFormValid()}
-    ><div className="flex items-center space-x-3 mx-auto">
-    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-    <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-    </div>
-    </button>):(
-
-         <button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"
-        //  disabled={!isFormValid()}
-         onClick={() => updateUser(idForUser)}
-    >SUBMIT
-    </button>
-    )}
-
-         
-
-         {/* {notification && <Notification message={notification.message} success={notification.success} />} */}
-
+<div id="payment" className="bg-[#eefcfd] h-[700px]">
+{loading ? (
+        <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center pt-[310px] mt-[-10px]">
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                </div>
+      ) : ( <>
+    
+    
+    {/* Background Image */}
+    {/* <NextImage src={img} alt="image here" className="absolute top-0 left-0 w-full h-[650px] object-cover z-0" width={600} height={600} /> */}
+    
+          {/* <h1 style={{color: "blue", fontSize: "30px", fontWeight: "bolder", marginLeft: "50px", }}>Payment Verify</h1> */}
+    
+          <div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
+      {/* Enlarged Circular Home Icon Button using Ant Design */}
+      <Link href="/" passHref>
+        <Button
+          type="default" // Default type for Ant Design button with custom border
+          shape="circle"
+          size="large"  // Increased size of the button
+          icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
+          className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
+          style={{
+            backgroundColor: "transparent", // Match navbar background
+            color: "white", // Icon color
+          }}
+        />
+      </Link>
+    
+    
+      <div className="text-center flex-grow text-3xl md:text-4xl font-bold block lg:hidden">
+        Payment Form
+      </div>
+      <div className="text-center flex-grow text-3xl md:text-4xl font-bold hidden lg:block">
+        Payment Verify Form
       </div>
     </div>
+    
+          <div className="space-y-6 mx-auto w-[320px] xs:w-[100%] bg-[#f8f8f8] border border-black-1500 relative z-10 rounded-md" style={styles.container}>
+            <div
+              // style={{
+              //   margin: "0 auto", 
+              //   marginTop: "10px",
+              //   //  backgroundColor: "white",
+              // }}
+              className="space-y-6 ml-6 mt-6"
+            >
+              <div>
+                {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
+                <AntInputComponent
+                className="shadow-md shadow-gray-400"
+                  placeholder={"Enter Roll No."}
+                  style={styles.inputs}
+                  value={rollNumber}
+                  onChange={(event)=>{
+                    // setRollNumber(event.target.value)
+                    console.log(event.target.value)
+                      setRollNumber(event.target.value)
+    
+                    }}
+                />
+              </div>
+              <div >
+                {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
+                <AntInputComponent
+                className="shadow-md shadow-gray-400"
+                  placeholder={"Enter Name"}
+                  style={styles.inputs}
+                  value={fullName}
+                />
+              </div>
+              <div>
+                {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
+                <AntInputComponent
+                className="shadow-md shadow-gray-400"
+                  placeholder={"Enter Course"}
+                  style={styles.inputs}
+                  value={course}
+                />
+              </div>
+              <div>
+                {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
+    
+                <AntInputComponent
+                className="shadow-md shadow-gray-400"
+                  placeholder={"Enter Batch"}
+                  style={styles.inputs}
+                  value={batch}
+                />
+              </div>
+    
+              {/* <div>
+                <p style={{ fontSize: "15px", marginLeft: "20px" }}>Upload</p>
+                <ImageUploadComponent />
+              </div> */}
+    </div>
+      
+    
+            <div className="image-upload-container bg-[#f8f8f8] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
+        {!paymentImg || paymentImg == "Not-Done" ? (
+        <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
+        ) : (
+        <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
+        )}
+        <input
+        id="file-upload"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageUpload}
+        />
+        <style jsx>{`
+        .image-upload-container {
+        width: 270px;
+        height: 180px;
+        border: 1px solid #aaa;
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        }
+        .uploaded-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        object-fit: cover; /* This line is important */
+        }
+        `}</style>
+        </div>
+    
+    
+            
+            {/* <Button style={{ backgroundColor: "#248ba5", fontSize: "20px", fontWeight: 500,
+            color: "white", textAlign: "center", width:"300px", justifyContent :"center",height: "40px", margin: "0 auto", marginTop: "20px", borderRadius: "50px"
+             }}
+             onClick={updateUser(idForUser)}
+             >Submit</Button> */}
+    
+    {registering?(<button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"  
+                // onClick={handleRegister}
+            // disabled={!isFormValid()}
+        ><div className="flex items-center space-x-3 mx-auto">
+        <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-2 h-2 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+        </div>
+        </button>):(
+    
+             <button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"
+            //  disabled={!isFormValid()}
+             onClick={() => updateUser(idForUser)}
+        >SUBMIT
+        </button>
+        )}
+    
+             
+    
+             {/* {notification && <Notification message={notification.message} success={notification.success} />} */}
+    
+          </div>
+        </> ) }
+
+        </div>
+
+
+    // Some new functionalities are going to come as sir has said, today is 4 September, this line is to be removed whenver it is seen
+   
   );
 }

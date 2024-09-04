@@ -113,97 +113,123 @@ function DownloadIdCard() {
     }
   };
 
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate page load completion
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500); // Adjust the timeout as needed
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#d4f6f9]">
       {/* Navbar */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
-  {/* Enlarged Circular Home Icon Button using Ant Design */}
-  <Link href="/" passHref>
-    <Button
-      type="default" // Default type for Ant Design button with custom border
-      shape="circle"
-      size="large"  // Increased size of the button
-      icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
-      className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
-      style={{
-        backgroundColor: "transparent", // Match navbar background
-        color: "white", // Icon color
-      }}
-    />
-  </Link>
 
-  <div className="text-center flex-grow text-3xl md:text-4xl font-bold">
-    Download ID Card
-  </div>
+      {loading? (
+        <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center pt-[310px] mt-[-10px]">
+        <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+        <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+    </div>
+      ) : (
+<>
+<div className="flex items-center justify-between bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white h-[60px] py-2 px-4">
+{/* Enlarged Circular Home Icon Button using Ant Design */}
+<Link href="/" passHref>
+<Button
+type="default" // Default type for Ant Design button with custom border
+shape="circle"
+size="large"  // Increased size of the button
+icon={<HomeOutlined style={{ fontSize: '20px' }} />}  // Increased icon size
+className="flex items-center justify-center border-2 border-[#d4f6f9]" // Add border similar to the page background
+style={{
+  backgroundColor: "transparent", // Match navbar background
+  color: "white", // Icon color
+}}
+/>
+</Link>
+
+<div className="text-center flex-grow text-3xl md:text-4xl font-bold">
+Download ID Card
+</div>
 </div>
 
-      {/* Main Content */}
-      <div className="w-full flex flex-col items-center py-8 px-4 md:px-0">
-        {/* CNIC Input */}
-        <div className="mb-4 w-full max-w-xs md:max-w-md lg:max-w-lg">
-          <Input
-            className="rounded-3xl border-2 border-gray-400 py-2 text-xl text-center w-full"
-            style={{ backgroundColor: "white" }}
-            id="cnicInput"
-            type="text"
-            maxLength="15"
-            inputMode="numeric"
-            placeholder="00000-0000000-0"
-            value={inputCnic}
-            onChange={(event) => {
-              setSimpleCnic(event.target.value);
-              const inputValue = event.target.value.replace(/\D/g, ""); // Remove non-digit characters
-              if (inputValue.length <= 13) {
-                const formattedCnic = formatCnicNumber(inputValue);
-                setInputCnic(formattedCnic);
-              }
-            }}
-          />
-        </div>
+{/* Main Content */}
+<div className="w-full flex flex-col items-center py-8 px-4 md:px-0">
+  {/* CNIC Input */}
+  <div className="mb-4 w-full max-w-xs md:max-w-md lg:max-w-lg">
+    <Input
+      className="rounded-3xl border-2 border-gray-400 py-2 text-xl text-center w-full"
+      style={{ backgroundColor: "white" }}
+      id="cnicInput"
+      type="text"
+      maxLength="15"
+      inputMode="numeric"
+      placeholder="00000-0000000-0"
+      value={inputCnic}
+      onChange={(event) => {
+        setSimpleCnic(event.target.value);
+        const inputValue = event.target.value.replace(/\D/g, ""); // Remove non-digit characters
+        if (inputValue.length <= 13) {
+          const formattedCnic = formatCnicNumber(inputValue);
+          setInputCnic(formattedCnic);
+        }
+      }}
+    />
+  </div>
 
-        {/* Submit Button */}
+  {/* Submit Button */}
 
-        {registering ? (
-          <button
-          className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
-          // disabled={!isFormValid()}
-          // onClick={() => getUserCnicData(inputCnic)}
-        >
-        <div className="flex items-center space-x-3 mx-auto">
-              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-              <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-            </div>
-          </button>) : 
-          (
-
-          <button
-            className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
-            disabled={!isFormValid()}
-            onClick={() => getUserCnicData(inputCnic)}
-          >
-            SUBMIT
-          </button>
-        )}
-
-
-
-
-
-        {/* Users Table */}
-        <div className="mt-6 rounded-lg w-full px-4 md:px-8 lg:px-16 max-w-2xl mx-auto">
-          {usersWithCnic.length > 0 ? (
-            <Table
-              columns={columns}
-              dataSource={usersWithCnic}
-              className="rounded-lg"
-              pagination={{ pageSize: 10 }} // Pagination with 10 rows per page
-              style={{ width: "100%" }}
-            />
-          ) : null}
-        </div>
+  {registering ? (
+    <button
+    className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
+    // disabled={!isFormValid()}
+    // onClick={() => getUserCnicData(inputCnic)}
+  >
+  <div className="flex items-center space-x-3 mx-auto">
+        <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+        <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+        <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+        <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
       </div>
+    </button>) : 
+    (
+
+    <button
+      className="btn disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white rounded-3xl font-semibold w-full max-w-xs md:max-w-md lg:max-w-lg"
+      disabled={!isFormValid()}
+      onClick={() => getUserCnicData(inputCnic)}
+    >
+      SUBMIT
+    </button>
+  )}
+
+
+
+
+
+  {/* Users Table */}
+  <div className="mt-6 rounded-lg w-full px-4 md:px-8 lg:px-16 max-w-2xl mx-auto">
+    {usersWithCnic.length > 0 ? (
+      <Table
+        columns={columns}
+        dataSource={usersWithCnic}
+        className="rounded-lg"
+        pagination={{ pageSize: 10 }} // Pagination with 10 rows per page
+        style={{ width: "100%" }}
+      />
+    ) : null}
+  </div>
+</div>
+</>
+      )}
+
+
+
     </div>
   );
 }
