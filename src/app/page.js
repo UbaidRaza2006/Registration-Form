@@ -756,290 +756,221 @@ export default function MainPage() {
 
 
 
-            {admin ? (
-                <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)', opacity: isFormDisabled ? 0.5 : 1, pointerEvents: isFormDisabled ? 'none' : 'auto' }} className={`disabled:opacity-40 mx-auto w-full lg:w-[60%] md:w-[60%] mx:w-[60%] flex flex-col items-start justify-start p-10 bg-[#eefcfd] shadow-2xl rounded-xl relative`} //disabled={!isAdmission()}
-                >
-                    <div className="w-full mr-0 mb-0 ml-0 space-y-4 lg:space-y-1 md:space-y-1 mx:space-y-1
-        lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6
-         ">
+{admin ? (
+  <div
+    style={{
+      boxShadow: '1px 5px 5px 8px rgba(0, 0, 0, 0.2)',
+      opacity: isFormDisabled ? 0.5 : 1,
+      pointerEvents: isFormDisabled ? 'none' : 'auto',
+    }}
+    className={`mx-auto w-full lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${
+      isFormDisabled ? 'opacity-50' : ''
+    }`}
+  >
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-3 mt-4">
+      <InputComponent
+        type="text"
+        id="nameInput"
+        placeholder="Full Name"
+        label="Full Name"
+        value={formData.fullName}
+        onChange={(event) => {
+          const formattedName = event.target.value
+            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+          setFormData({ ...formData, fullName: formattedName });
+        }}
+      />
+      <InputComponent
+        type="text"
+        id="fnameInput"
+        placeholder="Father Name"
+        label="Father Name"
+        value={formData.fatherName}
+        onChange={(event) => {
+          const formattedFatherName = event.target.value
+            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+          setFormData({ ...formData, fatherName: formattedFatherName });
+        }}
+      />
+      <InputComponent
+        id="emailInput"
+        type="email"
+        placeholder="Email"
+        label="Email"
+        value={formData.email}
+        onChange={(event) => setFormData({ ...formData, email: event.target.value })}
+      />
+      <InputComponent
+        id="cnicInput"
+        type="text"
+        maxLength="15"
+        inputMode="numeric"
+        placeholder="00000-0000000-0"
+        label="Cnic/B-form"
+        value={formData.cnic}
+        onChange={handleChange1}
+      />
+      <InputComponent
+        type="text"
+        id="phoneInput"
+        maxLength="12"
+        inputMode="numeric"
+        placeholder="0000-0000000"
+        label="Phone"
+        value={formData.phone}
+        onChange={handleChange2}
+      />
+      <InputComponent
+        type="text"
+        id="cityInput"
+        placeholder="City"
+        label="City"
+        value={formData.city}
+        onChange={(event) => {
+          const formattedCity = event.target.value
+            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+          setFormData({ ...formData, city: formattedCity });
+        }}
+      />
+      <InputComponent
+        type="date"
+        id="dateInput"
+        placeholder="Date Of Birth"
+        label="Date Of Birth"
+        value={formData.dateOfBirth}
+        onChange={(event) => setFormData({ ...formData, dateOfBirth: event.target.value })}
+      />
 
-                        <InputComponent
-                            type="text"
-                            id="nameInput"
-                            placeholder="Full Name"
-                            label="Full Name"
-                            value={formData.fullName}
-                            onChange={(event) => {
-                                const newName = event.target.value;
+    <InputComponent
+        type="text"
+        id="qualificationInput"
+        placeholder="Qualification"
+        label="Qualification"
+        value={formData.qualification}
+        onChange={(event) => {
+          const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
+          setFormData({ ...formData, qualification: formattedValue });
+        }}
+      />
 
-                                // Combine steps for efficiency
-                                const formattedName = newName
-                                    .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-                                    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+    </div>
 
-                                setFormData({
-                                    ...formData,
-                                    fullName: formattedName
-                                });
-                            }} />
-                        <InputComponent
-                            type="text"
-                            id="fnameInput"
-                            placeholder="Father Name"
-                            label="Father Name"
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-3">
+      <SelectComponent
+        label="Select Gender"
+        id="genderInput"
+        options={[
+          { id: "Male", label: "Male" },
+          { id: "Female", label: "Female" },
+        ]}
+        value={formData.gender}
+        onChange={(event) => setFormData({ ...formData, gender: event.target.value })}
+      />
+      <SelectComponent
+        label="Select Course"
+        id="courseInput"
+        options={allCourses
+          .filter((course) => course.admission === 'Opened')
+          .map((course) => ({ value: course.course, label: course.course }))}
+        value={formData.course}
+        onChange={(event) => {
+          const selectedCourse = allCourses.find((course) => course.course === event.target.value);
+          setFormData({
+            ...formData,
+            course: event.target.value,
+            batch: selectedCourse?.batch, // Set batch if selectedCourse exists
+          });
+        }}
+      />
+    </div>
 
-                            value={formData.fatherName}
-                            onChange={(event) => {
-                                const newFatherName = event.target.value;
+    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+      
+      <InputComponent
+        type="text"
+        id="addressInput"
+        placeholder="Address"
+        label="Address"
+        value={formData.address}
+        onChange={(event) => {
+          const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
+          setFormData({ ...formData, address: formattedValue });
+        }}
+      />
+    </div>
 
-                                // Combine steps for efficiency
-                                const formattedFatherName = newFatherName
-                                    .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-                                    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+    <div
+      className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
+      onClick={triggerFileInput}
+    >
+      {!image ? (
+        <label className="text-gray-600 cursor-pointer flex items-center justify-center">
+          Upload <PlusOutlined className="ml-2" />
+        </label>
+      ) : (
+        <img src={image} alt="Uploaded" className="uploaded-image" />
+      )}
+      <input
+        id="file-upload"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageUpload}
+      />
+      <style jsx>{`
+        .image-upload-container {
+          width: 130px;
+          height: 150px;
+          border: 2px solid #aaa;
+          border-radius: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .uploaded-image {
+          width: 100%;
+          height: 100%;
+          border-radius: 12px;
+          object-fit: cover;
+        }
+      `}</style>
+    </div>
 
-                                setFormData({
-                                    ...formData,
-                                    fatherName: formattedFatherName
-                                });
-                            }} />
-                        <InputComponent
-                            id="emailInput"
-                            type="text"
-                            placeholder="Email"
-                            label="Email"
-                            value={formData.email}
-                            onChange={(event) => {
+    {registering ? (
+      <button
+        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider flex items-center justify-center"
+        disabled={isFormDisabled}
+      >
+        <div className="flex items-center space-x-3">
+          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse"></div>
+          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
+        </div>
+      </button>
+    ) : (
+      <button
+        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
+        onClick={handleRegister}
+        disabled={isFormDisabled}
+      >
+        Register
+      </button>
+    )}
+  </div>
+) : (
+  <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-10px]">
+    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
+    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
+  </div>
+)}
 
-                                setFormData({
-                                    ...formData,
-                                    email: event.target.value
-                                });
-
-
-                            }}
-                        />
-
-                        <InputComponent
-                            id="cnicInput"
-                            type="text"
-                            maxLength="15"
-                            inputMode="numeric"
-                            placeholder="00000-0000000-0"
-                            label="Cnic/B-form"
-
-                            value={formData.cnic}
-                            onChange={(event) => {
-
-                                handleChange1(event)
-                            }} />
-                        <InputComponent
-                            type="text"
-                            id="phoneInput"
-                            maxLength="12"
-                            inputMode="numeric"
-                            placeholder="0000-0000000"
-                            label="Phone"
-                            value={formData.phone}
-                            onChange={(event) => {
-
-                                handleChange2(event)
-
-
-                            }} />
-                        <InputComponent
-                            type="text"
-                            id="cityInput"
-                            placeholder="City"
-                            label="City"
-                            value={formData.city}
-                            onChange={(event) => {
-                                const newCity = event.target.value;
-
-                                // Combine steps for efficiency
-                                const formattedCity = newCity
-                                    .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-                                    .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
-
-                                setFormData({
-                                    ...formData,
-                                    city: formattedCity
-                                });
-                            }} />
-                        <InputComponent
-                            type="date"
-                            id="dateInput"
-                            placeholder="Date Of Birth"
-                            label="Date Of Birth"
-
-                            value={formData.dateOfBirth}
-                            onChange={(event) => {
-                                setFormData({
-                                    ...formData,
-                                    dateOfBirth: event.target.value
-                                });
-                            }} />
-
-                    </div>
-                    <div className='mt-[5px] w-full mr-0 mb-0 ml-0 space-y-8 lg:space-y-3 md:space-y-3 mx:space-y-3
-        lg:grid grid-cols-2 gap-6 md:grid grid-cols-2 gap-6 mx:grid grid-cols-2 gap-6'>
-                        <SelectComponent
-                            label="Select Gender"
-                            id="genderInput"
-                            options={[
-                                { id: "Male", label: "Male" },
-                                { id: "Female", label: "Female" },
-                            ]}
-                            value={formData.gender}
-                            onChange={(event) => {
-                                setFormData({
-                                    ...formData,
-                                    gender: event.target.value,
-                                });
-                            }}
-                        />
-
-                        <SelectComponent
-                            label="Select Course"
-                            id="courseInput"
-                            options={allCourses
-                                .filter((course) => course.admission === 'Opened')
-                                .map((course) => ({ value: course.course, label: course.course }))}
-                            value={formData.course}
-                            onChange={(event) => {
-                                const selectedCourse = allCourses.find((course) => course.course === event.target.value);
-                                setFormData({
-                                    ...formData,
-                                    course: event.target.value,
-                                    batch: selectedCourse?.batch, // Set batch if selectedCourse exists
-                                });
-                            }}
-                        />
-
-
-                    </div>
-
-
-                    <div className="w-full mt-[35px] lg:mt-[15px] mx:mt-[15px] md:mt-[15px] mr-0 mb-0 ml-0 space-y-6">
-                        <InputComponent
-                            type="text"
-                            id="qualificationInput"
-                            placeholder="Qualification"
-                            label="Qualification"
-                            value={formData.qualification}
-                            onChange={(event) => {
-                                const newValue = event.target.value;
-
-                                // Capitalize the first letter of each word
-                                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
-                                setFormData({
-                                    ...formData,
-                                    qualification: formattedValue
-                                });
-                            }} />
-                        <InputComponent
-                            type="text"
-                            id="addressInput"
-                            placeholder="Address"
-                            label="Address"
-                            value={formData.address}
-                            onChange={(event) => {
-                                const newValue = event.target.value;
-
-                                // Capitalize the first letter of each word
-                                const formattedValue = newValue.replace(/\b\w/g, (char) => char.toUpperCase());
-                                setFormData({
-                                    ...formData,
-                                    address: formattedValue
-                                });
-                            }} />
-
-                    </div>
-
-
-
-
-                    <div className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400" onClick={triggerFileInput}>
-                        {!image ? (
-                            <label className="text-gray-600" htmlFor="file-upload">Upload <PlusOutlined /> </label>
-                        ) : (
-                            <img src={image} alt="Uploaded image" className="uploaded-image" />
-                        )}
-                        <input
-                            id="file-upload"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            onChange={handleImageUpload}
-                        />
-                        <style jsx>{`
-    .image-upload-container {
-    width: 130px;
-    height: 150px;
-    border: 2px solid #aaa;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    }
-    .uploaded-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    object-fit: cover; /* This line is important */
-    }
-    `}</style>
-                    </div>
-
-
-
-                    {/* Checking Github */}
-
-                    {/* <button
-            onClick={handleRegister}
-            className={`disabled:opacity-50 inline-flex w-[40%] lg:w-[25%] md:w-[25%] mx:w-[25%] h-[55px] mt-[20px] items-center justify-center mb-[-10px] mx-auto bg-${isButtonClicked ? '[#1f596b]' : '[#1f596b]'} text-white font-semibold uppercase tracking-wide rounded-md transition duration-300 ease-in-out`}
-        // disabled={!isFormValid()}
-        >Register</button> */}
-
-                    {registering ? (
-                        <button className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
-                        // onClick={handleRegister}
-                        // disabled={!isFormValid()}
-                        ><div className="flex items-center space-x-3 mx-auto">
-                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                            </div>
-                        </button>) : (
-
-                        <button className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
-                            onClick={handleRegister}
-                        // disabled={!isFormValid()}
-                        >Register
-                        </button>
-                    )}
-
-
-                    {/* <button className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
-            onClick={handleRegister}
-        // disabled={!isFormValid()}
-    >Register
-    </button> */}
-
-
-
-
-                </div>
-            ) : (
-                <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-10px]">
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                </div>
-            )}
 
 
 
