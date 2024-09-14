@@ -18,7 +18,7 @@ import dotenv from 'dotenv'
 import ImageUpload from "../components/Abc";
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
-import { Flex, message, Upload } from 'antd';
+import { Flex, Input, message, Upload } from 'antd';
 
 dotenv.config()
 
@@ -768,11 +768,15 @@ export default function MainPage() {
     }`}
   >
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-3 mt-4">
-      <InputComponent
+
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Full Name</p>
+            <Input
         type="text"
         id="nameInput"
         placeholder="Full Name"
         label="Full Name"
+        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         value={formData.fullName}
         onChange={(event) => {
           const formattedName = event.target.value
@@ -781,11 +785,17 @@ export default function MainPage() {
           setFormData({ ...formData, fullName: formattedName });
         }}
       />
-      <InputComponent
+        </div>
+
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Father Name</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
         id="fnameInput"
         placeholder="Father Name"
-        label="Father Name"
+        label="Full Name"
+        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         value={formData.fatherName}
         onChange={(event) => {
           const formattedFatherName = event.target.value
@@ -794,39 +804,56 @@ export default function MainPage() {
           setFormData({ ...formData, fatherName: formattedFatherName });
         }}
       />
-      <InputComponent
+        </div>
+        
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Email</p>
+            <Input
+        type="text"
         id="emailInput"
-        type="email"
         placeholder="Email"
         label="Email"
+        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         value={formData.email}
         onChange={(event) => setFormData({ ...formData, email: event.target.value })}
       />
-      <InputComponent
-        id="cnicInput"
+        </div>
+
+         <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Cnic/B-form</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
+        id="cnicInput"
         maxLength="15"
         inputMode="numeric"
         placeholder="00000-0000000-0"
-        label="Cnic/B-form"
         value={formData.cnic}
         onChange={handleChange1}
       />
-      <InputComponent
+        </div> 
+
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Phone No</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
         id="phoneInput"
         maxLength="12"
         inputMode="numeric"
         placeholder="0000-0000000"
-        label="Phone"
         value={formData.phone}
         onChange={handleChange2}
       />
-      <InputComponent
+        </div>
+
+      <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">City</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
         id="cityInput"
         placeholder="City"
-        label="City"
         value={formData.city}
         onChange={(event) => {
           const formattedCity = event.target.value
@@ -835,26 +862,36 @@ export default function MainPage() {
           setFormData({ ...formData, city: formattedCity });
         }}
       />
-      <InputComponent
+        </div>
+
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Date Of Birth</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="date"
         id="dateInput"
         placeholder="Date Of Birth"
-        label="Date Of Birth"
         value={formData.dateOfBirth}
         onChange={(event) => setFormData({ ...formData, dateOfBirth: event.target.value })}
       />
-
-    <InputComponent
+        </div>
+      
+      <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Qualification</p>
+            <Input
+            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
         id="qualificationInput"
         placeholder="Qualification"
-        label="Qualification"
         value={formData.qualification}
         onChange={(event) => {
           const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
           setFormData({ ...formData, qualification: formattedValue });
         }}
       />
+        </div>
+
+    
 
     </div>
 
@@ -889,17 +926,21 @@ export default function MainPage() {
 
     <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
       
-      <InputComponent
+        <div className="relative h-14">
+            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Address</p>
+            <Input
+        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
         type="text"
         id="addressInput"
         placeholder="Address"
-        label="Address"
         value={formData.address}
         onChange={(event) => {
           const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
-          setFormData({ ...formData, address: formattedValue });
+        setFormData({ ...formData, address: formattedValue });
         }}
       />
+        </div>
+
     </div>
 
     <div
