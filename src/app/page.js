@@ -19,6 +19,7 @@ import ImageUpload from "../components/Abc";
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, Input, message, Upload } from 'antd';
+import Link from "next/link";
 
 dotenv.config()
 
@@ -704,39 +705,44 @@ export default function MainPage() {
 
 
     return (
-        <div className="mr-0 mb-0 ml-0 relative bg-[#d4f6f9]">  {/* Parent div with background color */}
+        <div className="mr-0 mb-0 ml-0 relative bg-[#b2e8ec]">  {/* Parent div with background color */}
 
-            <div className="bg-[#d4f6f9] pt-6">  {/* Additional div to apply padding-top */}
+            <div className="bg-[#b2e8ec] pt-4">  {/* Additional div to apply padding-top */}
                 <Navbar />
             </div>
 
-            <div style={{ boxShadow: '1px 1px 1px 4px rgba(0.1, 0.1, 0, 0.1)' }} className="w-full text-white bg-[#1f596b] lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl h-6">
+            <div style={{ boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.3)' }} className="w-full bg-gradient-to-r from-[#0e303e] to-[#18819b] text-white lg:font-bold md:font-bold mx:font-bold lg:h-8 md:h-8 mx:h-8 flex items-center justify-center text-1xl h-6">
                 Service-Education-Registration
             </div>
 
-            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[350px] w-[95%]  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
+
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] w-[95%]  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
 
             /></div>
 
-            <div className="bg-none flex items-center justify-center rounded-xl space-x-2 mt-4 mb-4">
-                <button
-                    //   color="inherit"
-                    id='button3'
-                    onClick={() => { router.push("/download") }}
-                    className='btn h-12 inline md:hidden bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[280px] md::w-[280px] sm::w-[280px]'
-                //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
-                >
-                    <p className='font-bold '>Download ID Card</p>
-                </button>
-                <button
-                    //   color="inherit"
-                    id='button4'
-                    onClick={() => { router.push("/payment") }}
-                    className='btn h-12 inline md:hidden  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] text-white rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[280px] md::w-[280px] sm::w-[280px]'
-                //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
-                >
-                    <p className='font-bold'>Payment Verify</p>
-                </button>
+            <div className="bg-none flex items-center justify-center rounded-xl space-x-4 mt-4 mb-4">
+                <Link href="/download" passHref>
+                    <button
+                        //   color="inherit"
+                        id='button3'
+                        // onClick={() => { router.push("/download") }}
+                        className='btn h-12 inline md:hidden bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[200px] md:w-[200px] sm:w-[200px]'
+                    //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+                    >
+                        <p className='font-bold '>Download ID Card</p>
+                    </button>
+                </Link>
+                <Link href="/payment" passHref>
+                    <button
+                        //   color="inherit"
+                        id='button4'
+                        // onClick={() => { router.push("/payment") }}
+                        className='btn h-12 inline md:hidden  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] text-white rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[200px] md:w-[200px] sm:w-[200px]'
+                    //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
+                    >
+                        <p className='font-bold'>Payment Verify</p>
+                    </button>
+                </Link>
 
             </div>
 
@@ -756,248 +762,247 @@ export default function MainPage() {
 
 
 
-{admin ? (
-  <div
-    style={{
-      boxShadow: '1px 5px 5px 8px rgba(0, 0, 0, 0.2)',
-      opacity: isFormDisabled ? 0.5 : 1,
-      pointerEvents: isFormDisabled ? 'none' : 'auto',
-    }}
-    className={`mx-auto w-[95%] lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${
-      isFormDisabled ? 'opacity-50' : ''
-    }`}
-  >
-    <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-8 mb-4 mt-4">
+            {admin ? (
+                <div
+                    style={{
+                        boxShadow: '1px 5px 5px 8px rgba(0, 0, 0, 0.2)',
+                        opacity: isFormDisabled ? 0.5 : 1,
+                        pointerEvents: isFormDisabled ? 'none' : 'auto',
+                    }}
+                    className={`mx-auto w-[95%] lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${isFormDisabled ? 'opacity-50' : ''
+                        }`}
+                >
+                    <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-8 mb-4 mt-4">
 
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Full Name</p>
-            <Input
-        type="text"
-        id="nameInput"
-        placeholder="Full Name"
-        label="Full Name"
-        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        value={formData.fullName}
-        onChange={(event) => {
-          const formattedName = event.target.value
-            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
-          setFormData({ ...formData, fullName: formattedName });
-        }}
-      />
-        </div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Full Name</p>
+                            <Input
+                                type="text"
+                                id="nameInput"
+                                placeholder="Full Name"
+                                label="Full Name"
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                value={formData.fullName}
+                                onChange={(event) => {
+                                    const formattedName = event.target.value
+                                        .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+                                    setFormData({ ...formData, fullName: formattedName });
+                                }}
+                            />
+                        </div>
 
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Father Name</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="fnameInput"
-        placeholder="Father Name"
-        label="Full Name"
-        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        value={formData.fatherName}
-        onChange={(event) => {
-          const formattedFatherName = event.target.value
-            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
-          setFormData({ ...formData, fatherName: formattedFatherName });
-        }}
-      />
-        </div>
-        
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Email</p>
-            <Input
-        type="text"
-        id="emailInput"
-        placeholder="Email"
-        label="Email"
-        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        value={formData.email}
-        onChange={(event) => setFormData({ ...formData, email: event.target.value })}
-      />
-        </div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Father Name</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="fnameInput"
+                                placeholder="Father Name"
+                                label="Full Name"
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                value={formData.fatherName}
+                                onChange={(event) => {
+                                    const formattedFatherName = event.target.value
+                                        .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+                                    setFormData({ ...formData, fatherName: formattedFatherName });
+                                }}
+                            />
+                        </div>
 
-         <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Cnic/B-form</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="cnicInput"
-        maxLength="15"
-        inputMode="numeric"
-        placeholder="00000-0000000-0"
-        value={formData.cnic}
-        onChange={handleChange1}
-      />
-        </div> 
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Email</p>
+                            <Input
+                                type="text"
+                                id="emailInput"
+                                placeholder="Email"
+                                label="Email"
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                value={formData.email}
+                                onChange={(event) => setFormData({ ...formData, email: event.target.value })}
+                            />
+                        </div>
 
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Phone No</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="phoneInput"
-        maxLength="12"
-        inputMode="numeric"
-        placeholder="0000-0000000"
-        value={formData.phone}
-        onChange={handleChange2}
-      />
-        </div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Cnic/B-form</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="cnicInput"
+                                maxLength="15"
+                                inputMode="numeric"
+                                placeholder="00000-0000000-0"
+                                value={formData.cnic}
+                                onChange={handleChange1}
+                            />
+                        </div>
 
-      <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">City</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="cityInput"
-        placeholder="City"
-        value={formData.city}
-        onChange={(event) => {
-          const formattedCity = event.target.value
-            .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
-            .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
-          setFormData({ ...formData, city: formattedCity });
-        }}
-      />
-        </div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Phone No</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="phoneInput"
+                                maxLength="12"
+                                inputMode="numeric"
+                                placeholder="0000-0000000"
+                                value={formData.phone}
+                                onChange={handleChange2}
+                            />
+                        </div>
 
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Date Of Birth</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="date"
-        id="dateInput"
-        placeholder="Date Of Birth"
-        value={formData.dateOfBirth}
-        onChange={(event) => setFormData({ ...formData, dateOfBirth: event.target.value })}
-      />
-        </div>
-      
-      <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Qualification</p>
-            <Input
-            className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="qualificationInput"
-        placeholder="Qualification"
-        value={formData.qualification}
-        onChange={(event) => {
-          const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
-          setFormData({ ...formData, qualification: formattedValue });
-        }}
-      />
-        </div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">City</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="cityInput"
+                                placeholder="City"
+                                value={formData.city}
+                                onChange={(event) => {
+                                    const formattedCity = event.target.value
+                                        .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphanumeric characters
+                                        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
+                                    setFormData({ ...formData, city: formattedCity });
+                                }}
+                            />
+                        </div>
 
-    
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Date Of Birth</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="date"
+                                id="dateInput"
+                                placeholder="Date Of Birth"
+                                value={formData.dateOfBirth}
+                                onChange={(event) => setFormData({ ...formData, dateOfBirth: event.target.value })}
+                            />
+                        </div>
 
-    </div>
-
-    
-
-    <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-2 gap-8 mb-4">
-
-    <div className="mb-8" style={{ marginTop: '-24px' }}>
-  <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Gender</label>
-  <select
-    value={formData.gender}
-    id="genderInput"
-    onChange={(event) => setFormData({ ...formData, gender: event.target.value })}
-    className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
-    style={{
-      color: formData.gender ? 'black' : 'gray', // Black for selected, gray for placeholder
-    }}
-  >
-    
-
-    {/* Actual options */}
-    <option key="Male" value="Male" style={{ color: 'black' }}>
-      Male
-    </option>
-    <option key="Female" value="Female" style={{ color: 'black' }}>
-      Female
-    </option>
-  </select>
-</div>
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Qualification</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="qualificationInput"
+                                placeholder="Qualification"
+                                value={formData.qualification}
+                                onChange={(event) => {
+                                    const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
+                                    setFormData({ ...formData, qualification: formattedValue });
+                                }}
+                            />
+                        </div>
 
 
 
-    <div className="mb-8" style={{ marginTop: '-24px' }}>
-  <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Course</label>
-  <select
-    value={formData.course}
-    id="courseInput"
-    onChange={(event) => {
-        const selectedCourse = allCourses.find((course) => course.course === event.target.value);
-        setFormData({
-          ...formData,
-          course: event.target.value,
-          batch: selectedCourse?.batch, // Set batch if selectedCourse exists
-        });
-      }}
-    className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
-    style={{
-      color: formData.course ? 'black' : 'gray', // Black for selected, gray for placeholder
-    }}
-  >
-    
-
-    {/* Dynamically generating the options from the allCourses array */}
-    {allCourses
-      .filter((course) => course.admission === 'Opened')
-      .map((course) => (
-        <option key={course.course} value={course.course} style={{ color: 'black' }}>
-          {course.course}
-        </option>
-      ))}
-  </select>
-</div>
+                    </div>
 
 
 
-      
-    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-2 gap-8 mb-4">
 
-    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
-      
-        <div className="relative h-14">
-            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Address</p>
-            <Input
-        className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-        type="text"
-        id="addressInput"
-        placeholder="Address"
-        value={formData.address}
-        onChange={(event) => {
-          const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
-        setFormData({ ...formData, address: formattedValue });
-        }}
-      />
-        </div>
+                        <div className="mb-8" style={{ marginTop: '-24px' }}>
+                            <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Gender</label>
+                            <select
+                                value={formData.gender}
+                                id="genderInput"
+                                onChange={(event) => setFormData({ ...formData, gender: event.target.value })}
+                                className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
+                                style={{
+                                    color: formData.gender ? 'black' : 'gray', // Black for selected, gray for placeholder
+                                }}
+                            >
 
-    </div>
 
-    <div
-      className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
-      onClick={triggerFileInput}
-    >
-      {!image ? (
-        <label className="text-gray-600 cursor-pointer flex items-center justify-center">
-          Upload <PlusOutlined className="ml-2" />
-        </label>
-      ) : (
-        <img src={image} alt="Uploaded" className="uploaded-image" />
-      )}
-      <input
-        id="file-upload"
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleImageUpload}
-      />
-      <style jsx>{`
+                                {/* Actual options */}
+                                <option key="Male" value="Male" style={{ color: 'black' }}>
+                                    Male
+                                </option>
+                                <option key="Female" value="Female" style={{ color: 'black' }}>
+                                    Female
+                                </option>
+                            </select>
+                        </div>
+
+
+
+                        <div className="mb-8" style={{ marginTop: '-24px' }}>
+                            <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Course</label>
+                            <select
+                                value={formData.course}
+                                id="courseInput"
+                                onChange={(event) => {
+                                    const selectedCourse = allCourses.find((course) => course.course === event.target.value);
+                                    setFormData({
+                                        ...formData,
+                                        course: event.target.value,
+                                        batch: selectedCourse?.batch, // Set batch if selectedCourse exists
+                                    });
+                                }}
+                                className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
+                                style={{
+                                    color: formData.course ? 'black' : 'gray', // Black for selected, gray for placeholder
+                                }}
+                            >
+
+
+                                {/* Dynamically generating the options from the allCourses array */}
+                                {allCourses
+                                    .filter((course) => course.admission === 'Opened')
+                                    .map((course) => (
+                                        <option key={course.course} value={course.course} style={{ color: 'black' }}>
+                                            {course.course}
+                                        </option>
+                                    ))}
+                            </select>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
+
+                        <div className="relative h-14">
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Address</p>
+                            <Input
+                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
+                                type="text"
+                                id="addressInput"
+                                placeholder="Address"
+                                value={formData.address}
+                                onChange={(event) => {
+                                    const formattedValue = event.target.value.replace(/\b\w/g, (char) => char.toUpperCase());
+                                    setFormData({ ...formData, address: formattedValue });
+                                }}
+                            />
+                        </div>
+
+                    </div>
+
+                    <div
+                        className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
+                        onClick={triggerFileInput}
+                    >
+                        {!image ? (
+                            <label className="text-gray-600 cursor-pointer flex items-center justify-center">
+                                Upload <PlusOutlined className="ml-2" />
+                            </label>
+                        ) : (
+                            <img src={image} alt="Uploaded" className="uploaded-image" />
+                        )}
+                        <input
+                            id="file-upload"
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={handleImageUpload}
+                        />
+                        <style jsx>{`
         .image-upload-container {
           width: 130px;
           height: 150px;
@@ -1015,38 +1020,38 @@ export default function MainPage() {
           object-fit: cover;
         }
       `}</style>
-    </div>
+                    </div>
 
-    {registering ? (
-      <button
-        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider flex items-center justify-center border-none"
-        disabled={isFormDisabled}
-      >
-        <div className="flex items-center space-x-3">
-          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse"></div>
-          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
-          <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
-        </div>
-      </button>
-    ) : (
-      <button
-        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider border-none"
-        onClick={handleRegister}
-        disabled={isFormDisabled}
-      >
-        Register
-      </button>
-    )}
-  </div>
-) : (
-  <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
-    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
-    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
-    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
-  </div>
-)}
+                    {registering ? (
+                        <button
+                            className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider flex items-center justify-center border-none"
+                            disabled={isFormDisabled}
+                        >
+                            <div className="flex items-center space-x-3">
+                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+                                <div className="loader-dot w-3 h-3 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
+                            </div>
+                        </button>
+                    ) : (
+                        <button
+                            className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider border-none"
+                            onClick={handleRegister}
+                            disabled={isFormDisabled}
+                        >
+                            Register
+                        </button>
+                    )}
+                </div>
+            ) : (
+                <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.9s' }}></div>
+                </div>
+            )}
 
 
 

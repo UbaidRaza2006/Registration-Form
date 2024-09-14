@@ -1,5 +1,9 @@
 #bg{
-    background-color: white;
+    background: linear-gradient(to right, white, #e0f4f7, #f0fafb);
+    /* border-top: 1px dashed #1f596b; */
+    /* padding: 20px;
+    border-radius: 8px; */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 #abc{
     margin-top: 20px;

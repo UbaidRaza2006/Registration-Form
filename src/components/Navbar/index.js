@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import style from "../Navbar/nav.css"
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 // import MenuIcon from '@mui/icons-material/Menu';
 
 
@@ -38,6 +39,7 @@ const router = useRouter()
         >
           <p className='font-bold text-[#1f596b] text-2xl sm:text-4xl md:text-3xl lg:text-4xl xl:text-4xl'>Course Registration Form</p>
         </Typography>
+        <Link href="/downlaod" passHref>
         <button
           // color="inherit"
           id='button1'
@@ -47,15 +49,18 @@ const router = useRouter()
         >
           <p className='font-bold '>Download ID Card</p>
         </button>
+        </Link>
+        <Link href="/payment" passHref>      
         <button
           // color="inherit"
           id='button2'
           onClick={()=>{router.push("/payment")}}
-          className='btn hidden md:inline h-12  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
+          className='btn hidden ml-4 md:inline h-12  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
           // sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
           <p className='font-bold'>Payment Verify</p>
         </button>
+        </Link> 
 
 {/* <button className="btn h-12 w-[14%] md:w-[20%] bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] mt-4 text-white text-lg h-12 rounded-lg mx-auto block px-12 tracking-wider"
           onClick={()=>{router.push("/payment")}}
