@@ -714,16 +714,16 @@ export default function MainPage() {
                 Service-Education-Registration
             </div>
 
-            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[350px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[350px] w-[95%]  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
 
             /></div>
 
-            <div className="bg-none flex items-center justify-center rounded-xl space-x-1 mt-4 mb-4">
+            <div className="bg-none flex items-center justify-center rounded-xl space-x-2 mt-4 mb-4">
                 <button
                     //   color="inherit"
                     id='button3'
                     onClick={() => { router.push("/download") }}
-                    className='btn h-12 inline md:hidden bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
+                    className='btn h-12 inline md:hidden bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[280px] md::w-[280px] sm::w-[280px]'
                 //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
                 >
                     <p className='font-bold '>Download ID Card</p>
@@ -732,7 +732,7 @@ export default function MainPage() {
                     //   color="inherit"
                     id='button4'
                     onClick={() => { router.push("/payment") }}
-                    className='btn h-12 inline md:hidden  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] text-white rounded-md text-lg'
+                    className='btn h-12 inline md:hidden  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] text-white rounded-md text-md lg:text-lg md:text-lg sm:text-lg w-[160px] lg:w-[280px] md::w-[280px] sm::w-[280px]'
                 //   sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
                 >
                     <p className='font-bold'>Payment Verify</p>
@@ -763,11 +763,11 @@ export default function MainPage() {
       opacity: isFormDisabled ? 0.5 : 1,
       pointerEvents: isFormDisabled ? 'none' : 'auto',
     }}
-    className={`mx-auto w-full lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${
+    className={`mx-auto w-[95%] lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${
       isFormDisabled ? 'opacity-50' : ''
     }`}
   >
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4 mt-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-8 mb-4 mt-4">
 
         <div className="relative h-14">
             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Full Name</p>
@@ -897,7 +897,7 @@ export default function MainPage() {
 
     
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-2 gap-8 mb-4">
 
     <div className="mb-8" style={{ marginTop: '-24px' }}>
   <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Gender</label>
