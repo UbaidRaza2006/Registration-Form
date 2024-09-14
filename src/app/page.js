@@ -705,9 +705,9 @@ export default function MainPage() {
 
 
     return (
-        <div className="mr-0 mb-0 ml-0 relative bg-[#b2e8ec]">  {/* Parent div with background color */}
+        <div className="mr-0 mb-0 ml-0 relative bg-[#c1ebee]">  {/* Parent div with background color */}
 
-            <div className="bg-[#b2e8ec] pt-4">  {/* Additional div to apply padding-top */}
+            <div className="bg-[#c1ebee] pt-4">  {/* Additional div to apply padding-top */}
                 <Navbar />
             </div>
 
