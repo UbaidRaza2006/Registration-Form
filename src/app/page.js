@@ -714,7 +714,7 @@ export default function MainPage() {
                 Service-Education-Registration
             </div>
 
-            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[300px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[300px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[350px] w-full  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
 
             /></div>
 
@@ -767,7 +767,7 @@ export default function MainPage() {
       isFormDisabled ? 'opacity-50' : ''
     }`}
   >
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-3 mt-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4 mt-4">
 
         <div className="relative h-14">
             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Full Name</p>
@@ -895,33 +895,69 @@ export default function MainPage() {
 
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-3">
-      <SelectComponent
-        label="Select Gender"
-        id="genderInput"
-        options={[
-          { id: "Male", label: "Male" },
-          { id: "Female", label: "Female" },
-        ]}
-        value={formData.gender}
-        onChange={(event) => setFormData({ ...formData, gender: event.target.value })}
-      />
-      <SelectComponent
-        label="Select Course"
-        id="courseInput"
-        options={allCourses
-          .filter((course) => course.admission === 'Opened')
-          .map((course) => ({ value: course.course, label: course.course }))}
-        value={formData.course}
-        onChange={(event) => {
-          const selectedCourse = allCourses.find((course) => course.course === event.target.value);
-          setFormData({
-            ...formData,
-            course: event.target.value,
-            batch: selectedCourse?.batch, // Set batch if selectedCourse exists
-          });
-        }}
-      />
+    
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-4">
+
+    <div className="mb-8" style={{ marginTop: '-24px' }}>
+  <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Gender</label>
+  <select
+    value={formData.gender}
+    id="genderInput"
+    onChange={(event) => setFormData({ ...formData, gender: event.target.value })}
+    className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
+    style={{
+      color: formData.gender ? 'black' : 'gray', // Black for selected, gray for placeholder
+    }}
+  >
+    
+
+    {/* Actual options */}
+    <option key="Male" value="Male" style={{ color: 'black' }}>
+      Male
+    </option>
+    <option key="Female" value="Female" style={{ color: 'black' }}>
+      Female
+    </option>
+  </select>
+</div>
+
+
+
+    <div className="mb-8" style={{ marginTop: '-24px' }}>
+  <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Course</label>
+  <select
+    value={formData.course}
+    id="courseInput"
+    onChange={(event) => {
+        const selectedCourse = allCourses.find((course) => course.course === event.target.value);
+        setFormData({
+          ...formData,
+          course: event.target.value,
+          batch: selectedCourse?.batch, // Set batch if selectedCourse exists
+        });
+      }}
+    className="border-2 border-gray-300 focus:border-blue-500 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-inherit rounded-md"
+    style={{
+      color: formData.course ? 'black' : 'gray', // Black for selected, gray for placeholder
+    }}
+  >
+    
+
+    {/* Dynamically generating the options from the allCourses array */}
+    {allCourses
+      .filter((course) => course.admission === 'Opened')
+      .map((course) => (
+        <option key={course.course} value={course.course} style={{ color: 'black' }}>
+          {course.course}
+        </option>
+      ))}
+  </select>
+</div>
+
+
+
+      
     </div>
 
     <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
@@ -965,7 +1001,7 @@ export default function MainPage() {
         .image-upload-container {
           width: 130px;
           height: 150px;
-          border: 2px solid #aaa;
+          border: 2px solid #cfcece;
           border-radius: 12px;
           display: flex;
           justify-content: center;
@@ -983,7 +1019,7 @@ export default function MainPage() {
 
     {registering ? (
       <button
-        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider flex items-center justify-center"
+        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider flex items-center justify-center border-none"
         disabled={isFormDisabled}
       >
         <div className="flex items-center space-x-3">
@@ -995,7 +1031,7 @@ export default function MainPage() {
       </button>
     ) : (
       <button
-        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider"
+        className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-12 tracking-wider border-none"
         onClick={handleRegister}
         disabled={isFormDisabled}
       >
@@ -1004,7 +1040,7 @@ export default function MainPage() {
     )}
   </div>
 ) : (
-  <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-10px]">
+  <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
