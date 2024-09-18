@@ -800,7 +800,6 @@ export default function MainPage() {
                                 id="fnameInput"
                                 placeholder="Father Name"
                                 label="Full Name"
-                                className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
                                 value={formData.fatherName}
                                 onChange={(event) => {
                                     const formattedFatherName = event.target.value
