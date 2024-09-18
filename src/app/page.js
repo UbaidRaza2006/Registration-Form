@@ -1044,7 +1044,7 @@ export default function MainPage() {
                     )}
                 </div>
             ) : (
-                <div className="h-[150px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
+                <div className="h-[250px] w-[100%] flex items-center space-x-3 justify-center mt-[-70px]">
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>

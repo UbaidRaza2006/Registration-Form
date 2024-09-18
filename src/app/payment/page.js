@@ -457,7 +457,6 @@ console.log("Image Url ka baap hon----->", paymentImg)
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
                 </div>
       ) : ( <>
     
@@ -593,7 +592,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
              onClick={updateUser(idForUser)}
              >Submit</Button> */}
     
-    {registering?(<button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"  
+    {registering?(<button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider border-none"  
                 // onClick={handleRegister}
             // disabled={!isFormValid()}
         ><div className="flex items-center space-x-3 mx-auto">
@@ -604,7 +603,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
         </div>
         </button>):(
     
-             <button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider"
+             <button className="btn mt-4 mb-8 disabled:opacity-50 disabled:bg-gray-400 mt-0 bg-gradient-to-t from-[#0e303e] to-[#18819b] text-white disabled:text-white hover:bg-[#0d4a5b] active:bg-[#092e3e] shadow-xl h-4 rounded-2xl mx-auto block px-8 tracking-wider border-none"
             //  disabled={!isFormValid()}
              onClick={() => updateUser(idForUser)}
         >SUBMIT

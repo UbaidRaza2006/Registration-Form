@@ -39,11 +39,11 @@ const router = useRouter()
         >
           <p className='font-bold text-[#1f596b] text-2xl sm:text-4xl md:text-3xl lg:text-4xl xl:text-4xl'>Course Registration Form</p>
         </Typography>
-        <Link href="/downlaod" passHref>
+        <Link href="/download" passHref>
         <button
           // color="inherit"
           id='button1'
-          onClick={()=>{router.push("/download")}}
+          // onClick={()=>{router.push("/download")}}
           className='btn h-12 hidden md:inline \ bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] rounded-md text-lg'
           // sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
@@ -54,7 +54,7 @@ const router = useRouter()
         <button
           // color="inherit"
           id='button2'
-          onClick={()=>{router.push("/payment")}}
+          // onClick={()=>{router.push("/payment")}}
           className='btn hidden ml-4 md:inline h-12  bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e]  rounded-md text-lg'
           // sx={{ display: { xs: 'none', sm: 'none', md: 'inline', lg: 'inline', xl: 'inline' } }}
         >
