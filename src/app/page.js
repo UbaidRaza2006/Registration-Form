@@ -901,10 +901,10 @@ export default function MainPage() {
 
 
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-2 gap-8 mb-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-7 mb-12">
 
-                        <div className="mb-8" style={{ marginTop: '-24px' }}>
-                            <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Gender</label>
+                        <div className="mt-[-7px]">
+                            <label className="block font-medium text-gray-600 ml-3 mb-0">Select Gender</label>
                             <select
                                 value={formData.gender}
                                 id="genderInput"
@@ -928,8 +928,8 @@ export default function MainPage() {
 
 
 
-                        <div className="mb-8" style={{ marginTop: '-24px' }}>
-                            <label className="block font-medium text-gray-600 ml-3 mb-0 lg:mt-4 mx:mt-4 md:mt-4 mt-8">Select Course</label>
+                        <div className="lg:mt-[-7px] md:mt-[-7px]">
+                            <label className="block font-medium text-gray-600 ml-3 mb-0 ">Select Course</label>
                             <select
                                 value={formData.course}
                                 id="courseInput"
@@ -1044,7 +1044,7 @@ export default function MainPage() {
                     )}
                 </div>
             ) : (
-                <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
+                <div className="h-[150px] w-[100%] flex items-center space-x-3 justify-center mt-[-40px]">
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse"></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
