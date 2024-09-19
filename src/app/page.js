@@ -107,15 +107,21 @@ export default function MainPage() {
 
 
     const handleImageUpload = async (e) => {
-
-        setImageLoading(true)
-
+        setImageLoading(true);
+    
         const file = e.target.files[0];
+    
+        // Preview the image locally before uploading
+        const localImageUrl = URL.createObjectURL(file);
+        setImage(localImageUrl); // This will immediately show the image in the UI
+    
+        // Now proceed with the Cloudinary upload
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'Rizwan_Tayyab');
-
-        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
+    
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+        
         try {
             const response = await fetch(
                 `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
@@ -125,28 +131,37 @@ export default function MainPage() {
                 }
             );
             const data = await response.json();
-            console.log("Data.response hon->>>", data.secure_url);
-
+    
+            console.log("Data.response from Cloudinary:", data.secure_url);
+    
             // Set the image URL received from Cloudinary
             if (data.secure_url) {
-                setImage(data.secure_url);
+                setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
             }
-            // // Convert the image to base64
-            // const base64Image = await getBase64Image(data.secure_url);
-            // console.log("Base64 image:", base64Image);
-
-            // Update the form data with the base64 representation of the image
-
+    
+            // Update the form data with the Cloudinary image URL
             if (data.secure_url) {
                 setFormData(prevFormData => ({
                     ...prevFormData,
                     imageUrl: data.secure_url,
                 }));
+                toast.success("Image added", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                  })
             }
-            setImageLoading(false)
-
+    
+            setImageLoading(false);
+    
         } catch (error) {
-            setImageLoading(false)
+            setImageLoading(false);
             console.error('Error uploading image to Cloudinary:', error);
             toast.error(error, {
                 position: "top-right",
@@ -161,6 +176,7 @@ export default function MainPage() {
             });
         }
     };
+    
 
     // // Function to convert an image URL to base64
 

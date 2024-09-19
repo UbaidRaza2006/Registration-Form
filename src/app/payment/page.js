@@ -370,41 +370,61 @@ const updateUser = async (userId) => {
 
 const handleImageUpload = async (e) => {
   const file = e.target.files[0];
+
+  // Preview the image locally before uploading
+  const localImageUrl = URL.createObjectURL(file);
+  setImageee(localImageUrl); // This will immediately show the image in the UI
+
+  // Now proceed with the Cloudinary upload
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', 'Rizwan_Tayyab');
 
-        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
-        try {
-            const response = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
+  const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+  
+  try {
+      const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+          {
+              method: 'POST',
+              body: formData,
+          }
+      );
       const data = await response.json();
       console.log("Data.response hon->>>", data.secure_url);
 
-      // Set the image URL received from Cloudinary
-      // setImageee(data.secure_url);
-
-      // // Convert the image to base64
-      // const base64Image = await getBase64Image(data.secure_url);
-      // console.log("Base64 image:", base64Image);
-
-      // Update the form data with the base64 representation of the image
-      if(data.secure_url){
-
-        setPaymentImg(data.secure_url);
-        setImageee(data.secure_url);
-
+      // Set the Cloudinary image URL once the upload is successful
+      if (data.secure_url) {
+          setPaymentImg(data.secure_url);  // Update the payment image with the final Cloudinary URL
+          toast.success("Image added", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          })
+          // setImageee(data.secure_url);     // Replace the local preview with the Cloudinary URL
       }
-      // setPayment("done")
   } catch (error) {
       console.error('Error uploading image to Cloudinary:', error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+    });
   }
 };
+
 
 // // Function to convert an image URL to base64
 // const getBase64Image = async (imageUrl) => {
@@ -552,10 +572,10 @@ console.log("Image Url ka baap hon----->", paymentImg)
       
     
             <div className="image-upload-container bg-[#f8f8f8] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
-        {!paymentImg || paymentImg == "Not-Done" ? (
+        {(!paymentImg || paymentImg == "Not-Done") && !imageee ? (
         <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
         ) : (
-        <img src={paymentImg} alt="Uploaded image" className="uploaded-image" />
+        <img src={imageee} alt="Uploaded image" className="uploaded-image" />
         )}
         <input
         id="file-upload"
