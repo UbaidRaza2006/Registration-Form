@@ -573,11 +573,17 @@ console.log("Image Url ka baap hon----->", paymentImg)
       
     
             <div className="image-upload-container bg-[#f8f8f8] shadow-md shadow-gray-400 mx-auto" onClick={triggerFileInput}>
-        {(!paymentImg || paymentImg == "Not-Done") && !imageee ? (
-        <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
-        ) : (
-        <img src={imageee} alt="Uploaded image" className="uploaded-image" />
-        )}
+            {(!paymentImg || paymentImg === "Not-Done") && (!imageee || imageee === "Not-Done") ? (
+    <label className="text-gray-600 text-1xl" htmlFor="file-upload">Payment Image <PlusOutlined/> </label>
+) : (
+  <img 
+  src={imageee || (paymentImg !== "Not-Done" ? paymentImg : '')} 
+  alt="Uploaded image" 
+  className="uploaded-image" 
+/>
+
+)}
+
         <input
         id="file-upload"
         type="file"
