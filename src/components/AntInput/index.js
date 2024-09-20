@@ -5,7 +5,7 @@
 import React from 'react';
 import { Input } from 'antd';
 
-const AntInputComponent = ({placeholder,value,onChange,style}) => {
+const AntInputComponent = ({placeholder,value,onChange,style,type}) => {
   // const styles = {
   //   placeholder: {
   //     fontSize: "16px",  // Adjust the font size for the placeholder
@@ -14,6 +14,7 @@ const AntInputComponent = ({placeholder,value,onChange,style}) => {
 
   return (
     <Input
+    type={type}
     value={value}
     onChange={onChange}
       placeholder={placeholder || "Enter Name"}

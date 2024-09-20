@@ -145,7 +145,7 @@ export default function MainPage() {
                     ...prevFormData,
                     imageUrl: data.secure_url,
                 }));
-                toast.success("Image added", {
+                toast.success("Image Added", {
                     position: "top-right",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -829,7 +829,7 @@ export default function MainPage() {
                         <div className="relative h-14">
                             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Email</p>
                             <Input
-                                type="text"
+                                type="email"
                                 id="emailInput"
                                 placeholder="Email"
                                 label="Email"
@@ -843,7 +843,7 @@ export default function MainPage() {
                             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Cnic/B-form</p>
                             <Input
                                 className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-                                type="text"
+                                type="tel"
                                 id="cnicInput"
                                 maxLength="15"
                                 inputMode="numeric"
@@ -857,7 +857,7 @@ export default function MainPage() {
                             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Phone No</p>
                             <Input
                                 className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
-                                type="text"
+                                type="tel"
                                 id="phoneInput"
                                 maxLength="12"
                                 inputMode="numeric"
@@ -1013,7 +1013,7 @@ export default function MainPage() {
                         <input
                             id="file-upload"
                             type="file"
-                            accept="image/*"
+                            accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp, .ico, .heic, .heif" 
                             style={{ display: 'none' }}
                             onChange={handleImageUpload}
                         />

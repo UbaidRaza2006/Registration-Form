@@ -165,7 +165,7 @@ Download ID Card
       className="rounded-3xl border-2 border-gray-400 py-2 text-xl text-center w-full"
       style={{ backgroundColor: "white" }}
       id="cnicInput"
-      type="text"
+      type="tel"       
       maxLength="15"
       inputMode="numeric"
       placeholder="00000-0000000-0"

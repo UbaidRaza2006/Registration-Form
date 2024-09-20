@@ -523,6 +523,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
               <div>
                 {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
                 <AntInputComponent
+                 type="tel" 
                 className="shadow-md shadow-gray-400"
                   placeholder={"Enter Roll No."}
                   style={styles.inputs}
@@ -580,7 +581,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
         <input
         id="file-upload"
         type="file"
-        accept="image/*"
+        accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp, .ico, .heic, .heif" 
         style={{ display: 'none' }}
         onChange={handleImageUpload}
         />

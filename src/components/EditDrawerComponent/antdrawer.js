@@ -9,9 +9,11 @@ import SelectComponent from '../SelectComponent';
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 import NextImage from "next/image"; // Alias one of the imports
+import { Bounce, toast } from "react-toastify";
+
 
 import { Image } from 'cloudinary-react';
-import { Bounce, toast } from 'react-toastify';
+
 import dotenv from 'dotenv'
 
   dotenv.config()
@@ -586,42 +588,67 @@ const EditDrawerApp = ({ userData }) => {
 
   const handleStudentImage = async (e) => {
     const file = e.target.files[0];
+    
+    // Early return if no file is selected
+    if (!file) return;
+
+    // Preview the image locally before uploading
+    const localImageUrl = URL.createObjectURL(file);
+    setStudentImage(localImageUrl); // Immediately show the image preview in the UI
+
+    // Revoke the object URL to prevent memory leaks
+    URL.revokeObjectURL(localImageUrl);
+
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
-        try {
-            const response = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
-      const data = await response.json();
-      console.log("Data.response hon->>>", data.secure_url);
+    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+    
+    try {
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+        const data = await response.json();
+        console.log("Data.response hon->>>", data.secure_url);
 
-      // // Set the image URL received from Cloudinary
-      // // setStudentImage(data.secure_url);
-
-      // // Convert the image to base64
-      // const base64Image = await getBase64Image(data.secure_url);
-      // console.log("Base64 image:", base64Image);
-
-      // Update the form data with the base64 representation of the image
-
-      if (data.secure_url) {
-
-        setImageUrl(data.secure_url)
-        setStudentImage(data.secure_url)
-
-      }
+        // Set the image URL received from Cloudinary
+        if (data.secure_url) {
+            setImageUrl(data.secure_url);
+            toast.success("Image Added", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+          });
+            // setStudentImage(data.secure_url); // Replace local preview with the Cloudinary URL
+        }
 
     } catch (error) {
-      console.error('Error uploading image to Cloudinary:', error);
+        console.error('Error uploading image to Cloudinary:', error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+      });
     }
-  };
+};
+
 
   // // Function to convert an image URL to base64
   // const getBase64Image = async (imageUrl) => {
@@ -646,42 +673,68 @@ const EditDrawerApp = ({ userData }) => {
 
   const handlePaymentImage = async (e) => {
     const file = e.target.files[0];
+
+    // Early return if no file is selected
+    if (!file) return;
+
+    // Preview the image locally before uploading
+    const localImageUrl = URL.createObjectURL(file);
+    setPaymentImage(localImageUrl); // Immediately show the image preview in the UI
+
+    // Revoke the object URL to prevent memory leaks
+    URL.revokeObjectURL(localImageUrl);
+
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
-        try {
-            const response = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
-      const data = await response.json();
-      console.log("Data.response hon->>>", data.secure_url);
+    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+    
+    try {
+        const response = await fetch(
+            `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
+        const data = await response.json();
+        console.log("Data.response hon->>>", data.secure_url);
 
-      // Set the image URL received from Cloudinary
-      // setStudentImage(data.secure_url);
-
-      // Convert the image to base64
-      // const base64Image = await getBase64PaymentImage(data.secure_url);
-      // console.log("Base64 image:", base64Image);
-
-      // Update the form data with the base64 representation of the image
-      if (data.secure_url) {
-
-        setPaymentImg(data.secure_url)
-        setPaymentImage(data.secure_url)
-        setPayment("Done")
-
-      }
+        // Set the image URL received from Cloudinary
+        if (data.secure_url) {
+            setPaymentImg(data.secure_url);
+            // setPaymentImage(data.secure_url); // Replace local preview with the Cloudinary URL
+            setPayment("Done");
+            toast.success("Image Added", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+          });
+        }
 
     } catch (error) {
-      console.error('Error uploading image to Cloudinary:', error);
+        console.error('Error uploading image to Cloudinary:', error);
+        toast.error(error, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+      });
     }
-  };
+};
+
 
   // // Function to convert an image URL to base64
   // const getBase64PaymentImage = async (imageUrl) => {
@@ -773,7 +826,7 @@ const EditDrawerApp = ({ userData }) => {
     <input
     id="file-upload"
     type="file"
-    accept="image/*"
+    accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp, .ico, .heic, .heif" 
     style={{ display: 'none' }}
     onChange={handleStudentImage}
     />
@@ -806,7 +859,7 @@ const EditDrawerApp = ({ userData }) => {
     <input
     id="file-upload1"
     type="file"
-    accept="image/*"
+    accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .svg, .webp, .ico, .heic, .heif" 
     style={{ display: 'none' }}
     onChange={handlePaymentImage}
     />
