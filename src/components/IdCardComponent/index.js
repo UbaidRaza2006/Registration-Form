@@ -26,9 +26,9 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             borderRadius: '8px',
             padding: '15px',
             maxWidth: '90%',
-            width: '400px',
-            height: "170px",
-            maxHeight: '30vh',
+            width: '600px',
+            height: "190px",
+            maxHeight: '70vh',
             overflow: 'auto',
         }
     };
@@ -214,16 +214,24 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
 
   </div>
 </div>
-            <p className="mt-4">For your Registration Details, Download ID Card</p>
-            <div className="flex justify-end mt-10">
-                <Button
+            <p className="mt-0 font-boldest text-2xl text-gray-700 ml-0 mr-0 lg:ml-[9%] md:ml-[9%] sm:ml-[9%] lg:mr-[9%] md:mr-[9%] sm:mr-[9%] lg:text-center md:text-center sm:text-center" style={{fontWeight: "bold",}}>For your Registration Details, Download ID Card!</p>
+            <div className="flex justify-end mt-0">
+            <button
+                            className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-8 tracking-wider border-none"
+                            onClick={handleDownload}
+                    disabled={isGenerating}
+                        >
+                                                {isGenerating ? "Generating..." : "Download ID Card"}
+
+                        </button>
+                {/* <Button
                     type="primary"
                     style={{ backgroundColor: "#0d5667" }}
                     onClick={handleDownload}
                     disabled={isGenerating}
                 >
                     {isGenerating ? "Generating..." : "Download ID Card"}
-                </Button>
+                </Button> */}
             </div>
         </ReactModal>
     );
