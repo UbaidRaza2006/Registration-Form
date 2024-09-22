@@ -118,8 +118,9 @@ const NotifyBox = () => {
 
         {/* Description */}
         <p className="text-center text-gray-600 mb-8 font-medium leading-relaxed">
-          Want to be the first to know when admissions open? Enter your phone number below and we'll keep you updated!
-        </p>
+    Want to be the first to know when admissions open? Enter your phone number below and we&apos;ll keep you updated!
+</p>
+
 
         {/* Form */}
         <form className="flex flex-col gap-8">
