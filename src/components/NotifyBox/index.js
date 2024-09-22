@@ -16,9 +16,25 @@ const NotifyBox = () => {
     }
   };
 
+  const formatPhoneNumber = (input) => {
+    const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
+    return formattedNumber;
+};
+
+  const handleChange2 = (event) => {
+    const inputValue = event.target.value
+
+    if (inputValue.length <= 12) {
+        const formattedPhone = formatPhoneNumber(inputValue);
+
+
+        setPhoneNumber(formattedPhone)
+    }
+}
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-inherit">
-      <div className="mt-[-150px] bg-gray-100 rounded-[30px] shadow-2xl p-12 max-w-lg w-full transform transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden">
+      <div className="mt-[-150px] bg-gray-100 rounded-[30px] shadow-2xl p-12 max-w-lg w-[90%] transform transition-all duration-500 hover:scale-105 hover:shadow-xl relative overflow-hidden">
         
         {/* Decorative Elements */}
   <div className="absolute -top-16 -right-16 w-[200px] h-[200px] bg-gradient-to-br from-[#81d3e0] to-[#39b0c7] rounded-full blur-xl opacity-40"></div>
@@ -38,11 +54,14 @@ const NotifyBox = () => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <input
-            type="text"
+            type="tel"
+            id="phoneInput"
+            maxLength="12"
+            inputMode="numeric"
             placeholder="Enter your phone number"
             value={phoneNumber}
-            onChange={handlePhoneNumberChange}
-            className="w-full p-4 border-2 border-[#48a6b2] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#83e6f0] bg-gray-100 text-gray-700 placeholder-gray-500 shadow-inner transition-all duration-300 transform hover:scale-105"
+            onChange={handleChange2}
+            className="w-full p-4 border-2 border-[#48a6b2] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#83e6f0] bg-gray-100 text-gray-700 font-bold text-2xl placeholder-gray-500 shadow-inner transition-all duration-300 transform hover:scale-105"
           />
           <button
             type="submit"

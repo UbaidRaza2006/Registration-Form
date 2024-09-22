@@ -954,7 +954,7 @@ export default function MainPage() {
             {isFormDisabled && message ? (
 
                 <div className="flex justify-center items-center mb-6">
-                    <div className="text-center text-[#004d66] text-3xl">
+                    <div className="text-center text-[#004d66] text-3xl py-2">
                         {message}
                     </div>
                 </div>
