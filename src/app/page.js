@@ -906,6 +906,7 @@ export default function MainPage() {
     const text = "Admissions are Closed!"
 
 
+
     return (
         <div className="mr-0 mb-0 ml-0 pb-8 relative bg-[#c1ebee]">  {/* Parent div with background color */}
 
@@ -918,7 +919,7 @@ export default function MainPage() {
             </div>
 
 
-            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] w-[95%]  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px]"><Image className="h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
+            <div style={{ boxShadow: '1px 5px 5px 8px rgba(0.2, 0.2, 0.2, 0.2)' }} className=" mt-8 mx-auto h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] w-[95%]  lg:w-[60%] md:w-[60%] mx:w-[60%] rounded-xl mb-[30px] transform transition-all duration-500 hover:scale-105 hover:shadow-xl"><Image className="h-[280px] lg:h-[350px] md:h-[350px] sm:h-[350px] mx-auto w-full rounded-xl" src="/images/Rizwan.png" alt="course info" width={600} height={400}
 
             /></div>
 

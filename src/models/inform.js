@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const InformSchema = new mongoose.Schema({
-    course: { type: String, required: true }
+    contact: { type: String, required: true }
 },
     {timestamps:true}
 )
