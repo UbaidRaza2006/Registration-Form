@@ -22,6 +22,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Flex, Input, message, Upload } from 'antd';
 import Link from "next/link";
+import NotifyBox from "../components/NotifyBox";
 
 dotenv.config()
 
@@ -906,7 +907,7 @@ export default function MainPage() {
 
 
     return (
-        <div className="mr-0 mb-0 ml-0 relative bg-[#c1ebee]">  {/* Parent div with background color */}
+        <div className="mr-0 mb-0 ml-0 pb-8 relative bg-[#c1ebee]">  {/* Parent div with background color */}
 
             <div className="bg-[#c1ebee] pt-4">  {/* Additional div to apply padding-top */}
                 <Navbar />
@@ -953,7 +954,7 @@ export default function MainPage() {
             {isFormDisabled && message ? (
 
                 <div className="flex justify-center items-center mb-6">
-                    <div className="text-center text-gray-700 text-3xl">
+                    <div className="text-center text-[#004d66] text-3xl">
                         {message}
                     </div>
                 </div>
@@ -964,11 +965,13 @@ export default function MainPage() {
 
 
             {admin ? (
+                
                 <div
                     style={{
                         boxShadow: '1px 5px 5px 8px rgba(0, 0, 0, 0.2)',
-                        opacity: isFormDisabled ? 0.5 : 1,
-                        pointerEvents: isFormDisabled ? 'none' : 'auto',
+                        // opacity: isFormDisabled ? 0.5 : 1,
+                        display: isFormDisabled ? "none" : "",
+                        // pointerEvents: isFormDisabled ? 'none' : 'auto',
                     }}
                     className={`mx-auto w-[95%] lg:w-3/5 md:w-4/5 sm:w-4/5 p-8 bg-[#eefcfd] shadow-2xl rounded-xl relative ${isFormDisabled ? 'opacity-50' : ''
                         }`}
@@ -1254,8 +1257,15 @@ export default function MainPage() {
             )}
 
 
+{
+    admin?  
+    isFormDisabled? (
 
-
+        <NotifyBox/>
+    ):(
+        null
+    ): null
+}
 
 
             <div>
