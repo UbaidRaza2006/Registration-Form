@@ -222,20 +222,20 @@ export default function MainPage() {
 
     // const handleImageUpload = async (e) => {
     //     setImageLoading(true);
-    
+
     //     const file = e.target.files[0];
-    
+
     //     // Preview the image locally before uploading
     //     const localImageUrl = URL.createObjectURL(file);
     //     setImage(localImageUrl); // This will immediately show the image in the UI
-    
+
     //     // Now proceed with the Cloudinary upload
     //     const formData = new FormData();
     //     formData.append('file', file);
     //     formData.append('upload_preset', 'Rizwan_Tayyab');
-    
+
     //     const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
-        
+
     //     try {
     //         const response = await fetch(
     //             `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
@@ -245,14 +245,14 @@ export default function MainPage() {
     //             }
     //         );
     //         const data = await response.json();
-    
+
     //         console.log("Data.response from Cloudinary:", data.secure_url);
-    
+
     //         // Set the image URL received from Cloudinary
     //         if (data.secure_url) {
     //             setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
     //         }
-    
+
     //         // Update the form data with the Cloudinary image URL
     //         if (data.secure_url) {
     //             setFormData(prevFormData => ({
@@ -271,9 +271,9 @@ export default function MainPage() {
     //                 transition: Bounce,
     //               })
     //         }
-    
+
     //         setImageLoading(false);
-    
+
     //     } catch (error) {
     //         setImageLoading(false);
     //         console.error('Error uploading image to Cloudinary:', error);
@@ -290,7 +290,7 @@ export default function MainPage() {
     //         });
     //     }
     // };
-    
+
 
     // // Function to convert an image URL to base64
 
@@ -319,20 +319,20 @@ export default function MainPage() {
 
     const handleImageUpload = async (e) => {
         setImageLoading(true);
-    
+
         const file = e.target.files[0];
-    
+
         // Preview the image locally before uploading
         const localImageUrl = URL.createObjectURL(file);
         setImage(localImageUrl); // This will immediately show the image in the UI
-    
+
         // Now proceed with the Cloudinary upload
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'Rizwan_Tayyab');
-    
+
         const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
-        
+
         try {
             const response = await fetch(
                 `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
@@ -342,14 +342,14 @@ export default function MainPage() {
                 }
             );
             const data = await response.json();
-    
+
             console.log("Data.response from Cloudinary:", data.secure_url);
-    
+
             // Set the image URL received from Cloudinary
             if (data.secure_url) {
                 setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
             }
-    
+
             // Update the form data with the Cloudinary image URL
             if (data.secure_url) {
                 setFormData(prevFormData => ({
@@ -366,11 +366,11 @@ export default function MainPage() {
                     progress: undefined,
                     theme: "light",
                     transition: Bounce,
-                  })
+                })
             }
-    
+
             setImageLoading(false);
-    
+
         } catch (error) {
             setImageLoading(false);
             console.error('Error uploading image to Cloudinary:', error);
@@ -966,7 +966,7 @@ export default function MainPage() {
 
 
             {admin ? (
-                
+
                 <div
                     style={{
                         boxShadow: '1px 5px 5px 8px rgba(0, 0, 0, 0.2)',
@@ -1074,7 +1074,9 @@ export default function MainPage() {
                         </div>
 
                         <div className="relative h-14">
-                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">Date Of Birth</p>
+                            <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">
+                                Date Of Birth
+                            </p>
                             <Input
                                 className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300 color-black"
                                 type="date"
@@ -1083,6 +1085,13 @@ export default function MainPage() {
                                 value={formData.dateOfBirth}
                                 onChange={(event) => setFormData({ ...formData, dateOfBirth: event.target.value })}
                             />
+                            <style>
+                                {`
+      #dateInput::-webkit-calendar-picker-indicator {
+        filter: invert(100%);
+      }
+    `}
+                            </style>
                         </div>
 
                         <div className="relative h-14">
@@ -1258,15 +1267,15 @@ export default function MainPage() {
             )}
 
 
-{
-    admin?  
-    isFormDisabled? (
+            {
+                admin ?
+                    isFormDisabled ? (
 
-        <NotifyBox/>
-    ):(
-        null
-    ): null
-}
+                        <NotifyBox />
+                    ) : (
+                        null
+                    ) : null
+            }
 
 
             <div>
