@@ -1061,26 +1061,37 @@ export default function MainPage() {
   <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">
     City
   </p>
-  <Input 
+  <Input
     className="h-10 placeholder-gray-400 w-full pt-4 pr-4 pb-4 pl-4 mr-0 ml-0 text-base block bg-inherit border-2 border-gray-300"
     type="text"
     id="cityInput"
     placeholder="City"
     value={formData.city}
-    style={{
-      '&.ant-input-autofill': {
-        backgroundColor: 'inherit',
-        WebkitBoxShadow: '0 0 0 1000px transparent inset'
-      }
-    }}
     onChange={(event) => {
       const formattedCity = event.target.value
-        .replace(/[^a-zA-Z\s]/g, '') 
-        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+        .replace(/[^a-zA-Z\s]/g, "") // Remove non-alphanumeric characters
+        .replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()); // Capitalize first letter, lowercase remaining
       setFormData({ ...formData, city: formattedCity });
+    }}
+    style={{
+      backgroundColor: 'inherit',
     }}
   />
 </div>
+
+<style jsx>
+{`
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px inherit inset !important;
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+`}
+</style>
+
 
                         <div className="relative h-14">
                             <p className="pt-0 pr-2 pb-0 pl-2 absolute mt-[-22px] mr-0 mb-0 ml-2 font-medium text-gray-600 bg-inherit">
