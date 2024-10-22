@@ -1223,10 +1223,11 @@ useEffect(() => {
 
 
   return (
-    <div style={{}}>
+    <div className = "pt-4 bg-[#9ec6f1]">
 
 
       <DynamicModal
+      className = 'bg-[#9ec6f1]'
         title="Admin Login"
         visible={modalOpen}
         footer={null}
@@ -1270,6 +1271,7 @@ useEffect(() => {
       {!modalOpen && !loading ? (
         <>
           <div
+           className="bg-[#9ec6f1] mt-[-16px]"
           //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
           >
             <SideNavbarComponent />
@@ -1277,9 +1279,9 @@ useEffect(() => {
 
 
           {/* Cards */}
-          <div className="flex justify-between space-x-4 ml-28 mr-8 mt-4">
+          <div className="flex justify-between space-x-4 ml-28 mr-8 mt-6">
             {/* First card */}
-            <div className="flex-1 bg-white rounded-lg p-4 shadow-md">
+            <div className="flex-1 bg-white rounded-lg p-4 shadow-md ">
               <h2 className="text-xl font-bold text-gray-800">Students</h2>
               <p className="text-4xl font-bold text-blue-600">{allUsers.length}</p>
             </div>
@@ -1299,7 +1301,7 @@ useEffect(() => {
 
 
           {/* Search Bar */}
-          <div className="mx-auto flex space-x-2 items-center mt-7 ml-[8%]">
+          <div className="mx-auto flex space-x-2 items-center mt-3 ml-[8%]">
 
             <div className="flex space-x-2 items-center bg-blue-500 w-[65%] mt-4 p-4 rounded-md shadow-md">
               {/* City */}
@@ -1465,8 +1467,8 @@ useEffect(() => {
             {/* <MyAntTable/> */}
             {allUsers.length > 0 ? <Table
               style={{
-                marginLeft: "8.5%",
-                width: "90%",
+                marginLeft: "9.5%",
+                width: "88.5%",
                 // backgroundColor:"yellow",
               }}
               dataSource={allUsers}
@@ -1488,11 +1490,11 @@ useEffect(() => {
 
               <div className="flex justify-center items-center h-screen ml-24">
                 <div className="flex mt-[-300px] space-x-4">
-                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
-                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
-                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
-                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                  <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div>
+                  <div className="loader-dot w-7 h-7 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
+                  <div className="loader-dot w-7 h-7 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
+                  <div className="loader-dot w-7 h-7 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
+                  <div className="loader-dot w-7 h-7 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                  {/* <div className="loader-dot w-5 h-5 bg-gray-800 rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '1.2s' }}></div> */}
                 </div>
               </div>
 
@@ -1512,12 +1514,12 @@ useEffect(() => {
           </div>
         </>
       ) :  loading ? (
-        <div className="h-[120px] w-[100%] flex items-center space-x-3 justify-center pt-[310px] mt-[-10px]">
+        <div className="h-screen w-[100%] flex items-center space-x-3 justify-center bg-[#9ec6f1]">
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.3s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.6s' }}></div>
                     <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
-                    <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div>
+                    {/* <div className="loader-dot w-7 h-7 bg-[#1f596b] rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out', animationDelay: '0.9s' }}></div> */}
                 </div>
       ):(
         null

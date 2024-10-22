@@ -53,16 +53,16 @@ export async function POST(req) {
             }
     
 
-            //          const sameCourse=await Course.findOne({course:course})
+                     const sameContact=await Inform.findOne({contact:contact})
 
-            // if(sameCourse){
+            if(sameContact){
 
-            //     return NextResponse.json({
-            //         success: false,
-            //         message: "The Course Already exists!",
-            //     })
+                return NextResponse.json({
+                    success: true,
+                    message: "Already Exists!",
+                })
 
-            // }
+            }
 
 
 
@@ -74,7 +74,7 @@ export async function POST(req) {
                 console.log(contactAdded);
                 return NextResponse.json({
                     success: true,
-                    course:contactAdded,
+                    contact:contactAdded,
                     message: "Submitted Successfully!",
                 })
             }else{

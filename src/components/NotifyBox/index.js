@@ -26,7 +26,8 @@ const NotifyBox = () => {
             });
             
             const data = await response.json();
-            if (data.success) {
+            console.log("data of Contact --> ", data.message)
+            if (data.success && data.message !== "Already Exists!") {
                 setProcess(false);
                 toast.success('Contact No Added!', {
                     position: "top-right",
@@ -39,7 +40,22 @@ const NotifyBox = () => {
                     theme: "light",
                     transition: Bounce,
                 });
-            } else {
+            }
+            else if (data.success && data.message == "Already Exists!"){
+              setProcess(false);
+              toast.success(data.message, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+              });
+            }
+            else {
                 setProcess(false);
                 toast.error(data.message, {
                     position: "top-right",

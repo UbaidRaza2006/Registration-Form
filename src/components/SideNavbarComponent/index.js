@@ -7,6 +7,7 @@ import { ClassroomOutlined } from '@ant-design/icons';
 import {
   UserOutlined,
   LaptopOutlined,
+  PhoneOutlined,
   DownloadOutlined,
   BlockOutlined,
   LockOutlined,
@@ -14,6 +15,8 @@ import {
   LockTwoTone,
   CheckCircleTwoTone,
   StopOutlined,
+  CopyOutlined,
+  CheckOutlined,
   DeleteOutlined,
   NotificationOutlined,
   SettingOutlined,
@@ -59,6 +62,7 @@ function SideNavbarComponent() {
   const [isModalVisible6, setIsModalVisible6] = useState(false);
   const [isModalVisible7, setIsModalVisible7] = useState(false);
   const [isModalVisible9, setIsModalVisible9] = useState(false);
+  const [isModalVisible10, setIsModalVisible10] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -137,6 +141,31 @@ function SideNavbarComponent() {
       display: 'flex',
       flexDirection: 'column'
     }
+  };
+
+
+  const customStyles2 = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1000,
+    },
+    content: {
+      backgroundColor: 'rgba(204, 227, 230, 0.98)',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      border: 'none',
+      borderRadius: '8px',
+      padding: '20px',
+      width: '450px',
+      height: '600px',
+      overflow: 'hidden',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+      color: '#333',
+      fontFamily: 'Georgia, serif',
+      display: 'flex',
+      flexDirection: 'column',
+    },
   };
   
 
@@ -507,6 +536,10 @@ const handlePassword = () => {
       console.log("showModal", par)
       setIsModalVisible9(true)
     }
+    else if (par === 10) {
+      console.log("showModal", par)
+      setIsModalVisible10(true)
+    }
   };
 
   const handleCancel = (par) => {
@@ -541,6 +574,10 @@ const handlePassword = () => {
     else if (par === 9) {
       console.log("closeModal", par)
       setIsModalVisible9(false)
+    }
+    else if (par === 10) {
+      console.log("closeModal", par)
+      setIsModalVisible10(false)
     }
   };
 
@@ -839,10 +876,10 @@ const handlePassword = () => {
         }
       }, [searchTerm, uniqueCities]);
 
-
+ const phoneNumbers = []
 
   return (
-    <Layout style={{ height: '100%', position: 'fixed', marginTop: '-20px' }}>
+    <Layout style={{ height: '100%', position: 'fixed', marginTop: '0px' }}>
       <Sider style={{ backgroundColor: "#0E4C92", paddingTop: '10px', height: "100%" }} width={80} theme="dark">
         <Menu mode="vertical" className='space-y-5' style={{ backgroundColor: "#0E4C92" }} theme="dark" defaultSelectedKeys={['1']}>
           {/* <Menu.Item key="i1" icon={<Image style={{ borderRadius: "20px", marginLeft: '-25%', width: "100%" }}   width={600} height={400} src='/images/BhattiSahab.jpg' alt='User' />} /> */}
@@ -851,6 +888,7 @@ const handlePassword = () => {
           <Menu.Item key="3" icon={<LaptopOutlined />} onClick={() => showModal(3)} />
           <Menu.Item key="4" icon={<GlobalOutlined/>} onClick={() => showModal(7)} />
           <Menu.Item key="6" icon={<DownloadOutlined/>} onClick={() => showModal(9)} />
+          <Menu.Item key="10" icon={<PhoneOutlined/>} onClick={() => showModal(10)} />
           <Menu.Item key="5" icon={api ? (
             <div className="flex items-center space-x-2">
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
@@ -1213,6 +1251,79 @@ const handlePassword = () => {
         </div>
       </ReactModal>
 
+      {/* ye contacts ka he... */}
+      <ReactModal
+  isOpen={isModalVisible10}
+  onRequestClose={() => handleCancel(10)}
+  style={customStyles2}
+>
+  <div className="flex flex-col w-full h-full p-4"> {/* Added padding for better spacing */}
+
+    {/* Close Icon */}
+    <CloseOutlined
+      onClick={() => handleCancel(10)}
+      className="absolute right-2 top-2 text-gray-500 cursor-pointer"
+    />
+
+    {/* Heading */}
+    <h1 className="text-2xl font-bold text-center mb-4">Manage Phone Numbers</h1>
+
+    {/* Input Section for Adding Phone Number */}
+    <div className="flex items-center mb-4">
+      <Input
+        placeholder="Enter phone number"
+        className="flex-grow h-10 border-2 border-[#0e686efa] rounded-l-lg px-2"
+        // onChange={(e) => addPhoneNumber(e.target.value)}
+      />
+      <Button
+        className="rounded-r-lg h-10 bg-[#0e686efa] text-white flex items-center justify-center px-4"
+        icon={<CheckOutlined />}
+        // onClick={() => addPhoneNumber()}
+      />
+    </div>
+
+    {/* Action Buttons (Copy, Delete, Tick) */}
+    <div className="flex justify-end gap-3 mb-4">
+      <Button
+        icon={<CopyOutlined />}
+        // onClick={() => copyPhoneNumber()}
+        className="bg-[#adc7c9fa] text-black hover:bg-[#50b6b9fa] rounded"
+      />
+      <Button
+        icon={<DeleteOutlined />}
+        // onClick={() => removePhoneNumber()}
+        className="bg-[#adc7c9fa] text-black hover:bg-[#50b6b9fa] rounded"
+      />
+    </div>
+
+    {/* Phone Numbers List */}
+    <div className="overflow-y-auto border-2 border-[#0e686efa] bg-[#e2f0f1fa] mx-auto mt-4 rounded-lg shadow-lg w-full h-[50%] p-2">
+      <ul className="divide-y divide-gray-200 list-none">
+        {phoneNumbers.length > 0 ? (
+          phoneNumbers.map((phone, index) => (
+            <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]">
+              <span className="text-lg ml-3">{phone}</span>
+              <span className="flex gap-3 ml-auto">
+                <Button
+                  icon={<CopyOutlined />}
+                  // onClick={() => copyPhoneNumber(phone)}
+                  className="text-black border border-gray-500 rounded hover:bg-[#50b6b9fa]"
+                />
+                <Button
+                  icon={<DeleteOutlined />}
+                  // onClick={() => removePhoneNumber(phone)}
+                  className="text-black border border-gray-500 rounded hover:bg-[#50b6b9fa]"
+                />
+              </span>
+            </li>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No phone numbers available.</p>
+        )}
+      </ul>
+    </div>
+  </div>
+</ReactModal>
 
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
 <AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
