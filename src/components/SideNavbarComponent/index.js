@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button, Input, InputNumber, Layout, Menu, Modal } from 'antd';
+import { message } from 'antd';
 import "./index.css"
-import { ClassroomOutlined } from '@ant-design/icons';
+// import { ClassroomOutlined, LoadingOutlined } from '@ant-design/icons';
 import {
   UserOutlined,
   LaptopOutlined,
+  LoadingOutlined,
   PhoneOutlined,
   DownloadOutlined,
   BlockOutlined,
@@ -90,6 +92,12 @@ function SideNavbarComponent() {
   const [isLoading, setIsLoading] = useState(false);
   // const [selectedItemData, setSelectedItemData] = useState(null)
 
+  const [allContacts , setAllContacts] = useState([])
+  const [contactsToLoad, setContactsToLoad] = useState(false)
+
+  const [process, setProcess] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState('')
+
 
   const customStyles = {
     overlay: {
@@ -163,7 +171,7 @@ function SideNavbarComponent() {
       overflow: 'hidden',
       boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
       color: '#333',
-      fontFamily: 'Georgia, serif',
+      // fontFamily: 'Georgia, serif',
       display: 'flex',
       flexDirection: 'column',
     },
@@ -708,6 +716,7 @@ const handlePassword = () => {
       if(data.success){
       setUniqueCities(data.data)
       console.log("UniqueCities-->",data.data)
+      gettingContacts();
       }
       else{
         console.log(data)
@@ -738,6 +747,179 @@ const handlePassword = () => {
         });
     }
   };
+
+  const gettingContacts = async () => {
+    console.log("gettingContacts");
+    try {
+      const res = await fetch("/api/contacts", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      console.log("gettingContacts ka data-->", data)
+
+      if (data.success) {
+        const contacts = Array.isArray(data.data) ? data.data : [data.data]; // Use data.data directly
+        console.log("allContacts-->", contacts)
+
+
+
+        setAllContacts(contacts);
+        // setContactsToLoad(false)
+      } else {
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+        setAllContacts([]);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+    }
+  };
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    if (phoneNumber.length === 12) {
+        setProcess(true);
+        
+        try {
+            const response = await fetch("/api/addInform", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ contact: phoneNumber }),
+            });
+            
+            const data = await response.json();
+            console.log("data of Contact --> ", data.message)
+            if (data.success && data.message !== "Already Exists!") {
+                setProcess(false);
+                toast.success('Contact No Added!', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+                gettingContacts();
+            }
+            else if (data.success && data.message == "Already Exists!"){
+              setProcess(false);
+              toast.success(data.message, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "light",
+                  transition: Bounce,
+              });
+            }
+            else {
+                setProcess(false);
+                toast.error(data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                });
+            }
+        } catch (e) {
+            setProcess(false);
+            toast.error('Error occurred: ' + e.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+
+        setPhoneNumber('');
+        setProcess(false);
+    } else {
+        toast.error('Enter Complete Phone No!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+    }
+};
+
+
+  const formatPhoneNumber = (input) => {
+    const formattedNumber = input.replace(/\D/g, '').replace(/(\d{4})(\d{7})/, '$1-$2');
+    return formattedNumber;
+};
+
+  const handleChange2 = (event) => {
+    const inputValue = event.target.value
+
+    if (inputValue.length <= 12) {
+        const formattedPhone = formatPhoneNumber(inputValue);
+
+
+        setPhoneNumber(formattedPhone)
+    }
+}
+
+// Function to copy all phone numbers to clipboard
+const copyAllPhoneNumbers = () => {
+  const allNumbers = allContacts.map(contact => contact.contact).join(', ');
+  navigator.clipboard.writeText(allNumbers)
+    .then(() => message.success('All phone numbers copied to clipboard!'))
+    .catch(() => message.error('Failed to copy phone numbers'));
+};
+
+// Function to copy a single phone number
+const copyPhoneNumber = (phoneNumber) => {
+  navigator.clipboard.writeText(phoneNumber)
+    .then(() => message.success(`Phone number ${phoneNumber} copied!`))
+    .catch(() => message.error('Failed to copy phone number'));
+};
+
 
 
   // const handleBatchChange = (index, value) => {
@@ -881,7 +1063,7 @@ const handlePassword = () => {
         }
       }, [searchTerm, uniqueCities]);
 
- const phoneNumbers = [1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, ]
+//  const phoneNumbers = [1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, ]
 
   return (
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '0px' }}>
@@ -1264,6 +1446,10 @@ const handlePassword = () => {
 >
   <div className="flex flex-col w-full h-full p-6">
 
+    {/* Reload icon */}
+    <ReloadOutlined onClick={() => gettingContacts()} className='absolute left-2 top-2 text-gray-500 cursor-pointer' />
+  <p className='absolute left-8 top-2 text-gray-500'>{allContacts.length}</p>
+
     {/* Close Icon */}
     <CloseOutlined
       onClick={() => handleCancel(10)}
@@ -1271,50 +1457,53 @@ const handlePassword = () => {
     />
 
     {/* Heading */}
-    <h1 className="text-2xl font-semibold text-center mb-6 text-[#0e686e] font-serif">Manage Phone Numbers</h1>
+    <h1 className="text-2xl font-semibold text-center mb-6 text-[#0e686e]">Manage Phone Numbers</h1>
 
     {/* Input Section for Adding Phone Number */}
     <div className="flex items-center mb-4 w-full">
       <Input
         placeholder="Enter phone number"
         className="h-10 w-[73%] border-2 border-[#0e686e] rounded-l-md px-4 text-gray-700 focus:ring-2 focus:ring-[#0e686e] focus:outline-none"
-        // onChange={(e) => addPhoneNumber(e.target.value)}
+        type="tel"
+        id="phoneInput"
+        maxLength="12"
+        inputMode="numeric"
+        value={phoneNumber}
+        onChange={handleChange2}
       />
       {/* Tick, Copy, Delete Buttons in Line */}
       <Button
         className="h-10 w-[10%] bg-[#0e686e] text-white hover:bg-[#0c5b62] transition-colors duration-300"
-        icon={<CheckOutlined />}
-        // onClick={() => addPhoneNumber()}
+        onClick={!process ? handleSubmit : null}
+        icon={!process ? (<CheckOutlined />) : (<LoadingOutlined />)}
       />
       <Button
-        className="h-10 w-[10%] bg-[#f5f5f5] text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
-        icon={<CopyOutlined />}
-        // onClick={() => copyPhoneNumber()}
-      />
-      <Button
-        className="h-10 w-[10%] bg-[#f5f5f5] text-[#e74c3c] hover:bg-red-100 transition-colors duration-300 rounded-r-md"
-        icon={<DeleteOutlined />}
-        // onClick={() => removePhoneNumber()}
-      />
+  className="h-10 w-[10%] bg-[#f5f5f5] text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
+  icon={<CopyOutlined />}
+  onClick={copyAllPhoneNumbers} // Move the comment outside
+/>
+<Button
+  className="h-10 w-[10%] bg-[#f5f5f5] text-[#e74c3c] hover:bg-red-100 transition-colors duration-300 rounded-r-md"
+  icon={<DeleteOutlined />}
+/>
+
     </div>
 
     {/* Phone Numbers List */}
     <div className="overflow-y-auto border-2 border-[#0e686e] bg-[#f3f7f8] mx-auto rounded-lg shadow-md w-full h-[73%] p-4">
       <ul className="divide-y divide-gray-300 list-none">
-        {phoneNumbers.length > 0 ? (
-          phoneNumbers.map((phone, index) => (
+        {allContacts.length > 0 ? (
+          allContacts.map((contact, index) => (
             <li key={index} className="py-3 px-2 flex items-center justify-between hover:bg-[#e1eff0] transition-colors duration-300 rounded-md">
-              <span className="text-lg text-gray-800 font-serif">{phone}</span>
+              <span className="text-lg text-gray-800 font-semibold">{contact.contact}</span>
               <span className="flex gap-4">
                 <Button
                   icon={<CopyOutlined />}
-                  // onClick={() => copyPhoneNumber(phone)}
+                  onClick={() => copyPhoneNumber(contact.contact)}
                   className="text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
                 />
                 <Button
                   icon={<DeleteOutlined />}
-                  // onClick={() => removePhoneNumber(phone)}
-                  className="text-[#e74c3c] hover:bg-red-100 transition-colors duration-300"
                 />
               </span>
             </li>
