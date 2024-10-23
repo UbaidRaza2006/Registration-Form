@@ -146,27 +146,32 @@ function SideNavbarComponent() {
 
   const customStyles2 = {
     overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backgroundColor: 'rgba(0, 0, 0, 0.75)',
       zIndex: 1000,
     },
     content: {
-      backgroundColor: 'rgba(204, 227, 230, 0.98)',
-      top: '50%',
+      backgroundColor: 'rgba(248, 251, 252, 0.95)',
+      top: '5%', // Reduced height for more space at the top
       left: '50%',
-      transform: 'translate(-50%, -50%)',
+      bottom: '15%', // Added margin at the bottom
+      transform: 'translate(-50%, 0)',
       border: 'none',
-      borderRadius: '8px',
-      padding: '20px',
-      width: '450px',
-      height: '600px',
+      borderRadius: '12px',
+      padding : '10px',
+      width: '420px',
+      height: '550px', // Further reduced height
       overflow: 'hidden',
-      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+      boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
       color: '#333',
       fontFamily: 'Georgia, serif',
       display: 'flex',
       flexDirection: 'column',
     },
   };
+  
+  
+  
+  
   
 
 
@@ -876,7 +881,7 @@ const handlePassword = () => {
         }
       }, [searchTerm, uniqueCities]);
 
- const phoneNumbers = []
+ const phoneNumbers = [1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, 1111111111111, ]
 
   return (
     <Layout style={{ height: '100%', position: 'fixed', marginTop: '0px' }}>
@@ -1257,73 +1262,74 @@ const handlePassword = () => {
   onRequestClose={() => handleCancel(10)}
   style={customStyles2}
 >
-  <div className="flex flex-col w-full h-full p-4"> {/* Added padding for better spacing */}
+  <div className="flex flex-col w-full h-full p-6">
 
     {/* Close Icon */}
     <CloseOutlined
       onClick={() => handleCancel(10)}
-      className="absolute right-2 top-2 text-gray-500 cursor-pointer"
+      className="absolute right-4 top-4 text-gray-600 cursor-pointer hover:text-red-500 transition-colors duration-300"
     />
 
     {/* Heading */}
-    <h1 className="text-2xl font-bold text-center mb-4">Manage Phone Numbers</h1>
+    <h1 className="text-2xl font-semibold text-center mb-6 text-[#0e686e] font-serif">Manage Phone Numbers</h1>
 
     {/* Input Section for Adding Phone Number */}
-    <div className="flex items-center mb-4">
+    <div className="flex items-center mb-4 w-full">
       <Input
         placeholder="Enter phone number"
-        className="flex-grow h-10 border-2 border-[#0e686efa] rounded-l-lg px-2"
+        className="h-10 w-[73%] border-2 border-[#0e686e] rounded-l-md px-4 text-gray-700 focus:ring-2 focus:ring-[#0e686e] focus:outline-none"
         // onChange={(e) => addPhoneNumber(e.target.value)}
       />
+      {/* Tick, Copy, Delete Buttons in Line */}
       <Button
-        className="rounded-r-lg h-10 bg-[#0e686efa] text-white flex items-center justify-center px-4"
+        className="h-10 w-[10%] bg-[#0e686e] text-white hover:bg-[#0c5b62] transition-colors duration-300"
         icon={<CheckOutlined />}
         // onClick={() => addPhoneNumber()}
       />
-    </div>
-
-    {/* Action Buttons (Copy, Delete, Tick) */}
-    <div className="flex justify-end gap-3 mb-4">
       <Button
+        className="h-10 w-[10%] bg-[#f5f5f5] text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
         icon={<CopyOutlined />}
         // onClick={() => copyPhoneNumber()}
-        className="bg-[#adc7c9fa] text-black hover:bg-[#50b6b9fa] rounded"
       />
       <Button
+        className="h-10 w-[10%] bg-[#f5f5f5] text-[#e74c3c] hover:bg-red-100 transition-colors duration-300 rounded-r-md"
         icon={<DeleteOutlined />}
         // onClick={() => removePhoneNumber()}
-        className="bg-[#adc7c9fa] text-black hover:bg-[#50b6b9fa] rounded"
       />
     </div>
 
     {/* Phone Numbers List */}
-    <div className="overflow-y-auto border-2 border-[#0e686efa] bg-[#e2f0f1fa] mx-auto mt-4 rounded-lg shadow-lg w-full h-[50%] p-2">
-      <ul className="divide-y divide-gray-200 list-none">
+    <div className="overflow-y-auto border-2 border-[#0e686e] bg-[#f3f7f8] mx-auto rounded-lg shadow-md w-full h-[73%] p-4">
+      <ul className="divide-y divide-gray-300 list-none">
         {phoneNumbers.length > 0 ? (
           phoneNumbers.map((phone, index) => (
-            <li key={index} className="py-2 pl-1 pr-6 flex items-center hover:bg-[#adc7c9fa]">
-              <span className="text-lg ml-3">{phone}</span>
-              <span className="flex gap-3 ml-auto">
+            <li key={index} className="py-3 px-2 flex items-center justify-between hover:bg-[#e1eff0] transition-colors duration-300 rounded-md">
+              <span className="text-lg text-gray-800 font-serif">{phone}</span>
+              <span className="flex gap-4">
                 <Button
                   icon={<CopyOutlined />}
                   // onClick={() => copyPhoneNumber(phone)}
-                  className="text-black border border-gray-500 rounded hover:bg-[#50b6b9fa]"
+                  className="text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
                 />
                 <Button
                   icon={<DeleteOutlined />}
                   // onClick={() => removePhoneNumber(phone)}
-                  className="text-black border border-gray-500 rounded hover:bg-[#50b6b9fa]"
+                  className="text-[#e74c3c] hover:bg-red-100 transition-colors duration-300"
                 />
               </span>
             </li>
           ))
         ) : (
-          <p className="text-center text-gray-500">No phone numbers available.</p>
+          <p className="text-center text-gray-500 italic">No phone numbers available.</p>
         )}
       </ul>
     </div>
   </div>
 </ReactModal>
+        
+
+
+
 
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
 <AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
