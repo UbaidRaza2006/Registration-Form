@@ -25,7 +25,7 @@ export async function GET(req) {
 //   const skip = (page -1) * limit;
 
   try {
-          const contacts = await Inform.find()
+          const contacts = await Inform.find().sort({_id: -1})
         //   .skip(skip).limit(limit).toArray();
           if (contacts.length > 0) {
               return NextResponse.json({

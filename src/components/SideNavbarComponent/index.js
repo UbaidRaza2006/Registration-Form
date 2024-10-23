@@ -48,6 +48,7 @@ import InputComponent from '../InputComponent';
 import { Bounce, toast } from 'react-toastify';
 import DownloadButton from '../DownlaodButton';
 import DownloadModal from '../DownloadModal';
+import DeleteContactModal from '../ContactDelete';
 const { Sider } = Layout;
 
 
@@ -65,6 +66,7 @@ function SideNavbarComponent() {
   const [isModalVisible7, setIsModalVisible7] = useState(false);
   const [isModalVisible9, setIsModalVisible9] = useState(false);
   const [isModalVisible10, setIsModalVisible10] = useState(false);
+  const [isModalVisible11, setIsModalVisible11] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -88,6 +90,7 @@ function SideNavbarComponent() {
   const [batchValues, setBatchValues] = useState(Array(allCourses.length).fill(0));
 
   const [currentUser, setCurrentUser] = useState(null)
+  const [currentContact, setCurrentContact] = useState(null)
   const [isAdding, setIsAdding] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   // const [selectedItemData, setSelectedItemData] = useState(null)
@@ -183,7 +186,7 @@ function SideNavbarComponent() {
   
 
 
-  const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad, sideNavbarCity,setSideNavbarCity } = usePassword();
+  const { api, setApi, allowAdmission, setAllowAdmission, coursesToLoad, setCoursesToLoad, sideNavbarCity,setSideNavbarCity, contactLoad, setContactLoad } = usePassword();
 
   console.log(inputCondition)
   console.log(inputPassword)
@@ -206,6 +209,15 @@ function SideNavbarComponent() {
       gettingCourses();
     }
   }, [coursesToLoad])
+
+  useEffect(() => {
+    console.log("contactLoad-->", contactLoad)
+
+    if (contactLoad) {
+      console.log("gettingContacts()")
+      gettingContacts();
+    }
+  }, [contactLoad])
 
   useEffect(() => {
     gettingAdmin();
@@ -553,6 +565,12 @@ const handlePassword = () => {
       console.log("showModal", par)
       setIsModalVisible10(true)
     }
+    else if (par === 11) {
+      console.log("showModal", par)
+      setCurrentContact(itemData)
+      setIsModalVisible11(true)
+
+    }
   };
 
   const handleCancel = (par) => {
@@ -591,6 +609,10 @@ const handlePassword = () => {
     else if (par === 10) {
       console.log("closeModal", par)
       setIsModalVisible10(false)
+    }
+    else if (par === 11) {
+      console.log("closeModal", par)
+      setIsModalVisible11(false)
     }
   };
 
@@ -765,7 +787,7 @@ const handlePassword = () => {
 
 
         setAllContacts(contacts);
-        // setContactsToLoad(false)
+        setContactLoad(false)
       } else {
         toast.error(data.message, {
           position: "top-right",
@@ -779,6 +801,8 @@ const handlePassword = () => {
           transition: Bounce,
           });
         setAllContacts([]);
+        setContactLoad(false)
+
       }
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -908,16 +932,73 @@ const handlePassword = () => {
 // Function to copy all phone numbers to clipboard
 const copyAllPhoneNumbers = () => {
   const allNumbers = allContacts.map(contact => contact.contact).join(', ');
+
   navigator.clipboard.writeText(allNumbers)
-    .then(() => message.success('All phone numbers copied to clipboard!'))
-    .catch(() => message.error('Failed to copy phone numbers'));
+    .then(() => {
+      // alert('All phone numbers copied to clipboard!');  // Success notification
+      toast.success('All phone numbers copied to clipboard!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      console.log(`Copied to clipboard: ${allNumbers}`); // Optional logging for debugging
+    })
+    .catch(() => {
+      // alert('Failed to copy phone numbers');  // Error notification
+      toast.error('Failed to copy phone numbers', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      console.error('Failed to copy phone numbers'); // Optional error logging
+    });
 };
 
 // Function to copy a single phone number
 const copyPhoneNumber = (phoneNumber) => {
   navigator.clipboard.writeText(phoneNumber)
-    .then(() => message.success(`Phone number ${phoneNumber} copied!`))
-    .catch(() => message.error('Failed to copy phone number'));
+    .then(() => {
+      // alert(`Phone number ${phoneNumber} copied!`);
+      toast.success(`Phone number ${phoneNumber} copied!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      console.log(`Phone number ${phoneNumber} copied!`);
+    })
+    .catch(() => {
+      alert('Failed to copy phone number');
+      toast.error('Failed to copy phone number', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      console.error('Failed to copy phone number');
+    });
 };
 
 
@@ -1503,6 +1584,7 @@ const copyPhoneNumber = (phoneNumber) => {
                   className="text-[#0e686e] hover:bg-gray-200 transition-colors duration-300"
                 />
                 <Button
+                onClick={()=>{showModal(11, contact)}}
                   icon={<DeleteOutlined />}
                 />
               </span>
@@ -1523,6 +1605,7 @@ const copyPhoneNumber = (phoneNumber) => {
 <BatchModal isOpen={isModalVisible4} onClose={()=>{handleCancel(4)}} user={currentUser}/>
 <AdmissionModal isOpen={isModalVisible5} onClose={()=>{handleCancel(5)}} user={currentUser}/>
 <DeleteModal isOpen={isModalVisible6} onClose={()=>{handleCancel(6)}} user={currentUser}/>
+  <DeleteContactModal isOpen={isModalVisible11} onClose={()=>{handleCancel(11)}} user={currentContact}/>
   <DownloadModal isOpen={isModalVisible9} onClose={()=>{handleCancel(9)}}/>
 
     </Layout>
