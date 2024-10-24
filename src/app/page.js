@@ -16,7 +16,9 @@ import IdCardModal from "../components/IdCardComponent";
 import { Bounce, toast } from "react-toastify";
 import dotenv from 'dotenv'
 import ImageUpload from "../components/Abc";
-import ReactCrop from 'react-image-crop';
+// import ReactCrop from 'react-image-crop';
+// import 'react-image-crop/dist/ReactCrop.css';
+import ImageCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
@@ -73,9 +75,12 @@ export default function MainPage() {
     const [currentUser, setCurrentUser] = useState(null)
 
 
-    const [src, setSrc] = useState(null); // For previewing the selected image before cropping
-    const [crop, setCrop] = useState({ aspect: 1.6 }); // Set the aspect ratio to the ID card size
-    const [completedCrop, setCompletedCrop] = useState(null);
+    // const [src, setSrc] = useState(null); // For previewing the selected image before cropping
+    // const [crop, setCrop] = useState({ aspect: 1.6 }); // Set the aspect ratio to the ID card size
+    // const [completedCrop, setCompletedCrop] = useState(null);
+
+    const [crop, setCrop] = useState({ aspect: 4 / 5 }); // Fixed aspect ratio for passport-size
+  const [croppedImage, setCroppedImage] = useState(null);
     const [imageLoading, setImageLoading] = useState(false);
 
     // const [loading1, setLoading1] = useState(false);
@@ -317,82 +322,166 @@ export default function MainPage() {
     //     }
     // };
 
-    const handleImageUpload = async (e) => {
-        setImageLoading(true);
+    // These two below were working and are committed on 24-10-2024
 
-        const file = e.target.files[0];
+    // const handleImageUpload = async (e) => {
+    //     setImageLoading(true);
 
-        // Preview the image locally before uploading
-        const localImageUrl = URL.createObjectURL(file);
-        setImage(localImageUrl); // This will immediately show the image in the UI
+    //     const file = e.target.files[0];
 
-        // Now proceed with the Cloudinary upload
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'Rizwan_Tayyab');
+    //     // Preview the image locally before uploading
+    //     const localImageUrl = URL.createObjectURL(file);
+    //     setImage(localImageUrl); // This will immediately show the image in the UI
 
-        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+    //     // Now proceed with the Cloudinary upload
+    //     const formData = new FormData();
+    //     formData.append('file', file);
+    //     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-        try {
-            const response = await fetch(
-                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
-            const data = await response.json();
+    //     const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 
-            console.log("Data.response from Cloudinary:", data.secure_url);
+    //     try {
+    //         const response = await fetch(
+    //             `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+    //             {
+    //                 method: 'POST',
+    //                 body: formData,
+    //             }
+    //         );
+    //         const data = await response.json();
 
-            // Set the image URL received from Cloudinary
-            if (data.secure_url) {
-                setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
-            }
+    //         console.log("Data.response from Cloudinary:", data.secure_url);
 
-            // Update the form data with the Cloudinary image URL
-            if (data.secure_url) {
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    imageUrl: data.secure_url,
-                }));
-                toast.success("Image added", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                    transition: Bounce,
-                })
-            }
+    //         // Set the image URL received from Cloudinary
+    //         if (data.secure_url) {
+    //             setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
+    //         }
 
-            setImageLoading(false);
+    //         // Update the form data with the Cloudinary image URL
+    //         if (data.secure_url) {
+    //             setFormData(prevFormData => ({
+    //                 ...prevFormData,
+    //                 imageUrl: data.secure_url,
+    //             }));
+    //             toast.success("Image added", {
+    //                 position: "top-right",
+    //                 autoClose: 5000,
+    //                 hideProgressBar: false,
+    //                 closeOnClick: true,
+    //                 pauseOnHover: true,
+    //                 draggable: true,
+    //                 progress: undefined,
+    //                 theme: "light",
+    //                 transition: Bounce,
+    //             })
+    //         }
 
-        } catch (error) {
-            setImageLoading(false);
-            console.error('Error uploading image to Cloudinary:', error);
-            toast.error(error, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
-            });
-        }
-    };
+    //         setImageLoading(false);
+
+    //     } catch (error) {
+    //         setImageLoading(false);
+    //         console.error('Error uploading image to Cloudinary:', error);
+    //         toast.error(error, {
+    //             position: "top-right",
+    //             autoClose: 5000,
+    //             hideProgressBar: false,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: "light",
+    //             transition: Bounce,
+    //         });
+    //     }
+    // };
 
 
     const triggerFileInput = () => {
         document.getElementById('file-upload').click();
     };
 
+
+      // Function to handle file input and local preview
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const localImageUrl = URL.createObjectURL(file);
+      setImage(localImageUrl);
+    }
+  };
+
+  // Function to crop and upload the image
+  const handleImageCropAndUpload = async () => {
+    if (!croppedImage) return;
+
+    // Converting the cropped area to a file object
+    const blob = await getCroppedImageBlob(croppedImage, crop);
+    const formData = new FormData();
+    formData.append('file', blob);
+    formData.append('upload_preset', 'Rizwan_Tayyab');
+
+    setImageLoading(true);
+    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+      const data = await response.json();
+
+      // Update the form data with the Cloudinary image URL
+      if (data.secure_url) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          imageUrl: data.secure_url,
+        }));
+        toast.success('Image added', {
+          position: 'top-right',
+          autoClose: 5000,
+        });
+      }
+      setImageLoading(false);
+    } catch (error) {
+      setImageLoading(false);
+      console.error('Error uploading image:', error);
+      toast.error('Error uploading image', {
+        position: 'top-right',
+        autoClose: 5000,
+      });
+    }
+  };
+
+  // Helper function to crop the image
+  const getCroppedImageBlob = (image, crop) => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
+      canvas.width = crop.width;
+      canvas.height = crop.height;
+      const ctx = canvas.getContext('2d');
+
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
+
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, 'image/jpeg');
+    });
+  };
 
 
 
@@ -1198,7 +1287,9 @@ export default function MainPage() {
 
                     </div>
 
-                    <div
+        {/* This is the Upload Component working properly , committed on 24-10-2024 */}
+
+                    {/* <div
                         className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
                         onClick={triggerFileInput}
                     >
@@ -1234,7 +1325,62 @@ export default function MainPage() {
           object-fit: cover;
         }
       `}</style>
-                    </div>
+                    </div> */}
+
+<div className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
+                        onClick={triggerFileInput}
+>
+      {!image ? (
+        <label className="text-gray-600 cursor-pointer flex items-center justify-center">
+          Upload <PlusOutlined className="ml-2" />
+        </label>
+      ) : (
+        <div className="crop-container">
+          <ImageCrop
+            src={image}
+            crop={crop}
+            onChange={setCrop}
+            onImageLoaded={setCroppedImage}
+          />
+          <button onClick={handleImageCropAndUpload} className="upload-btn">
+            Upload Cropped Image
+          </button>
+        </div>
+      )}
+      <input
+        id="file-upload"
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleImageUpload}
+      />
+      <style jsx>{`
+        .image-upload-container {
+          width: 130px;
+          height: 150px;
+          border: 2px solid #cfcece;
+          border-radius: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+        }
+        .crop-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .upload-btn {
+          margin-top: 10px;
+          padding: 6px 12px;
+          background-color: #0e686e;
+          color: white;
+          border: none;
+          cursor: pointer;
+          border-radius: 6px;
+        }
+      `}</style>
+    </div>
 
                     {registering ? (
                         <button
