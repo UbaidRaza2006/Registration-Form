@@ -324,164 +324,164 @@ export default function MainPage() {
 
     // These two below were working and are committed on 24-10-2024
 
-    // const handleImageUpload = async (e) => {
-    //     setImageLoading(true);
+    const handleImageUpload = async (e) => {
+        setImageLoading(true);
 
-    //     const file = e.target.files[0];
+        const file = e.target.files[0];
 
-    //     // Preview the image locally before uploading
-    //     const localImageUrl = URL.createObjectURL(file);
-    //     setImage(localImageUrl); // This will immediately show the image in the UI
+        // Preview the image locally before uploading
+        const localImageUrl = URL.createObjectURL(file);
+        setImage(localImageUrl); // This will immediately show the image in the UI
 
-    //     // Now proceed with the Cloudinary upload
-    //     const formData = new FormData();
-    //     formData.append('file', file);
-    //     formData.append('upload_preset', 'Rizwan_Tayyab');
+        // Now proceed with the Cloudinary upload
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'Rizwan_Tayyab');
 
-    //     const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+        const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 
-    //     try {
-    //         const response = await fetch(
-    //             `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-    //             {
-    //                 method: 'POST',
-    //                 body: formData,
-    //             }
-    //         );
-    //         const data = await response.json();
+        try {
+            const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
+            const data = await response.json();
 
-    //         console.log("Data.response from Cloudinary:", data.secure_url);
+            console.log("Data.response from Cloudinary:", data.secure_url);
 
-    //         // Set the image URL received from Cloudinary
-    //         if (data.secure_url) {
-    //             setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
-    //         }
+            // Set the image URL received from Cloudinary
+            if (data.secure_url) {
+                setImage(data.secure_url); // Replace local preview with the Cloudinary URL once upload completes
+            }
 
-    //         // Update the form data with the Cloudinary image URL
-    //         if (data.secure_url) {
-    //             setFormData(prevFormData => ({
-    //                 ...prevFormData,
-    //                 imageUrl: data.secure_url,
-    //             }));
-    //             toast.success("Image added", {
-    //                 position: "top-right",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //                 theme: "light",
-    //                 transition: Bounce,
-    //             })
-    //         }
+            // Update the form data with the Cloudinary image URL
+            if (data.secure_url) {
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    imageUrl: data.secure_url,
+                }));
+                toast.success("Image added", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    transition: Bounce,
+                })
+            }
 
-    //         setImageLoading(false);
+            setImageLoading(false);
 
-    //     } catch (error) {
-    //         setImageLoading(false);
-    //         console.error('Error uploading image to Cloudinary:', error);
-    //         toast.error(error, {
-    //             position: "top-right",
-    //             autoClose: 5000,
-    //             hideProgressBar: false,
-    //             closeOnClick: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             progress: undefined,
-    //             theme: "light",
-    //             transition: Bounce,
-    //         });
-    //     }
-    // };
+        } catch (error) {
+            setImageLoading(false);
+            console.error('Error uploading image to Cloudinary:', error);
+            toast.error(error, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+    };
 
 
     const triggerFileInput = () => {
         document.getElementById('file-upload').click();
     };
 
+// // WORKING ON THIS..
+//       // Function to handle file input and local preview
+//   const handleImageUpload = (e) => {
+//     const file = e.target.files[0];
+//     if (file) {
+//       const localImageUrl = URL.createObjectURL(file);
+//       setImage(localImageUrl);
+//     }
+//   };
 
-      // Function to handle file input and local preview
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const localImageUrl = URL.createObjectURL(file);
-      setImage(localImageUrl);
-    }
-  };
+//   // Function to crop and upload the image
+//   const handleImageCropAndUpload = async () => {
+//     if (!croppedImage) return;
 
-  // Function to crop and upload the image
-  const handleImageCropAndUpload = async () => {
-    if (!croppedImage) return;
+//     // Converting the cropped area to a file object
+//     const blob = await getCroppedImageBlob(croppedImage, crop);
+//     const formData = new FormData();
+//     formData.append('file', blob);
+//     formData.append('upload_preset', 'Rizwan_Tayyab');
 
-    // Converting the cropped area to a file object
-    const blob = await getCroppedImageBlob(croppedImage, crop);
-    const formData = new FormData();
-    formData.append('file', blob);
-    formData.append('upload_preset', 'Rizwan_Tayyab');
+//     setImageLoading(true);
+//     const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
 
-    setImageLoading(true);
-    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_NAME;
+//     try {
+//       const response = await fetch(
+//         `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
+//         {
+//           method: 'POST',
+//           body: formData,
+//         }
+//       );
+//       const data = await response.json();
 
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${cloud}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-      const data = await response.json();
+//       // Update the form data with the Cloudinary image URL
+//       if (data.secure_url) {
+//         setFormData((prevFormData) => ({
+//           ...prevFormData,
+//           imageUrl: data.secure_url,
+//         }));
+//         toast.success('Image added', {
+//           position: 'top-right',
+//           autoClose: 5000,
+//         });
+//       }
+//       setImageLoading(false);
+//     } catch (error) {
+//       setImageLoading(false);
+//       console.error('Error uploading image:', error);
+//       toast.error('Error uploading image', {
+//         position: 'top-right',
+//         autoClose: 5000,
+//       });
+//     }
+//   };
 
-      // Update the form data with the Cloudinary image URL
-      if (data.secure_url) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          imageUrl: data.secure_url,
-        }));
-        toast.success('Image added', {
-          position: 'top-right',
-          autoClose: 5000,
-        });
-      }
-      setImageLoading(false);
-    } catch (error) {
-      setImageLoading(false);
-      console.error('Error uploading image:', error);
-      toast.error('Error uploading image', {
-        position: 'top-right',
-        autoClose: 5000,
-      });
-    }
-  };
+//   // Helper function to crop the image
+//   const getCroppedImageBlob = (image, crop) => {
+//     return new Promise((resolve) => {
+//       const canvas = document.createElement('canvas');
+//       const scaleX = image.naturalWidth / image.width;
+//       const scaleY = image.naturalHeight / image.height;
+//       canvas.width = crop.width;
+//       canvas.height = crop.height;
+//       const ctx = canvas.getContext('2d');
 
-  // Helper function to crop the image
-  const getCroppedImageBlob = (image, crop) => {
-    return new Promise((resolve) => {
-      const canvas = document.createElement('canvas');
-      const scaleX = image.naturalWidth / image.width;
-      const scaleY = image.naturalHeight / image.height;
-      canvas.width = crop.width;
-      canvas.height = crop.height;
-      const ctx = canvas.getContext('2d');
+//       ctx.drawImage(
+//         image,
+//         crop.x * scaleX,
+//         crop.y * scaleY,
+//         crop.width * scaleX,
+//         crop.height * scaleY,
+//         0,
+//         0,
+//         crop.width,
+//         crop.height
+//       );
 
-      ctx.drawImage(
-        image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width,
-        crop.height
-      );
-
-      canvas.toBlob((blob) => {
-        resolve(blob);
-      }, 'image/jpeg');
-    });
-  };
+//       canvas.toBlob((blob) => {
+//         resolve(blob);
+//       }, 'image/jpeg');
+//     });
+//   };
 
 
 
@@ -1289,7 +1289,7 @@ export default function MainPage() {
 
         {/* This is the Upload Component working properly , committed on 24-10-2024 */}
 
-                    {/* <div
+                    <div
                         className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
                         onClick={triggerFileInput}
                     >
@@ -1325,9 +1325,11 @@ export default function MainPage() {
           object-fit: cover;
         }
       `}</style>
-                    </div> */}
+                    </div>
 
-<div className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
+                    {/* WORKING ON THIS.... */}
+
+{/* <div className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
                         onClick={triggerFileInput}
 >
       {!image ? (
@@ -1380,7 +1382,7 @@ export default function MainPage() {
           border-radius: 6px;
         }
       `}</style>
-    </div>
+    </div> */}
 
                     {registering ? (
                         <button
