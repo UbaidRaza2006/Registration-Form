@@ -1350,7 +1350,7 @@ function SideNavbarComponent() {
             </Button>
           </div>
           <div className="w-full h-[250px] overflow-y-auto overflow-x-hidden max-h-[250px] rounded-md border-4 border-[#4d4b4b]"
-          // style={scrollStyles}
+          style={scrollStyles}
           >
             <table className="w-[528px]">
               <thead className='border-b-2 border-[#4d4b4b]'>
