@@ -1045,6 +1045,8 @@ function SideNavbarComponent() {
 
       const data = await response.json()
       if (data.success) {
+        setCourseName("")
+    setCoursesToLoad(true)
         toast.success('Course Added!', {
           position: "top-right",
           autoClose: 5000,
@@ -1301,7 +1303,7 @@ function SideNavbarComponent() {
         contentLabel="Custom Modal"
       >
         <div className="py-4 px-8 bg-white rounded-lg shadow-lg">
-          <h2 className="text-3xl font-serif text-dark-brown mb-6">Add Course</h2>
+          <h2 className="text-3xl font-serif text-[#4d4b4b] mb-6">Add Course - {allCourses.length}</h2>
           <div className="mb-6 flex items-center">
             <Input
               type="text"
@@ -1365,7 +1367,7 @@ function SideNavbarComponent() {
 
                     allCourses.map((item) => (
                       <tr key={item._id} className="border-b border-gray-300"> {/* Added bottom border to each row */}
-                        <td className="px-3 py-3 ">{item.course}</td>
+                        <td className="px-3 py-3 text-[#4d4b4b] font-bold">{item.course}</td>
                         <td className="px-3 py-3 text-center">
                           <div className="flex items-center justify-center ">
 
