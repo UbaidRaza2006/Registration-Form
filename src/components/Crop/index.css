@@ -1,0 +1,155 @@
+.homeMain {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 2em;
+    overflow-y: auto;
+    padding: 2em;
+    overflow-x: hidden;
+    /* background-color: red; */
+}
+
+.tileImages {
+    height: 100%;
+    width: 12em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    overflow-y: auto;
+}
+
+.tileImage {
+    width: 8em;
+    height: 8em;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.section {
+    width: 100%;
+    height: 100%;
+    padding: 0em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0em !important;
+    margin: 0;
+    cursor: pointer;
+}
+
+.section * {
+    cursor: pointer;
+}
+
+.displayImage {
+    color: #00000000;
+    width: 48em;
+    height: 32em;
+    cursor: pointer;
+    object-fit: cover;
+}
+
+.displayImagecont {
+    position: relative;
+    width: 48em;
+    height: 32em;
+    color: #fff;
+    background-color: #353535;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.message {
+    position: absolute;
+    top: 1em;
+    right: 2em;
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid #888;
+}
+
+.mainCropper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    background-color: #000;
+}
+
+.cropCont {
+    width: 600px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-items: center;
+    background-color: #000;
+}
+
+.crop {
+    width: 400px;
+    height: 400px;
+}
+
+input[type="range"] {
+    width: 90%;
+    position: relative;
+}
+
+.cropBtn {
+    position: relative;
+}
+
+.cropperCont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+
+.reactEasyCrop_Container {
+    width: 90%;
+    height: 90%;
+    padding: 2em;
+    margin: auto;
+    background-color: #000;
+}
+
+input[type="range"] {
+    height: 20px;
+    width: 250px;
+    appearance: none;
+    background: #ddd;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 30px;
+    width: 30px;
+    background: #3498db;
+    border: 2px solid #2980b9;
+    border-radius: 50%;
+}
+
+.cropControls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}

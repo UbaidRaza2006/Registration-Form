@@ -20,6 +20,7 @@ import { Bounce, toast } from "react-toastify";
 import dotenv from 'dotenv'
 import { PlusOneOutlined } from "@mui/icons-material";
 import Link from "next/link";
+import Crop from "../../components/Crop";
 
   dotenv.config()
 
@@ -637,6 +638,8 @@ console.log("Image Url ka baap hon----->", paymentImg)
         </button>
         )}
     
+
+    {/* <Crop/> */}
              
     
              {/* {notification && <Notification message={notification.message} success={notification.success} />} */}

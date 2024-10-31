@@ -6,6 +6,7 @@ import { Button, Input, Table } from "antd";
 import IdCard from "../../components/IdCard";
 import { Bounce, toast } from "react-toastify";
 import Link from "next/link";
+import Crop from "../../components/Crop";
 
 function DownloadIdCard() {
   const [registering, setRegistering] = useState(false);
@@ -159,6 +160,8 @@ Download ID Card
 
 {/* Main Content */}
 <div className="w-full flex flex-col items-center py-8 px-4 md:px-0">
+
+
   {/* CNIC Input */}
   <div className="mb-4 w-full max-w-xs md:max-w-md lg:max-w-lg">
     <Input
@@ -178,8 +181,12 @@ Download ID Card
           setInputCnic(formattedCnic);
         }
       }}
-    />
+      />
   </div>
+      
+      {/* To be removed */}
+      
+      {/* <Crop/> */}
 
   {/* Submit Button */}
 
