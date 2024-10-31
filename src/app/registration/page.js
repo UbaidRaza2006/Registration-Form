@@ -1469,7 +1469,6 @@ useEffect(() => {
               style={{
                 marginLeft: "9.5%",
                 width: "88.5%",
-                // backgroundColor:"yellow",
               }}
               dataSource={allUsers}
               columns={columns}

@@ -96,7 +96,7 @@ const formatDateTime = (dateString) => {
     </Space>
   }
 >
-  <div className="p-6">
+  <div className="p-6 text-[#393838]">
     <div className="flex justify-center mb-6">
       <Image
         src={userData.imageUrl}

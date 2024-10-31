@@ -101,7 +101,7 @@ const customStyles = {
       contentLabel="Admission Modal"
     >
        <div className="p-8 w-[450px] mx-auto">
-       <h2 className="text-2xl mb-6 mt-[-15px] text-center">
+       <h2 className="text-2xl mb-6 mt-[-15px] text-center text-[#393838]">
   Do You Want to <span className='text-red-900'>delete</span> Roll # {userToDelete ? (
     <span>
        <span className="text-2xl font-bolder">{userToDelete.rollNo}</span></span>
