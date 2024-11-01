@@ -367,7 +367,9 @@ const updateUser = async (userId) => {
 
 
 
-
+const triggerFileInput = () => {
+  document.getElementById('file-upload').click();
+};
 
 const handleImageUpload = async (e) => {
   const file = e.target.files[0];
@@ -462,9 +464,7 @@ useEffect(() => {
 const isFormValid = () => rollNo.length === 5;
 
 
-const triggerFileInput = () => {
-  document.getElementById('file-upload').click();
-};
+
 
 console.log(imageee);
 console.log("Image Url ka baap hon----->", paymentImg)
