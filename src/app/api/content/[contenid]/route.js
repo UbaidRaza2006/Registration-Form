@@ -8,7 +8,7 @@ import Content from "../../../../models/content";
 
 export async function PUT(request, content) {
   try {
-    await connectToDb
+    await connectToDb();
 
     const contentId = content.params.contentid; // Extract adminId
     const filter = { _id: contentId }; // Build filter
