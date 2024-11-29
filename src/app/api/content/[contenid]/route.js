@@ -1,32 +1,32 @@
-// import { NextResponse } from "next/server";
-// import connectToDb from "../../../../database";
-// import Admin from "../../../../models/admin";
-
 import { NextResponse } from "next/server";
 import connectToDb from "../../../../database";
 import Content from "../../../../models/content";
 
-export async function PUT(request, content) {
+export async function PUT(request, { params }) {
   try {
     await connectToDb();
+    
+    // Correctly access the contentid parameter from params
+    const contentId = params.contenid; // Use "contenid" as per the console output
 
-    const contentId = content.params.contentid; // Extract adminId
-    const filter = { _id: contentId }; // Build filter
+    if (!contentId) {
+      throw new Error('Content ID is missing or invalid.');
+    }
 
-    // Validate request body (optional but recommended)
-    const payload = await request.json();
-    // Perform basic validation here (e.g., required fields)
+    const filter = { _id: contentId }; // Build filter based on contentId
 
+    const payload = await request.json(); // Extract data from request body
+
+    // Perform the update operation
     const result = await Content.findOneAndUpdate(filter, payload, { new: true });
 
     if (!result) {
-      // Handle the case where no matching admin is found
       throw new Error(`Content Image with ID "${contentId}" not found`);
     }
 
     return NextResponse.json({ result, success: true });
   } catch (error) {
-    console.error("Error in editing an Content Image:", error);
+    console.error("Error in editing Content Image:", error);
     return NextResponse.json({ success: false, error: error.message });
   }
 }

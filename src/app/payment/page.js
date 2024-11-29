@@ -220,7 +220,7 @@ const [fullName, setFullName] = useState('');
   }
   else if(userData.success === false){
 
-    setRegistering(true)
+    setRegistering(false)
 
 
     toast.error(userData.message, {
@@ -524,6 +524,7 @@ console.log("Image Url ka baap hon----->", paymentImg)
               <div>
                 {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Roll No</p> */}
                 <AntInputComponent
+                          maxLength={5} // Restrict input to 5 characters
                  type="tel" 
                 className="shadow-md shadow-gray-400"
                   placeholder={"Enter Roll No."}
@@ -540,7 +541,8 @@ console.log("Image Url ka baap hon----->", paymentImg)
               <div >
                 {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Name</p> */}
                 <AntInputComponent
-                className="shadow-md shadow-gray-400"
+                disabled
+                className="shadow-md shadow-gray-400 custom-disabled-input"
                   placeholder={"Enter Name"}
                   style={styles.inputs}
                   value={fullName}
@@ -549,7 +551,8 @@ console.log("Image Url ka baap hon----->", paymentImg)
               <div>
                 {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Course</p> */}
                 <AntInputComponent
-                className="shadow-md shadow-gray-400"
+                disabled
+                className="shadow-md shadow-gray-400 custom-disabled-input"
                   placeholder={"Enter Course"}
                   style={styles.inputs}
                   value={course}
@@ -559,7 +562,8 @@ console.log("Image Url ka baap hon----->", paymentImg)
                 {/* <p style={{ fontSize: "15px", marginLeft: "20px" }}>Batch</p> */}
     
                 <AntInputComponent
-                className="shadow-md shadow-gray-400"
+                disabled
+                className="shadow-md shadow-gray-400 custom-disabled-input"
                   placeholder={"Enter Batch"}
                   style={styles.inputs}
                   value={batch}

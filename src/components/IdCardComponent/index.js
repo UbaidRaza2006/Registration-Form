@@ -26,8 +26,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             borderRadius: '8px',
             padding: '15px',
             maxWidth: '90%',
-            width: '600px',
-            height: "190px",
+            width: '500px',
+            height: "160px",
             maxHeight: '70vh',
             overflow: 'auto',
         }
@@ -214,10 +214,10 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
 
   </div>
 </div>
-            <p className="mt-0 font-boldest text-2xl text-gray-700 ml-0 mr-0 lg:ml-[9%] md:ml-[9%] sm:ml-[9%] lg:mr-[9%] md:mr-[9%] sm:mr-[9%] lg:text-center md:text-center sm:text-center" style={{fontWeight: "bold",}}>For your Registration Details, Download ID Card!</p>
+            <p className="mt-0 font-boldest text-1xl text-gray-700 ml-0 mr-0 lg:ml-[9%] md:ml-[9%] sm:ml-[9%] lg:mr-[9%] md:mr-[9%] sm:mr-[9%] lg:text-center md:text-center sm:text-center" style={{fontWeight: "bold",}}>For your Registration Details, Download ID Card!</p>
             <div className="flex justify-end mt-0">
             <button
-                            className="btn mt-4 text-white text-lg bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-8 tracking-wider border-none"
+                            className="btn mt-8 text-white text-md bg-gradient-to-t from-[#0e303e] to-[#18819b] hover:bg-[#0d4a5b] active:bg-[#092e3e] h-12 rounded-lg mx-auto block px-8 tracking-wider border-none"
                             onClick={handleDownload}
                     disabled={isGenerating}
                         >

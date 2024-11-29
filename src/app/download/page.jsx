@@ -16,12 +16,85 @@ function DownloadIdCard() {
   const [inputCnic, setInputCnic] = useState("");
   const [simpleCnic, setSimpleCnic] = useState("");
   const [usersWithCnic, setUsersWithCnic] = useState([]);
+  const [content, setContent] = useState(null);
+  const [contentImage, setContentImage] = useState("");
 
   useEffect(() => {
     if (inputCnic.length !== 15) {
       setUsersWithCnic([]);
     }
   }, [inputCnic]);
+
+  useEffect(()=>{
+    gettingContent();
+  },[])
+
+  const getBase64Image = async (imageUrl) => {
+    console.log("Function Running!");
+    if (typeof window !== 'undefined') {
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error('Error fetching image for base64 conversion:', error);
+            return null;
+        }
+    } else {
+        console.warn('getBase64Image function is being executed in a non-browser context.');
+        return null;
+    }
+};
+
+  const gettingContent = async () => {
+    console.log("gettingContent")
+    try {
+      const res = await fetch("/api/content", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      console.log("gettingContent ka data-->",data)
+      if (data.success) {
+        // setContentImage(data?.data[0].contentImage)
+        setContent(data?.data[0])
+        const base64Image = await getBase64Image(data?.data[0].contentImage);
+        console.log("Base64 image:", base64Image);
+        setContentImage(base64Image);      }
+      else {
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+    } catch (error) {
+      console.error("Error fetching contentImage:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
 
   const columns = [
     {
@@ -37,7 +110,7 @@ function DownloadIdCard() {
     {
       title: "Action",
       key: "action",
-      render: (text, record) => <IdCard user={record} />,
+      render: (text, record) => <IdCard user={record} contentImage={contentImage} />,
     },
   ];
 

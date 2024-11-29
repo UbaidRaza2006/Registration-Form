@@ -8,6 +8,15 @@
   background-color: #f0eded;
 }
 
+.custom-disabled-input[disabled] {
+  cursor: default; /* Shows the arrow cursor */
+  color: black; /* Keeps the font color the same as before */
+  background-color: inherit; /* Keeps the background color unchanged (optional) */
+  opacity: 1; /* Ensures no transparency effect is applied */
+}
+
+
+
 
 .id-card-modal-overlay {
   position: fixed;

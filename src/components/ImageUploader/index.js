@@ -4,7 +4,7 @@ import Cropper from "react-easy-crop";
 import { toast } from "react-toastify";
 import { PlusOutlined } from "@ant-design/icons";
 
-const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio }) => {
+const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio, trigger, setTrigger }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [croppingImage, setCroppingImage] = useState(null);
     const [croppedBlob, setCroppedBlob] = useState(null);
@@ -31,6 +31,21 @@ const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio }) => {
             setCroppedImageURL(null);
         }
     }, [reset]);
+
+    useEffect(()=>{
+        if(trigger){
+            console.log("trigger")
+            fileInputRef.current.click()
+        }
+    },[trigger])
+
+    useEffect(() => {
+        if (formImage) {
+            setPreviousImage(formImage);
+            // setCroppedBlob(null);
+            // setCroppedImageURL(null);
+        }
+    }, [formImage]);
 
     // Handle file input change and open the modal
     const handleFileChange = (e) => {
@@ -114,6 +129,7 @@ const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio }) => {
                 setPreviousImage(data.secure_url);
                 onImageUpload(data.secure_url);
                 toast.success("Image uploaded successfully!");
+                setTrigger(false);
                 setIsModalOpen(false);
             } else {
                 throw new Error("Failed to upload image.");
@@ -169,9 +185,12 @@ const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio }) => {
                         style={{
                             width: "100%",
                             height: "100%",
-                            objectFit: "cover",
-                            borderRadius: "12px",
-                        }}
+                            objectFit: "cover", // Ensures the image fully covers the container
+                            borderRadius: "12px", // Maintains rounded corners
+                            overflow: "hidden", // Ensures no content spills outside the container
+                            minWidth: "100%", // Force small images to stretch horizontally
+                            minHeight: "100%", // Force small images to stretch vertically
+                          }}
                     />
                 )}
             </div>

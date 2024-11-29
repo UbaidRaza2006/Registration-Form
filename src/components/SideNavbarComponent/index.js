@@ -7,6 +7,7 @@ import "./index.css"
 // import { ClassroomOutlined, LoadingOutlined } from '@ant-design/icons';
 import {
   UserOutlined,
+  IdcardOutlined,
   LaptopOutlined,
   LoadingOutlined,
   PhoneOutlined,
@@ -28,6 +29,7 @@ import {
   SaveOutlined,
   EditOutlined,
   CloseOutlined,
+  UploadOutlined,
   EyeOutlined,
   PlusOutlined,
   ReloadOutlined,
@@ -50,6 +52,7 @@ import DownloadButton from '../DownlaodButton';
 import DownloadModal from '../DownloadModal';
 import DeleteContactModal from '../ContactDelete';
 import DeleteAllContactModal from '../ContactAllDelete';
+import ImageUploader from '../ImageUploader';
 const { Sider } = Layout;
 
 
@@ -69,6 +72,7 @@ function SideNavbarComponent() {
   const [isModalVisible10, setIsModalVisible10] = useState(false);
   const [isModalVisible11, setIsModalVisible11] = useState(false);
   const [isModalVisible12, setIsModalVisible12] = useState(false);
+  const [isModalVisible13, setIsModalVisible13] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -102,6 +106,15 @@ function SideNavbarComponent() {
 
   const [process, setProcess] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState('')
+
+  const [image, setImage] = useState(null); // For storing the uploaded image
+  const [preview, setPreview] = useState(null); // For image preview
+  const [contentImage, setContentImage] = useState("")
+  const [content, setContent] = useState(null)
+  const [resetImage, setResetImage] = useState(false);
+  const [trigger, setTrigger] = useState(false);
+  const [updatingContent, setUpdatingContent] = useState(false)
+  const [downloading, setDownloading] = useState(false)
 
 
   const customStyles = {
@@ -183,6 +196,41 @@ function SideNavbarComponent() {
   };
 
 
+  const handleImageUpload = (image) => {
+    console.log("image form Uploader-->", image)
+    setContentImage(image)
+  };
+
+  const handleRemoveImage = () => {
+    setImage(null);
+    setContentImage("");
+    setResetImage(true)
+    // onRemove(); // Trigger parent function
+  };
+
+  // const handleDone = () => {
+  //   // onClose();
+  // };
+
+  const customStyles3 = {
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.75)",
+      zIndex: 1000,
+    },
+    content: {
+      width: "620px",
+      height: "550px",
+      margin: "auto",
+      borderRadius: "20px",
+      padding: "0",
+      backgroundColor: "linear-gradient(to bottom, #f8f9fa, #e9ecef)",
+      boxShadow: "0 12px 30px rgba(0, 0, 0, 0.4)",
+      display: "flex",
+      flexDirection: "row",
+      overflow: "hidden",
+    },
+  };
+
 
 
 
@@ -230,6 +278,12 @@ function SideNavbarComponent() {
       gettingCities()
     };
   }, [allCourses])
+
+  useEffect(()=>{
+    if(contentImage === ""){
+      gettingContent();
+    }
+}, [uniqueCities])
 
   // useEffect(() => {
   //   if(api){
@@ -351,6 +405,74 @@ function SideNavbarComponent() {
       });
     }
   }
+
+  const updateContentImage = async (contentId) => {
+    try {
+      setUpdatingContent(true)
+      if (contentId) {  // Ensure contentId and contentImage are valid
+        console.log("Updating Content Image...");
+        console.log("Content ID:", contentId);
+        console.log("Content Image:", contentImage);
+  
+        // Make PUT request to update content image
+        let data = await fetch(`/api/content/${contentId}`, {
+          method: "PUT",
+          body: JSON.stringify({contentImage: contentImage}),  // Pass the image data here
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        data = await data.json();
+        console.log("API Response:", data);
+  
+        // If the update is successful
+        if (data.success) {
+          toast.success(`New Image: ${data.result.contentImage}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+          // handleCancel(13)  // Optionally close the modal after success
+        } else {
+          toast.error(data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }
+      } else {
+        console.log("Missing contentId");
+      }
+      setUpdatingContent(false);
+    } catch (error) {
+      console.log("Error:", error);
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+  
 
   // isModalVisible2
   const updateMesssage = async (adminId) => {
@@ -578,6 +700,11 @@ function SideNavbarComponent() {
       setIsModalVisible12(true)
 
     }
+    else if (par === 13) {
+      console.log("showModal", par)
+      setIsModalVisible13(true)
+
+    }
   };
 
   const handleCancel = (par) => {
@@ -625,6 +752,10 @@ function SideNavbarComponent() {
       console.log("closeModal", par)
       setIsModalVisible12(false)
     }
+    else if (par === 13) {
+      console.log("closeModal", par)
+      setIsModalVisible13(false)
+    }
   };
 
   const back = () => {
@@ -667,6 +798,49 @@ function SideNavbarComponent() {
 
     } catch (error) {
       console.error("Error fetching users:", error);
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
+
+  const gettingContent = async () => {
+    console.log("gettingContent")
+    try {
+      const res = await fetch("/api/content", {
+        method: "GET",
+        cache: "no-cache", // Set cache control policy to 'no-cache'
+      });
+      const data = await res.json();
+      console.log("gettingContent ka data-->",data)
+      if (data.success) {
+        setContentImage(data?.data[0].contentImage)
+        setContent(data?.data[0])
+      }
+      else {
+        toast.error(data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+
+    } catch (error) {
+      console.error("Error fetching contentImage:", error);
       toast.error(error, {
         position: "top-right",
         autoClose: 5000,
@@ -1046,7 +1220,7 @@ function SideNavbarComponent() {
       const data = await response.json()
       if (data.success) {
         setCourseName("")
-    setCoursesToLoad(true)
+        setCoursesToLoad(true)
         toast.success('Course Added!', {
           position: "top-right",
           autoClose: 5000,
@@ -1170,6 +1344,7 @@ function SideNavbarComponent() {
           <Menu.Item key="4" icon={<GlobalOutlined />} onClick={() => showModal(7)} />
           <Menu.Item key="6" icon={<DownloadOutlined />} onClick={() => showModal(9)} />
           <Menu.Item key="10" icon={<PhoneOutlined />} onClick={() => showModal(10)} />
+          <Menu.Item key="11" icon={<IdcardOutlined />} onClick={() => showModal(13)} />
           <Menu.Item key="5" icon={api ? (
             <div className="flex items-center space-x-2">
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
@@ -1350,7 +1525,7 @@ function SideNavbarComponent() {
             </Button>
           </div>
           <div className="w-full h-[250px] overflow-y-auto overflow-x-hidden max-h-[250px] rounded-md border-4 border-[#4d4b4b]"
-          style={scrollStyles}
+            style={scrollStyles}
           >
             <table className="w-[528px]">
               <thead className='border-b-2 border-[#4d4b4b]'>
@@ -1612,8 +1787,85 @@ function SideNavbarComponent() {
         </div>
       </ReactModal>
 
+      {/* ye id card ka he */}
+      <ReactModal
+      isOpen={isModalVisible13}
+      onRequestClose={() => handleCancel(13)}
+      style={customStyles3}
+      ariaHideApp={false}
+    >
+      
+      {/* Left Section: Image */}
+      <div className="w-[400px] bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center relative">
+        {/* <div
+          className="w-[90%] h-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden flex justify-center items-center"
+        >
+          <img
+            src="https://via.placeholder.com/400x600" // Replace with dynamic image
+            alt="Preview"
+            className="w-auto h-full object-contain"
+          />
+        </div> */}
+
+<ImageUploader
+ratio={[3,4]} 
+size="450px" 
+formImage={contentImage} 
+onImageUpload={handleImageUpload} 
+reset={resetImage} 
+trigger={trigger}
+setTrigger={setTrigger}
+/>
 
 
+      </div>
+
+      {/* Right Section: Buttons */}
+      <div className="w-1/3 bg-white flex flex-col justify-between py-6 px-4 relative">
+        {/* Close Button */}
+        <button
+          // onClick={onClose}
+          className="absolute right-3 top-3 text-gray-400 hover:text-red-500 transition duration-300"
+        >
+          <CloseOutlined style={{ fontSize: "20px" }} />
+        </button>
+
+        {/* Header */}
+        <h2 className="text-xl font-bold text-gray-800 text-center mb-4 mt-4">
+          Manage Your ID Card
+        </h2>
+
+        {/* Buttons */}
+        <div className="flex flex-col gap-4">
+          <button
+            className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all shadow-md flex justify-center items-center"
+            onClick={()=>{setTrigger(true)}}
+          >
+            <UploadOutlined className="mr-2 text-lg" /> Upload Image
+          </button>
+
+          <button
+            className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-md flex justify-center items-center"
+          >
+            {downloading?null : <DownloadOutlined className="mr-2 text-lg" />} {downloading?"Downloading..." :"Download ID Card"}
+          </button>
+
+          <button
+            className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-md flex justify-center items-center"
+            onClick={()=>{handleRemoveImage()}}
+          >
+            <DeleteOutlined className="mr-2 text-lg" /> Remove Image
+          </button>
+
+          <button
+            className="w-full bg-gradient-to-r from-gray-800 to-gray-900 text-white py-3 rounded-lg hover:from-gray-900 hover:to-black transition-all shadow-md flex justify-center items-center"
+            onClick={()=>{updateContentImage(content._id)}}
+          >
+            {updatingContent? null : <CheckOutlined className="mr-2 text-lg" />} {updatingContent? "Wait...":"Done"}
+          </button>
+        </div>
+      </div>
+    </ReactModal>
 
 
       <BatchModal isOpen={isModalVisible4} onClose={() => { handleCancel(4) }} user={currentUser} />
