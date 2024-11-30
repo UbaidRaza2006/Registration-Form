@@ -16,6 +16,8 @@ import InputComponent from "../../components/InputComponent";
 import { Bounce, toast } from "react-toastify";
 import { useRadioGroup } from "@mui/material";
 import OtherVerificationButton from "../../components/OtherVerificationButton";
+import { useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
 const { Search } = Input;
 
 const { Option } = Select;
@@ -25,6 +27,8 @@ const DynamicModal = dynamic(() => import("antd").then((antd) => antd.Modal), {
 
 
 export default function AdminPage() {
+
+  const router = useRouter();
 
 
   const { api, setApi, coursesToLoad, setCoursesToLoad, sideNavbarCity, setSideNavbarCity } = usePassword();
@@ -985,139 +989,6 @@ export default function AdminPage() {
     resetSelectInputs();
   };
 
-
-
-  const dataSource = [
-    {
-      key: "1",
-      fullName: "Ubaid Raza",
-      fatherName: "Tayyab",
-      cnic: "430133344",
-      phone: "03093322555",
-      course: "Web & App",
-      status: "Pending",
-    },
-    {
-      key: "2",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "3",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "4",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "5",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "6",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "7",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "8",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "9",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "10",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "11",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "12",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "13",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-    {
-      key: "14",
-      fullName: "Rizwan",
-      fatherName: "Bhatti",
-      cnic: "4209872297",
-      phone: "0334309303",
-      course: "Web & App",
-      status: "Approved",
-    },
-
-    // Add more data as needed
-  ];
-
   const columns = [
     {
       title: "Student Name",
@@ -1274,7 +1145,7 @@ useEffect(() => {
            className="bg-[#9ec6f1] mt-[-16px]"
           //  style={{ width: "15%", height: "400px", border: "2px solid red" , backgroundColor : "green", position: "fixed",}}
           >
-            <SideNavbarComponent />
+            <SideNavbarComponent router={router} />
           </div>
 
 

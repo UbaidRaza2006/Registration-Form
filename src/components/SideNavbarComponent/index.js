@@ -15,6 +15,7 @@ import {
   BlockOutlined,
   LockOutlined,
   GlobalOutlined,
+  PictureOutlined,
   LockTwoTone,
   CheckCircleTwoTone,
   StopOutlined,
@@ -29,6 +30,7 @@ import {
   SaveOutlined,
   EditOutlined,
   CloseOutlined,
+  HomeOutlined,
   UploadOutlined,
   EyeOutlined,
   PlusOutlined,
@@ -53,12 +55,15 @@ import DownloadModal from '../DownloadModal';
 import DeleteContactModal from '../ContactDelete';
 import DeleteAllContactModal from '../ContactAllDelete';
 import ImageUploader from '../ImageUploader';
+import { useRouter } from 'next/router';
 const { Sider } = Layout;
 
 
 
 
-function SideNavbarComponent() {
+function SideNavbarComponent({router}) {
+
+  // const router = useRouter();
 
 
   const [isModalVisible1, setIsModalVisible1] = useState(false);
@@ -73,6 +78,7 @@ function SideNavbarComponent() {
   const [isModalVisible11, setIsModalVisible11] = useState(false);
   const [isModalVisible12, setIsModalVisible12] = useState(false);
   const [isModalVisible13, setIsModalVisible13] = useState(false);
+  const [isModalVisible14, setIsModalVisible14] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [inputPassword, setInputPassword] = useState('');
   const [recheckPassword, setRecheckPassword] = useState('');
@@ -115,6 +121,11 @@ function SideNavbarComponent() {
   const [trigger, setTrigger] = useState(false);
   const [updatingContent, setUpdatingContent] = useState(false)
   const [downloading, setDownloading] = useState(false)
+  const [saving, setSaving] = useState(false)
+
+  const [infoImage, setInfoImage] = useState("")
+  const [resetInfoImage, setResetInfoImage] = useState(false);
+
 
 
   const customStyles = {
@@ -199,12 +210,28 @@ function SideNavbarComponent() {
   const handleImageUpload = (image) => {
     console.log("image form Uploader-->", image)
     setContentImage(image)
+    setResetImage(false);
   };
 
   const handleRemoveImage = () => {
+    console.log("Removing..")
     setImage(null);
     setContentImage("");
     setResetImage(true)
+    // onRemove(); // Trigger parent function
+  };
+
+  const handleInfoImageUpload = (imageee) => {
+    console.log("image form Uploader-->", imageee)
+    setInfoImage(imageee)
+    setResetInfoImage(false);
+  };
+
+  const handleRemoveInfoImage = () => {
+    console.log("RemovingInfo..")
+    // setImage(null);
+    setInfoImage("");
+    setResetInfoImage(true)
     // onRemove(); // Trigger parent function
   };
 
@@ -231,6 +258,24 @@ function SideNavbarComponent() {
     },
   };
 
+  // const customStyles4 = {
+  //   overlay: {
+  //     backgroundColor: "rgba(0, 0, 0, 0.8)", // Dark overlay for focus
+  //     zIndex: 1000,
+  //   },
+  //   content: {
+  //     width: "750px",
+  //     height: "450px",
+  //     margin: "auto",
+  //     borderRadius: "15px",
+  //     padding: "0",
+  //     display: "flex",
+  //     flexDirection: "row",
+  //     boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)", // Modern shadow effect
+  //     backgroundColor: "#f9fafb", // Subtle light gray for a clean look
+  //   },
+  // };
+
 
 
 
@@ -245,6 +290,7 @@ function SideNavbarComponent() {
     console.log("admin", admin)
     if (admin) {
       setAdmissionsOpen(admin.admissions)
+      setInfoImage(admin.infoImage)
     }
 
   }, [admin])
@@ -404,6 +450,72 @@ function SideNavbarComponent() {
         transition: Bounce,
       });
     }
+  }
+
+  const updateInfoImage = async (adminId, infoImage) => {
+
+console.log("infoImage", infoImage)
+    setSaving(true);
+    try {
+      
+        let data = await fetch(`/api/admins/${adminId}`, {
+          method: "PUT",
+          body: JSON.stringify({ _id: adminId, infoImage: infoImage }), headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        data = await data.json()
+        console.log(data, `/api/admins/${adminId}`)
+        // console.log("info-->",data);
+        if (data.success) {
+          toast.success(`New Info-Image: ${data.result.infoImage}`, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+          // gettingAdmin()
+          // handleCancel(14)
+          // setInputCondition("verify")
+          // setOpen(false);
+        }
+        else {
+          console.log(data);
+          toast.error(data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }
+      
+      
+    }
+    catch (error) {
+      console.log("error-->", error)
+      toast.error(error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+    setSaving(false);
   }
 
   const updateContentImage = async (contentId) => {
@@ -705,6 +817,11 @@ function SideNavbarComponent() {
       setIsModalVisible13(true)
 
     }
+    else if (par === 14) {
+      console.log("showModal", par)
+      setIsModalVisible14(true)
+
+    }
   };
 
   const handleCancel = (par) => {
@@ -755,6 +872,10 @@ function SideNavbarComponent() {
     else if (par === 13) {
       console.log("closeModal", par)
       setIsModalVisible13(false)
+    }
+    else if (par === 14) {
+      console.log("closeModal", par)
+      setIsModalVisible14(false)
     }
   };
 
@@ -823,6 +944,7 @@ function SideNavbarComponent() {
       console.log("gettingContent ka data-->",data)
       if (data.success) {
         setContentImage(data?.data[0].contentImage)
+        // setContentImage(data?.data[0].infoImage)
         setContent(data?.data[0])
       }
       else {
@@ -854,7 +976,6 @@ function SideNavbarComponent() {
       });
     }
   };
-
 
   const gettingCourses = async () => {
     console.log("gettingCourses");
@@ -1345,6 +1466,8 @@ function SideNavbarComponent() {
           <Menu.Item key="6" icon={<DownloadOutlined />} onClick={() => showModal(9)} />
           <Menu.Item key="10" icon={<PhoneOutlined />} onClick={() => showModal(10)} />
           <Menu.Item key="11" icon={<IdcardOutlined />} onClick={() => showModal(13)} />
+          <Menu.Item key="12" icon={<PictureOutlined />} onClick={() => showModal(14)} />
+          <Menu.Item key="13" icon={<HomeOutlined />} onClick={() => router.push('/')} />
           <Menu.Item key="5" icon={api ? (
             <div className="flex items-center space-x-2">
               <div className="loader-dot w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s', animationIterationCount: 'infinite', animationTimingFunction: 'ease-in-out' }}></div>
@@ -1866,6 +1989,77 @@ setTrigger={setTrigger}
         </div>
       </div>
     </ReactModal>
+
+
+          {/* Ye main page pr frontImage ka he */}
+          <ReactModal
+  isOpen={isModalVisible14}
+  onRequestClose={() => handleCancel(14)}
+  style={{
+    overlay: {
+      backgroundColor: "rgba(0, 0, 0, 0.7)",
+      zIndex: 1000,
+    },
+    content: {
+      width: "600px",
+      height: "450px",
+      margin: "auto",
+      borderRadius: "15px",
+      padding: "20px",
+      backgroundColor: "#f9f9f9",
+      boxShadow: "0 8px 20px rgba(0, 0, 0, 0.3)",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  }}
+  ariaHideApp={false}
+>
+  {/* Header */}
+  <h2 className="text-2xl font-semibold text-gray-700 mb-4 text-center">
+    Upload & Update Info Image
+  </h2>
+
+  {/* Uploader Section */}
+  <div className="flex flex-col items-center justify-center w-full h-[70%]">
+      <ImageUploader 
+      ratio={[1714.2857, 1000]} 
+      size="300px"
+      reset={resetInfoImage}
+      formImage={infoImage}
+      onImageUpload={handleInfoImageUpload}
+       />
+    <p className="text-sm text-gray-500 mt-2">
+      Upload an image with a 1714:1000 ratio for the best fit.
+    </p>
+  </div>
+
+  {/* Modal Buttons */}
+  <div className="flex space-x-4 mt-6">
+  <button
+      className="px-4 py-2 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 transition focus:outline-none"
+      onClick={()=>{handleRemoveInfoImage()}} // Replace with your save logic
+    >
+      Remove
+    </button>
+    <button
+      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition focus:outline-none"
+      onClick={()=>{updateInfoImage(admin._id, infoImage)}} // Replace with your save logic
+    >
+      {saving?"Saving..": "Save"}
+    </button>
+    <button
+      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition focus:outline-none"
+      onClick={() => handleCancel(14)}
+    >
+      Close
+    </button>
+  </div>
+</ReactModal>
+
+
+
 
 
       <BatchModal isOpen={isModalVisible4} onClose={() => { handleCancel(4) }} user={currentUser} />

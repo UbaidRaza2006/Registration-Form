@@ -83,7 +83,7 @@ function IdCard({ user, contentImage }) {
           <div className="mx-auto w-[180px] h-[120px] relative">
             <div className="absolute w-[177px] h-[116px] border border-gray-900">
               <Image
-                src="/images/blank.png"
+                src="/images/Green Minimalist School ID Card.svg"
                 className="w-full h-full object-cover"
                 width={600}
                 height={400}

@@ -22,11 +22,12 @@ import Content from "../../../models/content";
 // import Register from "../../../models/registration";
 // import { NextResponse } from "next/server";
 
+Content.syncIndexes();
 
 
 
 const ContentSchema = Joi.object({
-    contentImage: Joi.string().required(),
+    contentImage: Joi.string(),
 })
 
 
@@ -44,12 +45,12 @@ export async function POST(req) {
 
             const extractData = await req.json();
             const {
-                contentImage
+                contentImage,
                 }= extractData;
 
 
             const { error } = ContentSchema.validate({
-                contentImage
+                contentImage,
             });
     
             if (error) {

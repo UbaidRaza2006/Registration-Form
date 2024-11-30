@@ -129,7 +129,9 @@ const ImageUploader = ({ formImage, onImageUpload, reset, size, ratio, trigger, 
                 setPreviousImage(data.secure_url);
                 onImageUpload(data.secure_url);
                 toast.success("Image uploaded successfully!");
-                setTrigger(false);
+                if(trigger){
+                    setTrigger(false);
+                }
                 setIsModalOpen(false);
             } else {
                 throw new Error("Failed to upload image.");

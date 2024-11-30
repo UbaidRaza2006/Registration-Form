@@ -22,7 +22,8 @@ const AdminSchema = Joi.object({
     adminName: Joi.string().required(),
     adminPassword: Joi.string().required(),
     admissions: Joi.string().required(),
-    textAdmission: Joi.string(),
+    textAdmission: Joi.string().allow(''),
+    infoImage: Joi.string().allow(''),
 })
 
 
@@ -44,6 +45,7 @@ export async function POST(req) {
                 adminPassword,
                 admissions,
                 textAdmission,
+                infoImage,
                 }= extractData;
 
 
@@ -52,6 +54,7 @@ export async function POST(req) {
                 adminPassword,
                 admissions,
                 textAdmission,
+                infoImage,
             });
     
             if (error) {
@@ -66,6 +69,7 @@ export async function POST(req) {
                 adminPassword,
                 admissions,
                 textAdmission,
+                infoImage,
             });
 
             if(adminCreated){

@@ -9,6 +9,7 @@ const AdminSchema = new mongoose.Schema({
     adminPassword: String,
     admissions:String,
     textAdmission:String,
+    infoImage:String,
 },
     {timestamps:true}
 )
