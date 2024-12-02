@@ -1,8 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Input, InputNumber, Layout, Menu, Modal } from 'antd';
 import { message } from 'antd';
+import html2canvas from "html2canvas-pro";
+import jsPDF from "jspdf";
 import "./index.css"
 // import { ClassroomOutlined, LoadingOutlined } from '@ant-design/icons';
 import {
@@ -64,6 +66,8 @@ const { Sider } = Layout;
 function SideNavbarComponent({router}) {
 
   // const router = useRouter();
+  const idCardRef = useRef(null);
+
 
 
   const [isModalVisible1, setIsModalVisible1] = useState(false);
@@ -207,11 +211,92 @@ function SideNavbarComponent({router}) {
   };
 
 
-  const handleImageUpload = (image) => {
+  const handleImageUpload = async (image) => {
     console.log("image form Uploader-->", image)
-    setContentImage(image)
+    // setContentImage(image)
+    const base64Image = await getBase64Image(image);
+        console.log("Base64 image:", base64Image);
+        setContentImage(image);
     setResetImage(false);
   };
+  
+  const getBase64Image = async (imageUrl) => {
+    console.log("Function Running!");
+    if (typeof window !== 'undefined') {
+        try {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
+        } catch (error) {
+            console.error('Error fetching image for base64 conversion:', error);
+            return null;
+        }
+    } else {
+        console.warn('getBase64Image function is being executed in a non-browser context.');
+        return null;
+    }
+  };
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    console.log("contentImage", contentImage);
+
+    const inputData = idCardRef.current;
+
+    try {
+      const canvas = await html2canvas(inputData, {
+        scale: 15, // Reduced scale from 9 to 2
+        letterRendering: true,
+      });
+
+      const imageData = canvas.toDataURL("image/jpeg", 0.5); // Changed format to JPEG and reduced quality to 0.5
+
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: "a4",
+      });
+
+      const width = pdf.internal.pageSize.getWidth();
+      const height = (canvas.height * width) / canvas.width;
+
+      pdf.addImage(imageData, "JPEG", 0, 0, width, height, '', 'FAST');
+      pdf.save(`Student: UbaidRaza.pdf`);
+
+      setDownloading(false);
+      toast.success('Downloaded Successfully!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (e) {
+      console.error("Error generating PDF:", e);
+      setDownloading(false);
+      toast.error('Error, Try again later!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+};
+
 
   const handleRemoveImage = () => {
     console.log("Removing..")
@@ -226,7 +311,7 @@ function SideNavbarComponent({router}) {
     setInfoImage(imageee)
     setResetInfoImage(false);
   };
-
+  
   const handleRemoveInfoImage = () => {
     console.log("RemovingInfo..")
     // setImage(null);
@@ -235,9 +320,6 @@ function SideNavbarComponent({router}) {
     // onRemove(); // Trigger parent function
   };
 
-  // const handleDone = () => {
-  //   // onClose();
-  // };
 
   const customStyles3 = {
     overlay: {
@@ -245,7 +327,7 @@ function SideNavbarComponent({router}) {
       zIndex: 1000,
     },
     content: {
-      width: "620px",
+      width: "650px",
       height: "550px",
       margin: "auto",
       borderRadius: "20px",
@@ -258,23 +340,6 @@ function SideNavbarComponent({router}) {
     },
   };
 
-  // const customStyles4 = {
-  //   overlay: {
-  //     backgroundColor: "rgba(0, 0, 0, 0.8)", // Dark overlay for focus
-  //     zIndex: 1000,
-  //   },
-  //   content: {
-  //     width: "750px",
-  //     height: "450px",
-  //     margin: "auto",
-  //     borderRadius: "15px",
-  //     padding: "0",
-  //     display: "flex",
-  //     flexDirection: "row",
-  //     boxShadow: "0 10px 30px rgba(0, 0, 0, 0.4)", // Modern shadow effect
-  //     backgroundColor: "#f9fafb", // Subtle light gray for a clean look
-  //   },
-  // };
 
 
 
@@ -584,6 +649,7 @@ console.log("infoImage", infoImage)
       });
     }
   };
+
   
 
   // isModalVisible2
@@ -695,10 +761,6 @@ console.log("infoImage", infoImage)
           transition: Bounce,
         });
       }
-      // }
-      // else{
-      //   console.log("adminsOpen nhi araha")
-      // }
     }
     catch (error) {
       console.log("error-->", error)
@@ -721,41 +783,6 @@ console.log("infoImage", infoImage)
     setAdmissionsOpen(newStatus);
     updateAdmissions(admin._id, newStatus); // Update admission status
   };
-
-  // // isModalVisible3
-  // const editBatchOfTheCourse = async (batch, courseId) => {
-
-
-  //   try {
-  //     if (batch && id) {
-  //       let data = await fetch(`/api/courses/${courseId}`, {
-  //         method: "PUT",
-  //         body: JSON.stringify({ _id: courseId, batch: batch }), headers: {
-  //           "Content-Type": "application/json"
-  //         }
-  //       })
-  //       data = await data.json()
-  //       console.log(data, `/api/courses/${courseId}`)
-  //       // console.log("info-->",data);
-  //       if (data.success) {
-  //         alert(`New Batch No.${data.result.batch} has been Launched!}`)
-  //         setIsAdding(false)
-  //         // setOpen(false);
-  //       }
-  //       else {
-  //         console.log(data);
-  //       }
-  //     }
-  //     else {
-  //       console.log("batch wagerah aa hi nhi rahaa")
-  //     }
-  //   }
-  //   catch (error) {
-  //     console.log("error-->", error)
-  //   }
-  // }
-
-
 
 
 
@@ -1919,7 +1946,98 @@ console.log("infoImage", infoImage)
     >
       
       {/* Left Section: Image */}
-      <div className="w-[400px] bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center relative">
+      <div className="w-[420px] bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center relative">
+
+              {/* id card ui */}
+              
+               <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+        <div ref={idCardRef} className="relative pt-2 w-[350px] h-[500px]">
+          {/* First child div for the school image */}
+          <div className="mx-auto w-[180px] h-[120px] relative">
+            <div className="absolute w-[177px] h-[116px] border border-gray-900">
+              <Image
+                src="/images/Green Minimalist School ID Card.svg"
+                className="w-full h-full object-cover"
+                width={600}
+                height={400}
+                alt="School Image"
+              />
+            </div>
+
+            {/* Second child div for the rest of the ID card content */}
+            <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
+              {/* User Image */}
+              <Image
+                className="absolute top-0 left-0 w-[24.8%] h-[44.7%] mt-[24%] ml-[6.3%]"
+                alt="User-Image"
+                src="/images/UBAID-RAZA.jpg"
+                width={600}
+                height={400}
+              />
+
+              {/* User Details */}
+              <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[34.2%] ml-[53%] overflow-hidden">
+                <p
+                  className=" id-card-text"
+                >
+                  UBAID RAZA
+                </p>
+                <p
+
+                  className=" id-card-text"
+                >
+                  TECHNO KIDS
+                </p>
+                <p
+
+                  className="id-card-text"
+                >
+                  2
+                      </p>
+              </div>
+
+              {/* User Roll Number */}
+              <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[56%] ml-[18.5%] flex justify-center items-center">
+                <p
+                  style={{
+                    color: "white",
+                    fontSize: "7px",
+                    fontWeight: "bold",
+                    letterSpacing: "2px",
+                    fontStyle: "italic",
+                  }}
+                  className="break-words"
+                >
+                  00001
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Content Image Section */}
+          <div className="w-[95%] h-[70%] mt-[10px] border border-gray-900 mx-auto">
+            {/* Add the Content Image here */}
+            {contentImage && (
+              <Image
+                src={contentImage}
+                className="w-full h-full object-cover"
+                alt="Content Image"
+                width={600}
+                height={400}
+              />
+
+            )}
+          </div>
+        </div>
+      </div>
+
+              {/* id card ui */}
+
+
+
+
+
+
         {/* <div
           className="w-[90%] h-[90%] bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden flex justify-center items-center"
         >
@@ -1931,8 +2049,8 @@ console.log("infoImage", infoImage)
         </div> */}
 
 <ImageUploader
-ratio={[3,4]} 
-size="450px" 
+ratio={[1,1.04]} 
+size="400px" 
 formImage={contentImage} 
 onImageUpload={handleImageUpload} 
 reset={resetImage} 
@@ -1969,6 +2087,7 @@ setTrigger={setTrigger}
 
           <button
             className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-md flex justify-center items-center"
+            onClick={()=>{handleDownload()}}
           >
             {downloading?null : <DownloadOutlined className="mr-2 text-lg" />} {downloading?"Downloading..." :"Download ID Card"}
           </button>

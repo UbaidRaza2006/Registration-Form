@@ -20,11 +20,11 @@ function IdCard({ user, contentImage }) {
 
     try {
       const canvas = await html2canvas(inputData, {
-        scale: 9,
+        scale: 15, // Reduce scale to lower size
         letterRendering: true,
       });
 
-      const imageData = canvas.toDataURL("image/png", 0.8);
+      const imageData = canvas.toDataURL("image/jpeg", 0.5); // Using JPEG format and reduced quality to 0.5
 
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -35,8 +35,8 @@ function IdCard({ user, contentImage }) {
       const width = pdf.internal.pageSize.getWidth();
       const height = (canvas.height * width) / canvas.width;
 
-      pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
-      pdf.save(`Student:${user.rollNo}.pdf`);
+      pdf.addImage(imageData, "JPEG", 0, 0, width, height);
+      pdf.save(`Student_${user.rollNo}.pdf`);
 
       setIsGenerating(false);
       toast.success('Downloaded Successfully!', {
@@ -95,7 +95,7 @@ function IdCard({ user, contentImage }) {
             <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
               {/* User Image */}
               <Image
-                className="absolute top-0 left-0 w-[26%] h-[38.5%] mt-[25%] ml-[6.8%]"
+                className="absolute top-0 left-0 w-[24.8%] h-[44.7%] mt-[24%] ml-[6.3%]"
                 alt="User-Image"
                 src={user.imageUrl}
                 width={600}
@@ -103,41 +103,20 @@ function IdCard({ user, contentImage }) {
               />
 
               {/* User Details */}
-              <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[34.2%] ml-[62%] space-y-[-1px] overflow-hidden">
-                <p
-                  style={{
-                    color: "#018394",
-                    fontSize: "6px",
-                    fontWeight: "bold",
-                  }}
-                  className="break-words"
-                >
+              <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[35%] ml-[53%] overflow-hidden">
+                <p className=" id-card-text">
                   {user.fullName}
                 </p>
-                <p
-                  style={{
-                    color: "#018394",
-                    fontSize: "6px",
-                    fontWeight: "bold",
-                  }}
-                  className="break-words"
-                >
+                <p className=" id-card-text">
                   {user.course}
                 </p>
-                <p
-                  style={{
-                    color: "#018394",
-                    fontSize: "6px",
-                    fontWeight: "bold",
-                  }}
-                  className="break-words"
-                >
+                <p className="id-card-text">
                   {user.batch}
                 </p>
               </div>
 
               {/* User Roll Number */}
-              <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[54.3%] ml-[19%] flex justify-center items-center">
+              <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[56.5%] ml-[18.5%] flex justify-center items-center">
                 <p
                   style={{
                     color: "white",
@@ -155,17 +134,16 @@ function IdCard({ user, contentImage }) {
           </div>
 
           {/* Content Image Section */}
-          <div className="w-[90%] mt-[10px] border border-gray-900 mx-auto">
+          <div className="w-[95%] h-[70%] mt-[10px] mx-auto">
             {/* Add the Content Image here */}
             {contentImage && (
               <Image
                 src={contentImage}
-                className="w-full h-[calc(90%_*_(3/4))] object-cover"
+                className="w-full h-full object-cover"
                 alt="Content Image"
                 width={600}
                 height={400}
               />
-
             )}
           </div>
         </div>

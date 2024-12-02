@@ -78,7 +78,8 @@ export default function MainPage() {
     const [isFormDisabled, setIsFormDisabled] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [resetImage, setResetImage] = useState(false);
-
+    const [contentImage, setContentImage] = useState("")
+    const [content, setContent] = useState(null)
 
 
     // Function to handle image upload
@@ -88,6 +89,7 @@ export default function MainPage() {
             ...prevData,
             imageUrl, // Update the formData with the new image URL
         }));
+        setResetImage(false);
     };
 
     // cnic and phone
@@ -481,6 +483,7 @@ export default function MainPage() {
                 course: courseUpdate[0].course,
                 batch: courseUpdate[0].batch// Or use whatever field you need from allCourses
             }));
+            gettingContent()
         }
 
     }
@@ -575,6 +578,50 @@ export default function MainPage() {
             });
         }
     };
+
+    const gettingContent = async () => {
+        console.log("gettingContent")
+        try {
+          const res = await fetch("/api/content", {
+            method: "GET",
+            cache: "no-cache", // Set cache control policy to 'no-cache'
+          });
+          const data = await res.json();
+          console.log("gettingContent ka data-->",data)
+          if (data.success) {
+            setContentImage(data?.data[0].contentImage)
+            // setContentImage(data?.data[0].infoImage)
+            setContent(data?.data[0])
+          }
+          else {
+            toast.error(data.message, {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+              transition: Bounce,
+            });
+          }
+    
+        } catch (error) {
+          console.error("Error fetching contentImage:", error);
+          toast.error(error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+          });
+        }
+      };
 
 
     // console.log(formData);
@@ -897,48 +944,6 @@ export default function MainPage() {
 
                     </div>
 
-                    {/* This is the Upload Component working properly , committed on 24-10-2024 */}
-
-                    {/* <div
-                        className="image-upload-container mt-4 bg-[#eefcfd] shadow-md shadow-gray-400"
-                        onClick={triggerFileInput}
-                    >
-                        {!image ? (
-                            <label className="text-gray-600 cursor-pointer flex items-center justify-center">
-                                Upload <PlusOutlined className="ml-2" />
-                            </label>
-                        ) : (
-                            <img src={image} alt="Uploaded" className="uploaded-image" />
-                        )}
-                        <input
-                            id="file-upload"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            onChange={handleImageUpload}
-                        />
-                        <style jsx>{`
-        .image-upload-container {
-          width: 130px;
-          height: 150px;
-          border: 2px solid #cfcece;
-          border-radius: 12px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-        }
-        .uploaded-image {
-          width: 100%;
-          height: 100%;
-          border-radius: 12px;
-          object-fit: cover;
-        }
-      `}</style>
-                    </div> */}
-
-                    {/* WORKING ON THIS.... */}
-                    {/* iski height width ka bhi kaam karna he */}
                     <ImageUploader ratio={[3,4]} size="200px" formImage={formData.imageUrl} onImageUpload={handleImageUpload} reset={resetImage} />
 
 
@@ -990,7 +995,7 @@ export default function MainPage() {
 
 
             <div>
-                <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} />
+                <IdCardModal isOpen={showModal} onClose={closeModal} user={currentUser} contentImage={contentImage} />
             </div>
 
 
@@ -1048,423 +1053,3 @@ export default function MainPage() {
 }
 
 
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import { Spin, List, Space, message, Typography } from "antd";
-// import { useParams, useNavigate } from "react-router-dom";
-// import { useLazyGetQuizByIdQuery } from "../../services/quizService";
-// import {
-//   EyeOutlined,
-//   EditOutlined,
-//   ArrowLeftOutlined,
-// } from "@ant-design/icons";
-// import {
-//   Container,
-//   QuizQuestionModel,
-//   ThemeButton,
-// } from "../../components/components";
-// import {
-//   useCreateQuizQuestionMutation,
-//   useDeleteQuizQuestionMutation,
-//   useUpdateQuizQuestionMutation,
-// } from "../../services/quizQuestionService";
-
-// const { Title, Paragraph } = Typography;
-
-// const QuizDetail = () => {
-//   const params = useParams();
-//   const navigate = useNavigate();
-//   const [getQuizById, { data, isLoading }] = useLazyGetQuizByIdQuery();
-//   const [quizData, setQuizData] = useState(null);
-//   const [direction, setDirection] = useState("rtl");
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [options, setOptions] = useState([]);
-//   const [correctAnswers, setCorrectAnswers] = useState([]);
-//   const [questionImage, setQuestionImage] = useState("");
-//   const [mode, setMode] = useState("create");
-//   const [currentQuestion, setCurrentQuestion] = useState(null);
-
-//   const [updateQuizQuestion] = useUpdateQuizQuestionMutation();
-//   const [createQuizQuestion] = useCreateQuizQuestionMutation();
-//   const [deleteQuizQuestion] = useDeleteQuizQuestionMutation();
-
-
-//   const [isButtonLoading, setIsButtonLoading] = useState(false);
-//   const [isRefetch, setIsRefetch] = useState(false);
-
-
-//   useEffect(() => {
-//     if (isRefetch) {
-//       getQuizById(params.id).then((res) => {
-//         if (res?.data?.data) {
-//           setQuizData(res.data.data); // Auto-update quiz data
-//           console.log("quizData ", res?.data?.data)
-//           setIsRefetch(false);
-//         }
-//       });
-//     }
-//   }, [isRefetch]);
-
-//    useEffect(() => {
-//       getQuizById(params.id).then((res) => {
-//         if (res?.data?.data) {
-//           setQuizData(res.data.data); // Auto-update quiz data
-//           console.log("quizData ", res?.data?.data)
-//           setIsRefetch(false);
-//       };
-//     })}, [params.id, getQuizById]);
-
-
-//   const handleAddQuestion = () => {
-//     setOptions([]);
-//     setCorrectAnswers([]);
-//     setQuestionImage(null);
-//     setCurrentQuestion(null);
-//     setMode("create");
-//     setIsModalOpen(true);
-//   };
-
-//   const handleEditQuestion = (question) => {
-//     setCurrentQuestion(question);
-//     setOptions(question.options || []);
-//     setCorrectAnswers(question.correctAnswers || []);
-//     setQuestionImage(question.image || null);
-//     setMode("edit");
-//     setIsModalOpen(true);
-//   };
-
-//   const handleModalClose = () => {
-//     setIsModalOpen(false);
-//     setCurrentQuestion(null);
-//     setOptions([]);
-//     setCorrectAnswers([]);
-//     setQuestionImage(null);
-//     setMode("create");
-//   };
-
-//   const handleDeleteQuestion = async (id) => {
-//     try {
-//       console.log("deleteId-->", id)
-//       const res = await deleteQuizQuestion({ id });
-//       console.log("resDelete-->",res)
-//       if (!res?.data?.error) {
-//         message.success("Quiz Question deleted successfully");
-//         // refetch();
-//       setIsRefetch(true)
-//       }
-//     } catch (err) {
-//       message.error("Failed to delete Quiz Question");
-//     }
-//   };
-
-//   const handleSaveQuestion = async (values) => {
-//     setIsButtonLoading(true);
-//     console.log("questionImage-->", questionImage)
-//     const formData = {
-//       title: {
-//         en: values["title.en"] || "",
-//         ur: values["title.ur"] || "",
-//       },
-//       isTitleArabic: false,
-//       desc: {
-//         en: values["desc.en"] || "",
-//         ur: values["desc.ur"] || "",
-//       },
-//       image: questionImage || "",
-//       quizType: values.quizType,
-//       correctAnswers: correctAnswers || [],
-//       quiz: params.id,
-//       options: options.map((option, index) => ({
-//         id: index + 1,
-//         en: {
-//           label: option.en.label || "",
-//           isArabic: option.en.isArabic || false,
-//         },
-//         ur: {
-//           label: option.ur.label || "",
-//           isArabic: option.ur.isArabic || false,
-//         },
-//       })),
-//     };
-
-//     let response;
-//     if (mode === "create") {
-//       response = await createQuizQuestion(formData);
-//     } else {
-//       response = await updateQuizQuestion({
-//         id: currentQuestion._id,
-//         body: formData,
-//       });
-//     }
-
-//     console.log("formData--> ", formData)
-//     console.log("response--> ", response)
-
-//     if (!response?.data?.error) {
-//       message.success("Question saved successfully.");
-//       setIsRefetch(true);
-//       setIsModalOpen(false);
-//     } else {
-//       message.error(response?.data?.msg || "An error occurred.");
-//     }
-
-//     setIsButtonLoading(false); // Stop Loading Spinner
-//   };
-
-//   if (isLoading) {
-//     return (
-//       <Container selected={"8"}>
-//         <div style={{ textAlign: "center", padding: "50px" }}>
-//           <Spin size="large" />
-//           <p className="text-[#6f42c1]">Loading Quiz details...</p>
-//         </div>
-//       </Container>
-//     );
-//   }
-
-//   if (!quizData && !isLoading) {
-//     return (
-//       <Container selected={"8"}>
-//         <div style={{ textAlign: "center", padding: "50px" }}>
-//           <Title level={4}>No Quiz Data Available</Title>
-//         </div>
-//       </Container>
-//     );
-//   }
-
-//   const { quiz, questions } = quizData;
-//   const lng = direction === "rtl" ? "ur" : "en";
-
-//   return (
-//     <div className="bg-gradient-to-r from-[#ede6f7] to-[#f4effd]">
-//       <Container selected={"61"}>
-//         {/* Header Section */}
-//         <div className="flex items-center py-6 w-full justify-between">
-//           <ArrowLeftOutlined
-//             className="cursor-pointer"
-//             onClick={() => navigate("/quiz/quiz")}
-//           />
-//           <div>
-//             <button
-//               onClick={() => setDirection("ltr")}
-//               style={{
-//                 fontFamily: "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif",
-//                 backgroundColor: direction === "ltr" ? "#733cd8" : "#f5f5f5",
-//                 color: direction === "ltr" ? "#ffffff" : "#6a5acd",
-//                 border: direction === "ltr" ? "none" : "2px solid #6a5acd",
-//                 borderRadius: "8px",
-//                 padding: "8px 20px",
-//                 fontSize: "20px",
-//                 fontWeight: "500",
-//                 cursor: "pointer",
-//                 transition: "all 0.3s ease-in-out",
-//                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-//               }}
-//               className="mr-2 hover:shadow-lg"
-//             >
-//               English
-//             </button>
-//             <button
-//               onClick={() => setDirection("rtl")}
-//               style={{
-//                 fontFamily: "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif",
-//                 backgroundColor: direction === "rtl" ? "#733cd8" : "#f5f5f5",
-//                 color: direction === "rtl" ? "#ffffff" : "#6a5acd",
-//                 border: direction === "rtl" ? "none" : "2px solid #6a5acd",
-//                 borderRadius: "8px",
-//                 padding: "8px 30px",
-//                 fontSize: "20px",
-//                 fontWeight: "500",
-//                 cursor: "pointer",
-//                 transition: "all 0.3s ease-in-out",
-//                 boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-//               }}
-//               className="ml-2 hover:shadow-lg"
-//             >
-//               اردو
-//             </button>
-//           </div>
-
-//         </div>
-
-//         {/* Quiz Details */}
-//         <div
-//           style={{
-//             textAlign: direction === "rtl" ? "right" : "left",
-//             direction: direction,
-//             fontFamily: direction === "rtl"
-//               ? "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif"
-//               : "Arial, sans-serif",
-//             marginBottom: "30px",
-//           }}
-//           className="p-8 border-2 border-gray-300 rounded-3xl bg-gradient-to-r from-white to-gray-50 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
-//         >
-//           <h2 className="text-3xl font-extrabold text-gray-900 mb-6 leading-tight">
-//             {quiz?.[lng]?.title}
-//           </h2>
-
-//           <p className="text-xl text-[#40178d] my-4 leading-relaxed opacity-90">
-//             {quiz?.[lng]?.description}
-//           </p>
-
-//           <div className="my-6 flex items-center gap-6">
-//             <strong className="text-lg text-gray-800 font-medium">
-//               {lng === "en" ? "Category:" : "کیٹیگری:"}
-//             </strong>
-//             <span className="text-gray-700 text-lg font-light">
-//               {quiz?.quiz_category?.[lng]?.name}
-//             </span>
-//           </div>
-
-//           <div className="my-6 flex items-center gap-6">
-//             <strong className="text-lg text-gray-800 font-medium">
-//               {lng === "en" ? "Sub-Category:" : "ذیلی کیٹیگری:"}
-//             </strong>
-//             <span className="text-gray-700 text-lg font-light">
-//               {quiz?.quiz_sub_category?.[lng]?.name}
-//             </span>
-//           </div>
-
-//           <div className="my-6 flex items-center gap-6">
-//             <strong className="text-lg text-gray-800 font-medium">
-//               {lng === "en" ? "Created At:" : "بنائی گئی تاریخ:"}
-//             </strong>
-//             <span className="text-gray-700 text-lg font-light">
-//               {new Date(quiz?.createdAt).toLocaleDateString()}
-//             </span>
-//           </div>
-
-//           <hr className="my-6 border-t-2 border-gray-300 opacity-60" />
-//         </div>
-
-//         {/* Questions List */}
-//         <List
-//           header={
-//             <Space
-//               style={{
-//                 display: "flex",
-//                 flexDirection: direction === "rtl" ? "row-reverse" : "row", // Flip order
-//                 // alignItems: direction === "rtl" ? "flex-end" : "flex-start",                
-//                 justifyContent: "space-between",
-//                 alignItems: "center",
-//                 padding: "8px 0",
-//               }}
-//             >
-//               <h3
-//                 style={{
-//                   fontSize: "1.75rem",
-//                   fontWeight: "bold",
-//                   color: "#40178d",
-//                   letterSpacing: "1px",
-//                 }}
-//               >
-//                 {lng === "en" ? "Questions" : "سوالات"}
-//               </h3>
-//               <button
-//                 style={{
-//                   fontFamily: "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif",
-//                   padding: "5px 20px",
-//                   backgroundColor: "#f5f5f5",
-//                   color: "#733cd8",
-//                   borderRadius: "8px",
-//                   border: "2px dashed #6a5acd",
-//                   fontWeight: "semi-bold",
-//                   fontSize: "23px",
-//                   cursor: "pointer",
-//                   transition: "all 0.3s ease-in-out",
-//                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-//                   // border: "none",
-//                   // cursor: "pointer",
-//                 }}
-//                 className="ml-2 hover:shadow-lg"
-//                 onClick={handleAddQuestion}
-//               >
-//                 {lng === "en" ? "Add Question" : "سوال شامل کریں"}
-//               </button>
-//             </Space>
-//           }
-//           dataSource={questions}
-//           renderItem={(item, index) => (
-//             <div
-//               key={index}
-//               className="px-6 py-4 mb-6 border-2 border-gray-300 rounded-3xl bg-gradient-to-r from-white to-gray-50 shadow-md hover:shadow-xl transition-all duration-300 ease-in-out"
-//               style={{
-//                 textAlign: direction === "rtl" ? "right" : "left",
-//                 direction: direction,
-//                 fontFamily: direction === "rtl"
-//                   ? "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif"
-//                   : "Arial, sans-serif",
-//               }}
-//             >
-//               <div className="flex items-start gap-6">
-//                 {/* Left side: Question Text */}
-//                 <div className="flex-1">
-//                   <h4 className="text-2xl font-semibold text-gray-900 mb-4">
-//                     {lng === "en" ? `Q${index + 1}:` : `س${index + 1}:`}{" "}
-//                     {item.title?.[lng]}
-//                   </h4>
-
-//                   <p className="text-lg text-gray-700 mb-2">
-//                     <strong>{lng === "en" ? "Type:" : "قسم:"}</strong>{" "}
-//                     {item.quizType}
-//                   </p>
-//                 </div>
-//               </div>
-
-//               <div className="flex items-center gap-6 text-gray-700 mt-4">
-//                 <button
-//                   className="text-lg font-small flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-all duration-300"
-//                   onClick={() => console.log("View Question", item)}
-//                 >
-//                   <EyeOutlined />
-//                   {lng === "en" ? "View" : "دیکھیں"}
-//                 </button>
-
-//                 <button
-//                   className="text-lg font-small flex items-center gap-2 text-green-600 hover:text-green-800 transition-all duration-300"
-//                   onClick={() => handleEditQuestion(item)}
-//                 >
-//                   <EditOutlined />
-//                   {lng === "en" ? "Edit" : "ترمیم کریں"}
-//                 </button>
-
-//                 <button
-//                   className="text-lg font-small flex items-center gap-2 text-green-600 hover:text-green-800 transition-all duration-300"
-//                   onClick={() => handleDeleteQuestion(item._id)}
-//                 >
-//                   <EditOutlined />
-//                   {lng === "en" ? "Delete" : "delete کریں"}
-//                 </button>
-//               </div>
-//             </div>
-//           )}
-//         />
-
-//        {/* Quiz Question Modal */}
-//       <QuizQuestionModel
-//         isOpen={isModalOpen}
-//         onClose={handleModalClose}
-//         onFinish={handleSaveQuestion}
-//         formRef={null}
-//         isLoading={isButtonLoading}
-//         // image={image}
-//         // onHandleImage={setImage}
-//         options={options}
-//         setOptions={setOptions}
-//         correctAnswers={correctAnswers}
-//         setCorrectAnswers={setCorrectAnswers}
-//         questionData={currentQuestion}
-//         setQuestionImage={setQuestionImage}
-//         questionImage={questionImage}
-//       />
-//     </Container>
-//     </div>
-//   );
-
-// };
-
-// export default QuizDetail;

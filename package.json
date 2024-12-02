@@ -36,7 +36,7 @@
     "jspdf": "^2.5.1",
     "memfs": "^4.9.2",
     "mongoose": "^8.8.3",
-    "next": "14.1.0",
+    "next": "^14.1.0",
     "next-transpile-modules": "^10.0.1",
     "pdf-lib": "^1.17.1",
     "react": "^18",

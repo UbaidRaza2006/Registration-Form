@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* globals.css */
+.font-oswald {
+  font-family: "Oswald", sans-serif;
+}
+
+.font-rubik-bubbles {
+  font-family: "Rubik Bubbles", serif;
+}
+
+.id-card-text {
+  font-family: "Oswald", sans-serif; /* Assuming you're using Oswald */
+  font-size: 5px;
+  color: #007076; /* Teal color similar to the design */
+  font-weight: bold; /* To match the bold styling */
+  letter-spacing: -0.2px; /* Adjust for proper spacing */
+  text-transform: uppercase; /* Ensure text is in uppercase */
+  margin: 0.2px 0; /* Optional for spacing between lines */
+}
 
 
 .acdefg{

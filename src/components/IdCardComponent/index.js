@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import ReactModal from "react-modal";
 import { Bounce, toast } from "react-toastify";
 
-const IdCardModal = ({ isOpen, onClose, user }) => {
+const IdCardModal = ({ isOpen, onClose, user, contentImage }) => {
     const idCardRef = useRef(null);
     const [isGenerating, setIsGenerating] = useState(false);
     const [downloaded, setDownloaded] = useState(false);
@@ -38,7 +38,6 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             if (isOpen) {
                 setDownloaded(false);
                 const base64Image = await getBase64Image(user.imageUrl);
-                console.log("Base64 image:", base64Image);
                 setImage(base64Image);
             }
         };
@@ -47,7 +46,6 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
     }, [isOpen]);
 
     const getBase64Image = async (imageUrl) => {
-        console.log("Function Running!");
         if (typeof window !== 'undefined') {
             try {
                 const response = await fetch(imageUrl);
@@ -75,11 +73,11 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
 
         try {
             const canvas = await html2canvas(inputData, {
-                scale: 9,
+                scale: 15, // Reduced scale to lower size
                 letterRendering: true,
             });
 
-            const imageData = canvas.toDataURL("image/png", 0.8);
+            const imageData = canvas.toDataURL("image/jpeg", 0.5); // Using JPEG format and reduced quality to 0.5
 
             const pdf = new jsPDF({
                 orientation: "portrait",
@@ -90,8 +88,8 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             const width = pdf.internal.pageSize.getWidth();
             const height = (canvas.height * width) / canvas.width;
 
-            pdf.addImage(imageData, "PNG", 0, 0, width, height, '', 'FAST');
-            pdf.save(`Student:${user.rollNo}.pdf`);
+            pdf.addImage(imageData, "JPEG", 0, 0, width, height);
+            pdf.save(`Student_${user.rollNo}.pdf`);
 
             setIsGenerating(false);
             setDownloaded(true);
@@ -132,88 +130,86 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
             style={customStyles}
             contentLabel="Custom Modal"
         >
-            <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-  <div ref={idCardRef} className="relative pt-2 w-[350px] h-[230px] ">
-    {/* First child div for the school image */}
+           <div style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+        <div ref={idCardRef} className="relative pt-2 w-[350px] h-[500px]">
+          {/* First child div for the school image */}
+          <div className="mx-auto w-[180px] h-[120px] relative">
+            <div className="absolute w-[177px] h-[116px] border border-gray-900">
+              <Image
+                src="/images/Green Minimalist School ID Card.svg"
+                className="w-full h-full object-cover"
+                width={600}
+                height={400}
+                alt="School Image"
+              />
+            </div>
 
-<div className=" mx-auto w-[180px] h-[120px]">
+            {/* Second child div for the rest of the ID card content */}
+            <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
+              {/* User Image */}
+              <Image
+                className="absolute top-0 left-0 w-[24.8%] h-[44.7%] mt-[24%] ml-[6.3%]"
+                alt="User-Image"
+                src={image}
+                width={600}
+                height={400}
+              />
 
-<div className="absolute w-[177px] h-[116px] border border-gray-900">
-      <Image
-        src="/images/Green Minimalist School ID Card (1).svg"
-        className="w-full h-full object-cover"
-        width={600}
-        height={400}
-        alt="School Image"
-      />
-    </div>
+              {/* User Details */}
+              <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[34.2%] ml-[53%] overflow-hidden">
+                <p
+                  className=" id-card-text"
+                >
+                  {user?.fullName}
+                </p>
+                <p
 
-    {/* Second child div for the rest of the ID card content */}
-    <div className="absolute w-[177px] h-[116px] z-10 overflow-hidden">
-      {/* User Image */}
-      <Image
-        className="absolute top-0 left-0  w-[26%] h-[38.5%] mt-[25%] ml-[6.8%]"
-        alt="User-Image"
-        src={image}
-        width={600}
-        height={400}
-      />
-      
-      {/* User Details */}
-      <div className="absolute top-0 left-0 w-[37%] h-[35%] mt-[34.2%] ml-[62%] space-y-[-1px] overflow-hidden">
-        <p
-          style={{ color: "#018394",
-             fontSize: "6px", 
-             fontWeight: "bold",
-             }}
-          className="break-words"
-        >
-          {user?.fullName}
-        </p>
-        <p
-          style={{
-            color: "#018394",
-            fontSize: "6px",
-            fontWeight: "bold",
-            // marginTop: "2px",
-          }}
-          className="break-words"
-        >
-          {user?.course}
-        </p>
-        <p
-          style={{
-            color: "#018394",
-            fontSize: "6px",
-            fontWeight: "bold",
-            // marginTop: "2px",
-          }}
-          className="break-words"
-        >
-          {user?.batch}
-        </p>
+                  className=" id-card-text"
+                >
+                  {user?.course}
+                </p>
+                <p
+
+                  className="id-card-text"
+                >
+                  {user?.batch}
+                </p>
+              </div>
+
+              {/* User Roll Number */}
+              <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[56%] ml-[18.5%] flex justify-center items-center">
+                <p
+                  style={{
+                    color: "white",
+                    fontSize: "7px",
+                    fontWeight: "bold",
+                    letterSpacing: "2px",
+                    fontStyle: "italic",
+                  }}
+                  className="break-words"
+                >
+                  {user?.rollNo}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Content Image Section */}
+          <div className="w-[95%] h-[70%] mt-[10px] mx-auto">
+            {/* Add the Content Image here */}
+            {contentImage && (
+              <Image
+                src={contentImage}
+                className="w-full h-full object-cover"
+                alt="Content Image"
+                width={600}
+                height={400}
+              />
+
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* User Roll Number */}
-      <div className="absolute top-0 left-0 w-[20%] h-[10%] mt-[53.8%] ml-[19.5%] flex justify-center items-center">
-        <p
-          style={{
-            color: "white",
-            fontSize: "7px",
-            fontWeight: "bold",
-            letterSpacing: "1.5px",
-            fontStyle: "italic",
-          }}
-          className="break-words"
-        >
-          {user?.rollNo}
-        </p>
-      </div>
-    </div> 
-    </div>
-
-  </div>
-</div>
             <p className="mt-0 font-boldest text-1xl text-gray-700 ml-0 mr-0 lg:ml-[9%] md:ml-[9%] sm:ml-[9%] lg:mr-[9%] md:mr-[9%] sm:mr-[9%] lg:text-center md:text-center sm:text-center" style={{fontWeight: "bold",}}>For your Registration Details, Download ID Card!</p>
             <div className="flex justify-end mt-0">
             <button
@@ -224,14 +220,6 @@ const IdCardModal = ({ isOpen, onClose, user }) => {
                                                 {isGenerating ? "Generating..." : "Download ID Card"}
 
                         </button>
-                {/* <Button
-                    type="primary"
-                    style={{ backgroundColor: "#0d5667" }}
-                    onClick={handleDownload}
-                    disabled={isGenerating}
-                >
-                    {isGenerating ? "Generating..." : "Download ID Card"}
-                </Button> */}
             </div>
         </ReactModal>
     );

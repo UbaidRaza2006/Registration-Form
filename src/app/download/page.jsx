@@ -29,27 +29,27 @@ function DownloadIdCard() {
     gettingContent();
   },[])
 
-  const getBase64Image = async (imageUrl) => {
-    console.log("Function Running!");
-    if (typeof window !== 'undefined') {
-        try {
-            const response = await fetch(imageUrl);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-        } catch (error) {
-            console.error('Error fetching image for base64 conversion:', error);
-            return null;
-        }
-    } else {
-        console.warn('getBase64Image function is being executed in a non-browser context.');
-        return null;
-    }
-};
+//   const getBase64Image = async (imageUrl) => {
+//     console.log("Function Running!");
+//     if (typeof window !== 'undefined') {
+//         try {
+//             const response = await fetch(imageUrl);
+//             const blob = await response.blob();
+//             return new Promise((resolve, reject) => {
+//                 const reader = new FileReader();
+//                 reader.onload = () => resolve(reader.result);
+//                 reader.onerror = reject;
+//                 reader.readAsDataURL(blob);
+//             });
+//         } catch (error) {
+//             console.error('Error fetching image for base64 conversion:', error);
+//             return null;
+//         }
+//     } else {
+//         console.warn('getBase64Image function is being executed in a non-browser context.');
+//         return null;
+//     }
+// };
 
   const gettingContent = async () => {
     console.log("gettingContent")
@@ -63,9 +63,9 @@ function DownloadIdCard() {
       if (data.success) {
         // setContentImage(data?.data[0].contentImage)
         setContent(data?.data[0])
-        const base64Image = await getBase64Image(data?.data[0].contentImage);
-        console.log("Base64 image:", base64Image);
-        setContentImage(base64Image);      }
+        // const base64Image = await getBase64Image(data?.data[0].contentImage);
+        // console.log("Base64 image:", base64Image);
+        setContentImage(data?.data[0].contentImage);      }
       else {
         toast.error(data.message, {
           position: "top-right",
