@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+
 /* globals.css */
 .font-oswald {
   font-family: "Oswald", sans-serif;
@@ -11,11 +14,17 @@
   font-family: "Rubik Bubbles", serif;
 }
 
+/* Add this in your globals.css */
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+
 .id-card-text {
-  font-family: "Oswald", sans-serif; /* Assuming you're using Oswald */
+  /* font-family: 'Poppins', sans-serif; */
   font-size: 5px;
   color: #007076; /* Teal color similar to the design */
-  font-weight: bold; /* To match the bold styling */
+  /* font-weight: bold; To match the bold styling */
   letter-spacing: -0.2px; /* Adjust for proper spacing */
   text-transform: uppercase; /* Ensure text is in uppercase */
   margin: 0.2px 0; /* Optional for spacing between lines */
